@@ -1,5 +1,3 @@
-// Update with your config settings.
-
 module.exports = {
 //npx knex init if knex is not installed globally
 // once this file is setup, we move to migrations
@@ -14,6 +12,7 @@ module.exports = {
     },
     useNullAsDefault: true
   },
+  
   testing: {
     client: 'pg',
    connection: process.env.TEST_URL,
