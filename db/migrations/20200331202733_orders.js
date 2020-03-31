@@ -1,8 +1,17 @@
+
 exports.up = function (knex) {
-    knex.schema.createTable('orders', (table) => {
+    return knex.schema.createTable('orders', (table) => {
         table.uuid('id').primary().notNullable()
-        table.foreign('user_id').references(users.id)
-        table.foreign('product_id').references(products.id)
+        table.integer('user_id')
+            .references('id')
+            .inTable('users')
+            .onUpdate('CASCADE')
+            .onDelete('CASCADE')
+        table.uuid('product_id')
+            .references('id')
+            .inTable('products')
+            .onUpdate('CASCADE')
+            .onDelete('CASCADE')
         table.text('status').defaultTo('pending').notNullable()
         table.text('total_price').defaultTo(0)
         table.timestamp('created_at').defaultTo(knex.fn.now());

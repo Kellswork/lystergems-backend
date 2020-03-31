@@ -1,7 +1,11 @@
 exports.up = function (knex) {
-    knex.schema.createTable('users-address', (table) => {
-        table.increment('id').primary()
-        table.foreign('user_id').references('users.id')
+    return knex.schema.createTable('users-address', (table) => {
+        table.increments('id')
+        table.integer('user_id')
+            .references('id')
+            .inTable('users')
+            .onUpdate('CASCADE')
+            .onDelete('CASCADE')
         table.text('billing_address').notNullable()
         table.text('shipping_address').notNullable()
         table.text('city').notNullable()
@@ -10,6 +14,7 @@ exports.up = function (knex) {
         table.integer('zipcode').unsigned()
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').nullable();
+
     })
 };
 

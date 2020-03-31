@@ -1,3 +1,4 @@
+require('dotenv').config()
 module.exports = {
 //npx knex init if knex is not installed globally
 // once this file is setup, we move to migrations

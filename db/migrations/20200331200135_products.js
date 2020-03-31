@@ -1,7 +1,11 @@
 exports.up = function (knex) {
-    knex.schema.createTable('products', (table) => {
+    return knex.schema.createTable('products', (table) => {
         table.uuid('id').primary()
-        table.foreign('product_category_id').references('product-catergory.id')
+        table.integer('product_category_id')
+            .references('id')
+            .inTable('product-category')
+            .onUpdate('CASCADE')
+            .onDelete('CASCADE')
         table.text('product_name').notNullable()
         table.text('product_image1').nullable()
         table.text('product_image2').nullable()
@@ -18,5 +22,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-
+    return knex.schema.dropTableIfExists('products')
 };
