@@ -11,16 +11,13 @@
     "node": true
   },
   "rules": {
-    "jsx-a11y/href-no-hash": ["off"],
-    "react/jsx-filename-extension": ["warn", { "extensions": [".js", ".jsx"] }],
     "prettier/prettier": "error",
-    "no-unused-vars": "warn",
-    "no-console": "off",
+    "no-unused-vars": [2, {"vars": "all", "args": "all"}],
+    "no-console": 2,
     "func-names": "off",
     "no-process-exit": "off",
-    "object-shorthand": "off",
+    "object-shorthand": [2, "always"],
     "class-methods-use-this": "off",
-    "key-spacing": { "afterColon": true },
     "indent": ["warn", 2],
     "max-len": [
       "warn",
