@@ -14,7 +14,6 @@ exports.up = function (knex) {
         table.integer('zipcode').unsigned()
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').nullable();
-
     })
 };
 
