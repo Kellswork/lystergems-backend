@@ -13,6 +13,7 @@ exports.up = function (knex) {
             .onUpdate('CASCADE')
             .onDelete('CASCADE')
             .notNullable()
+        table.integer('product_quantity').notNullable()
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').nullable();
     })

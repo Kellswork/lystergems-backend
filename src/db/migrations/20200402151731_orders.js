@@ -7,14 +7,8 @@ exports.up = function (knex) {
             .inTable('users')
             .onUpdate('CASCADE')
             .onDelete('CASCADE')
-        table.integer('product_id')
-            .references('id')
-            .inTable('products')
-            .onUpdate('CASCADE')
-            .onDelete('CASCADE')
         table.enu('status', ['pending', 'in_transit', 'delivered', 'cancelled'])
-        table.text('total_price').defaultTo(0)
-        table.integer('product_quantity').notNullable()
+        table.float('total_price').defaultTo(0)
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').nullable();
     })
