@@ -1,12 +1,12 @@
 exports.up = function (knex) {
-    return knex.schema.createTable('users-address', (table) => {
+    return knex.schema.createTable('users_address', (table) => {
         table.increments('id')
         table.integer('user_id')
             .references('id')
             .inTable('users')
             .onUpdate('CASCADE')
             .onDelete('CASCADE')
-        table.text('billing_address').notNullable()
+            .notNullable()
         table.text('shipping_address').notNullable()
         table.text('city').notNullable()
         table.text('state').notNullable()
@@ -18,5 +18,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-    return knex.schema.dropTableIfExists('users-address')
+    return knex.schema.raw('drop table if exists address cascade;');
 };

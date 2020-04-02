@@ -2,7 +2,7 @@ exports.up = function (knex) {
     return knex.schema.alterTable('users', (table) => {
         table.integer('address_id')
             .references('id')
-            .inTable('users-address')
+            .inTable('users_address')
             .onUpdate('CASCADE')
             .onDelete('CASCADE')
     })

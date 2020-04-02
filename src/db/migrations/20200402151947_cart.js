@@ -1,25 +1,24 @@
-
 exports.up = function (knex) {
-    return knex.schema.createTable('orders', (table) => {
-        table.uuid('id').primary().notNullable()
+    return knex.schema.createTable('cart', (table) => {
+        table.increments('id')
         table.integer('user_id')
             .references('id')
             .inTable('users')
             .onUpdate('CASCADE')
             .onDelete('CASCADE')
-        table.uuid('product_id')
+            .nullable()
+        table.integer('product_id')
             .references('id')
             .inTable('products')
             .onUpdate('CASCADE')
             .onDelete('CASCADE')
-        table.text('status').defaultTo('pending').notNullable()
-        table.text('total_price').defaultTo(0)
+            .notNullable()
+        table.text('total_price').defaultTo(0).nullable()
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').nullable();
     })
 };
 
 exports.down = function (knex) {
-    return knex.schema.dropTableIfExists('orders')
-
+    return knex.schema.dropTableIfExists('cart')
 };

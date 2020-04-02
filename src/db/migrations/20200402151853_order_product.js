@@ -1,15 +1,15 @@
 exports.up = function (knex) {
-    return knex.schema.createTable('wishlist', (table) => {
-        table.increments('id').primary()
-        table.integer('user_id')
-            .references('id')
-            .inTable('users')
-            .onUpdate('CASCADE')
-            .onDelete('CASCADE')
-            .nullable()
-        table.uuid('product_id')
+    return knex.schema.createTable('order_product', (table) => {
+        table.increments('id')
+        table.integer('product_id')
             .references('id')
             .inTable('products')
+            .onUpdate('CASCADE')
+            .onDelete('CASCADE')
+            .notNullable()
+        table.integer('order_id')
+            .references('id')
+            .inTable('orders')
             .onUpdate('CASCADE')
             .onDelete('CASCADE')
             .notNullable()
@@ -19,5 +19,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-    return knex.schema.dropTableIfExists('wishlist')
+    return knex.schema.dropTableIfExists('order_product')
 };
