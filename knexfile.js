@@ -1,39 +1,39 @@
 require('dotenv').config()
 module.exports = {
-//npx knex init if knex is not installed globally
-// once this file is setup, we move to migrations
+  //npx knex init if knex is not installed globally
+  // once this file is setup, we move to migrations
   development: {
     client: 'pg',
-    connection: process.env.DEV_URL,
+    connection: 'postgresql://lambda:kissme22@localhost:5432/shopping-site',
     migrations: {
-      directory: './db/migrations'
+      directory: './src/db/migrations'
     },
     seeds: {
-      directory: './db/seeds/dev'
+      directory: './src/db/seeds/dev'
     },
     useNullAsDefault: true
   },
-  
+
   testing: {
     client: 'pg',
-   connection: process.env.TEST_URL,
+    connection: process.env.TEST_URL,
     migrations: {
-      directory: './db/migrations'
+      directory: './src/db/migrations'
     },
     seeds: {
-      directory: './db/seeds/test'
+      directory: './src/db/seeds/test'
     },
     useNullAsDefault: true
   },
 
   staging: {
     client: 'pg',
-   connection: process.env.STAG_URL,
+    connection: process.env.STAG_URL,
     migrations: {
-      directory: './db/migrations'
+      directory: './src/db/migrations'
     },
     seeds: {
-      directory: './db/seeds/staging'
+      directory: './src/db/seeds/staging'
     },
     useNullAsDefault: true
   },
@@ -42,12 +42,11 @@ module.exports = {
     client: 'pg',
     connection: process.env.PROD_URL,
     migrations: {
-      directory: '/.db/migrations'
+      directory: './src/db/migrations'
     },
     seeds: {
-      directory: '/.db/seeds/production'
+      directory: './src/db/seeds/production'
     },
     useNullAsDefault: true
   },
-
 };
