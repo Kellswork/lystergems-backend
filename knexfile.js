@@ -4,7 +4,7 @@ module.exports = {
   // once this file is setup, we move to migrations
   development: {
     client: 'pg',
-    connection: 'postgresql://lambda:kissme22@localhost:5432/shopping-site',
+    connection: process.env.DEV_URL,
     migrations: {
       directory: './src/db/migrations'
     },
