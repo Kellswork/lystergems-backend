@@ -7,6 +7,7 @@ exports.up = function (knex) {
             .inTable('category')
             .onUpdate('CASCADE')
             .onDelete('CASCADE')
+            .notNullable()
         table.text('name').notNullable()
         table.text('image1').nullable()
         table.text('image2').nullable()
@@ -16,12 +17,12 @@ exports.up = function (knex) {
         table.boolean('availabilty').defaultTo(false)
         table.text('color').nullable()
         table.float('price').unsigned().notNullable()
-        table.float('size').nullable()
+        table.text('size').defaultTo('N/A')
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').nullable();
     })
 };
 
 exports.down = function (knex) {
-    return knex.schema.dropTableIfExists('products')
+    return knex.schema.raw('drop table if exists products cascade;');
 };

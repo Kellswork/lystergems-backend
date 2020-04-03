@@ -5,6 +5,7 @@ exports.up = function (knex) {
             .inTable('users_address')
             .onUpdate('CASCADE')
             .onDelete('CASCADE')
+            .notNullable()
     })
 };
 

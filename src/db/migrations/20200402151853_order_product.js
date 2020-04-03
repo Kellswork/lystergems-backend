@@ -1,5 +1,5 @@
 exports.up = function (knex) {
-    return knex.schema.createTable('order_product', (table) => {
+    return knex.schema.createTable('order_products', (table) => {
         table.increments('id')
         table.integer('product_id')
             .references('id')
@@ -20,5 +20,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-    return knex.schema.dropTableIfExists('order_product')
+    return knex.schema.dropTableIfExists('order_products')
 };
