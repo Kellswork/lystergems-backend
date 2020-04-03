@@ -18,6 +18,9 @@
     "no-process-exit": "off",
     "object-shorthand": [2, "always"],
     "class-methods-use-this": "off",
+    "key-spacing": [2, {
+      "afterColon": true
+    }],
     "indent": ["warn", 2],
     "max-len": [
       "warn",
