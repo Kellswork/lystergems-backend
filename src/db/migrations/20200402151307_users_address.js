@@ -18,5 +18,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-    return knex.schema.raw('drop table if exists address cascade;');
+    return knex.schema.raw('drop table if exists users_address cascade;');
 };

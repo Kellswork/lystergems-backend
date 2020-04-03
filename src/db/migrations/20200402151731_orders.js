@@ -8,6 +8,7 @@ exports.up = function (knex) {
             .onUpdate('CASCADE')
             .onDelete('CASCADE')
         table.enu('status', ['pending', 'in_transit', 'delivered', 'cancelled'])
+         table.float('shipping_fee')
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').nullable();
     })
