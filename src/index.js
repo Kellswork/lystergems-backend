@@ -1,3 +1,2 @@
-import {server} from './server'
-
-server()
+import { server } from './server.js';
+server();
