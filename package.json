@@ -17,9 +17,8 @@
       "!**/vendor/**",
       "!**/src/specs/**",
       "!**/coverage/**"
-
     ]
-  }, 
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Kellswork/shopping-site-backend.git"
