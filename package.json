@@ -7,7 +7,10 @@
     "start": "nodemon src/index.js --exec \"node -r @babel/register\"",
     "build": "npm run clean && babel src --out-dir dist",
     "clean": "rimraf dist",
-    "test": "NODE_ENV=test jest --coverage ./src/specs/**/*.spec.js --testTimeout=10000"
+    "test": "NODE_ENV=test jest --coverage ./src/specs/**/*.spec.js --testTimeout=10000",
+    "knex": "node -r esm node_modules/.bin/knex",
+    "db:migrate": "npm run knex migrate:latest",
+    "db:rollback": "npm run knex migrate:rollback"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -17,9 +20,8 @@
       "!**/vendor/**",
       "!**/src/specs/**",
       "!**/coverage/**"
-
     ]
-  }, 
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Kellswork/shopping-site-backend.git"
@@ -41,8 +43,12 @@
   "dependencies": {
     "@babel/runtime": "^7.9.2",
     "core-js": "^3.6.4",
+    "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
     "express": "^4.17.1",
     "jest": "^25.2.4",
+    "knex": "^0.20.13",
+    "pg": "^7.18.2",
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
