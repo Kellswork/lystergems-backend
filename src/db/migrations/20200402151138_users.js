@@ -7,7 +7,7 @@ export function up(knex) {
     table.text('password').notNullable();
     table.text('phone_number').notNullable();
     table.enu('role', ['customer', 'admin']).defaultTo('customer');
-    table.boolean('is_verified').defaultTo(false);
+    table.boolean('is_verified').defaultTo(false).comment('email verification');
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').nullable();
   });
