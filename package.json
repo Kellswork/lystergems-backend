@@ -7,7 +7,7 @@
     "start": "nodemon src/index.js --exec \"node -r @babel/register\"",
     "build": "npm run clean && babel src --out-dir dist",
     "clean": "rimraf dist",
-    "test": "NODE_ENV=test jest --coverage ./src/specs/**/*.spec.js --testTimeout=10000",
+    "test": "NODE_ENV=test jest --coverage ./src/resources/*.spec.js --testTimeout=10000",
     "knex": "node -r esm node_modules/.bin/knex",
     "db:migrate": "npm run knex migrate:latest",
     "db:rollback": "npm run knex migrate:rollback"
@@ -42,7 +42,9 @@
   "homepage": "https://github.com/Kellswork/shopping-site-backend#readme",
   "dependencies": {
     "@babel/runtime": "^7.9.2",
+    "body-parser": "^1.19.0",
     "core-js": "^3.6.4",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
