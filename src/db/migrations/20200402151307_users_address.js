@@ -8,7 +8,8 @@ export function up(knex) {
       .onUpdate('CASCADE')
       .onDelete('CASCADE')
       .notNullable();
-    table.text('shipping_address').notNullable();
+    table.text('phone_number').notNullable();
+    table.text('street_address').notNullable();
     table.text('city').notNullable();
     table.text('state').notNullable();
     table.text('country').notNullable();
