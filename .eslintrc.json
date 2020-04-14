@@ -25,6 +25,7 @@
       "beforeColon": false,
       "afterColon": true
     }],
+    "eqeqeq": "off",
     "indent": ["warn", 2],
     "max-len": [
       "warn",

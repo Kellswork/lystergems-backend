@@ -30,6 +30,9 @@ export default class UserAddress extends Model {
         'country',
       ],
       properties: {
+        id: {
+          type: 'integer ',
+        },
         user_id: {
           type: 'integer',
         },
@@ -47,13 +50,11 @@ export default class UserAddress extends Model {
           type: 'string',
           minLength: 1,
           maxLength: 50,
-          format: 'email',
         },
         state: {
           type: 'string',
           minLength: 1,
           maxLength: 50,
-          format: 'email',
         },
         country: {
           type: 'string',
