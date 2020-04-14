@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 app.get('/', (req, res) =>
   res.status(200).json({
-    message: 'Welcome to Kells shopping site',
+    message: 'Welcome to the shopping site',
   }),
 );
 app.use('/api/v1', routes);
