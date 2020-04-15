@@ -7,10 +7,12 @@
     "start": "nodemon src/index.js --exec \"node -r @babel/register\"",
     "build": "npm run clean && babel src --out-dir dist",
     "clean": "rimraf dist",
-    "test": "NODE_ENV=test jest --coverage ./src/resources/*.spec.js --testTimeout=10000",
+    "test": "NODE_ENV=testing jest --coverage --verbose --testTimeout=10000",
     "knex": "node -r esm node_modules/.bin/knex",
-    "db:migrate": "npm run knex migrate:latest",
-    "db:rollback": "npm run knex migrate:rollback"
+    "db:latest": "npm run knex migrate:latest",
+    "db:rollback": "npm run knex migrate:rollback",
+    "latest-test": "NODE_ENV=testing npm run knex migrate:latest ",
+    "rollback-test": "NODE_ENV=testing npm run knex migrate:rollback"
   },
   "jest": {
     "collectCoverageFrom": [
