@@ -56,8 +56,7 @@ const validateUser = [
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(400).json({
-        status: 400,
+      return res.status(400).json({
         error: errors.array().map((i) => i.msg),
       });
     }

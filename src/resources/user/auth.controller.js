@@ -43,7 +43,7 @@ export const addUserAddressInfo = async (req, res) => {
       userAddress,
     });
   } catch (error) {
-    console.log(error.ValidationError);
+    console.log(error);
     return res.status(500).json({
       error: 'could not add address, please try again later',
     });

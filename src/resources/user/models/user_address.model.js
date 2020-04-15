@@ -30,11 +30,8 @@ export default class UserAddress extends Model {
         'country',
       ],
       properties: {
-        id: {
-          type: 'integer ',
-        },
         user_id: {
-          type: 'integer',
+          type: 'string',
         },
         phone_number: {
           type: 'string',
