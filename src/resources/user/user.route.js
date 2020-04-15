@@ -7,4 +7,4 @@ const router = Router();
 export default router;
 
 router.post('/auth/register', validateUser, addUserInfo);
-router.post('/auth/register/address', validateUserAddress, addUserAddressInfo);
+router.post('/users/:id/address', validateUserAddress, addUserAddressInfo);

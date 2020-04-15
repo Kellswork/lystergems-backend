@@ -16,6 +16,7 @@
       "vars": "all",
       "args": "all"
     }],
+    "no-use-before-define": "off",
     "no-console": "warn",
     "func-names": "off",
     "no-process-exit": "off",

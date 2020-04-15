@@ -1,22 +1,30 @@
 import request from 'supertest';
+// import { body } from 'express-validator';
 import app from '../../../server';
-import User from '../models/user.model';
+import db from '../../../db/dbconfig';
 
 beforeAll(async () => {
-  await User.raw('truncate users cascade');
+  await db.raw('truncate users cascade');
 });
 
+// I'll convert this to use async
 describe('Test for user info', () => {
-  it('POST', async () => {
+  it('POST', () => {
     const user = {
       firstname: 'kells',
       lastname: 'leo',
-      email: 'kelsiie@gmail.com',
+      email: 'kelsie@gmail.com',
       password: 'pass12345',
-      confirmPassword: 'pass1234',
+      confirmPassword: 'pass12345',
     };
-    const response = await request(app).post('/api/auth/register').send(user);
-    expect(response.statusCode).toBe(201);
-    expect(response.body.message).toEqual('user created successfully');
+    return request(app)
+      .post('/api/v1/auth/register')
+      .send(user)
+      .expect('Content-Type', /json/)
+      .then((response) => {
+        console.log(response.body);
+        expect(response.statusCode).toBe(201);
+        expect(response.body.message).toEqual('user created successfully');
+      });
   });
 });

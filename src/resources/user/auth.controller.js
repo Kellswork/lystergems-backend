@@ -1,7 +1,8 @@
 import bcrypt from 'bcryptjs';
-import { createUser, createUserAddress } from './models/index.model';
+import { createUser } from './models/index.model';
 
-export const addUserInfo = async (req, res) => {
+export default addUserInfo;
+const addUserInfo = async (req, res) => {
   try {
     const { firstname, lastname, email, password } = req.body;
     const hashedPassword = bcrypt.hashSync(password, 10);
@@ -31,21 +32,6 @@ export const addUserInfo = async (req, res) => {
     }
     return res.status(500).json({
       error: 'could not create user, please try again later',
-    });
-  }
-};
-
-export const addUserAddressInfo = async (req, res) => {
-  try {
-    const userAddress = await createUserAddress(req.body);
-    return res.status(201).json({
-      message: 'address has been added successfully',
-      userAddress,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      error: 'could not add address, please try again later',
     });
   }
 };
