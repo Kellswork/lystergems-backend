@@ -1,7 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { createUser } from './models/index.model';
 
-export default addUserInfo;
 const addUserInfo = async (req, res) => {
   try {
     const { firstname, lastname, email, password } = req.body;
@@ -35,3 +34,5 @@ const addUserInfo = async (req, res) => {
     });
   }
 };
+
+export default addUserInfo;

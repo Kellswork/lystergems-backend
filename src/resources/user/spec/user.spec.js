@@ -7,9 +7,8 @@ beforeAll(async () => {
   await db.raw('truncate users cascade');
 });
 
-// I'll convert this to use async
 describe('Test for user info', () => {
-  it('POST', () => {
+  it('POST', async () => {
     const user = {
       firstname: 'kells',
       lastname: 'leo',
@@ -17,14 +16,10 @@ describe('Test for user info', () => {
       password: 'pass12345',
       confirmPassword: 'pass12345',
     };
-    return request(app)
+    const response = await request(app)
       .post('/api/v1/auth/register')
-      .send(user)
-      .expect('Content-Type', /json/)
-      .then((response) => {
-        console.log(response.body);
-        expect(response.statusCode).toBe(201);
-        expect(response.body.message).toEqual('user created successfully');
-      });
+      .send(user);
+    expect(response.statusCode).toBe(201);
+    expect(response.body.message).toEqual('user created successfully');
   });
 });
