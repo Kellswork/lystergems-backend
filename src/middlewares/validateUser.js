@@ -1,11 +1,11 @@
-const { check, body, validationResult } = require('express-validator');
+import { check, body, validationResult } from 'express-validator';
 
 const validateUser = [
   check('firstname')
     .matches(/^[a-zA-Z]+$/i)
     .withMessage('firstname must contain only alphabets')
     .isLength({
-      min: 1,
+      min: 2,
     })
     .withMessage('field cannot be empty')
     .isLength({
@@ -20,7 +20,7 @@ const validateUser = [
     .matches(/^[a-zA-Z]+$/i)
     .withMessage('lastname must contain only alphabets')
     .isLength({
-      min: 1,
+      min: 2,
     })
     .withMessage('field cannot be empty')
     .isLength({
@@ -39,11 +39,9 @@ const validateUser = [
     })
     .withMessage('password must have atleast 5 characters')
     .isLength({
-      max: 15,
+      max: 50,
     })
-    .withMessage('password cannot contain more than 15 characters')
-    .matches(/^\S{3,}$/)
-    .withMessage('password cannot contain whitespaces')
+    .withMessage('maximum number of characters reached')
     .trim(),
 
   body('confirmPassword').custom((value, { req }) => {

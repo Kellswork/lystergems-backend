@@ -1,7 +1,6 @@
 import path from 'path';
+import { Model } from 'objection';
 import db from '../../../db/dbconfig';
-
-const { Model } = require('objection');
 
 Model.knex(db);
 
