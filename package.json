@@ -7,7 +7,7 @@
     "start": "nodemon src/index.js --exec \"node -r @babel/register\"",
     "build": "npm run clean && babel src --out-dir dist",
     "clean": "rimraf dist",
-    "test": "NODE_ENV=testing jest --coverage --collectCoverageFrom=src/**/*.spec.js --verbose --detectOpenHandles --testTimeout=10000",
+    "test": "NODE_ENV=testing jest --coverage  --verbose --detectOpenHandles --testTimeout=10000",
     "knex": "node -r esm node_modules/.bin/knex",
     "db:latest": "npm run knex migrate:latest",
     "db:rollback": "npm run knex migrate:rollback",
@@ -20,9 +20,17 @@
       "**/src//**/*.js",
       "!**/node_modules/**",
       "!**/vendor/**",
-      "!**/src/specs/**",
+      "**/src/resources/**",
       "!**/coverage/**"
-    ]
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 50,
+        "functions": 50,
+        "lines": 50,
+        "statements": 50
+      }
+    }
   },
   "repository": {
     "type": "git",
@@ -51,6 +59,7 @@
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
+    "express-jwt": "^5.3.3",
     "express-validator": "^6.4.0",
     "helmet": "^3.22.0",
     "jest": "^25.2.4",
