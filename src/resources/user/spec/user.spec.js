@@ -25,6 +25,7 @@ describe('Test for user info', () => {
     expect(response.body.user).toHaveProperty('firstname');
     expect(response.body.user).toHaveProperty('lastname');
     expect(response.body.user).toHaveProperty('email');
+    expect(response.body).toHaveProperty('token');
   });
 
   it('should return 400 if email has been registered', async () => {

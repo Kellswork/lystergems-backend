@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { createUser } from './models/index.model';
+import generateToken from '../../helpers/generateToken';
 
 const addUserInfo = async (req, res) => {
   try {
@@ -11,6 +12,7 @@ const addUserInfo = async (req, res) => {
       email,
       password: hashedPassword,
     });
+    const token = generateToken(user);
     return res.status(201).json({
       message: 'user created successfully',
       user: {
@@ -19,6 +21,7 @@ const addUserInfo = async (req, res) => {
         lastname,
         email,
       },
+      token,
     });
   } catch (error) {
     if (
