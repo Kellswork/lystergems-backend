@@ -1,7 +1,5 @@
 import { createUserAddress } from './models/index.model';
 
-export default addUserAddressInfo;
-
 // will fix this in the future to use user_id from req.params
 const addUserAddressInfo = async (req, res) => {
   try {
@@ -17,3 +15,5 @@ const addUserAddressInfo = async (req, res) => {
     });
   }
 };
+
+export default addUserAddressInfo;

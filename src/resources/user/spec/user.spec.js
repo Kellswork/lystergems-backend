@@ -21,5 +21,8 @@ describe('Test for user info', () => {
       .send(user);
     expect(response.statusCode).toBe(201);
     expect(response.body.message).toEqual('user created successfully');
+    expect(response.body.user).toHaveProperty('firstname');
+    expect(response.body.user).toHaveProperty('lastname');
+    expect(response.body.user).toHaveProperty('email');
   });
 });
