@@ -22,9 +22,9 @@ describe('Test for user info', () => {
     expect(response.statusCode).toBe(201);
     expect(response.body.message).toEqual('user created successfully');
     expect(response.body.user).toHaveProperty('id');
-    expect(response.body.user).toHaveProperty('firstname');
-    expect(response.body.user).toHaveProperty('lastname');
-    expect(response.body.user).toHaveProperty('email');
+    expect(response.body.user.firstname).toEqual('kells');
+    expect(response.body.user.lastname).toEqual('leo');
+    expect(response.body.user.email).toEqual('kelsie@gmail.com');
     expect(response.body).toHaveProperty('token');
   });
 
