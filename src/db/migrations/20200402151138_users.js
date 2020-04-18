@@ -5,7 +5,6 @@ export function up(knex) {
     table.text('lastname').notNullable();
     table.text('email').notNullable().unique().comment('email must be unique');
     table.text('password').notNullable();
-    table.text('phone_number').notNullable();
     table.enu('role', ['customer', 'admin']).defaultTo('customer');
     table.boolean('is_verified').defaultTo(false).comment('email verification');
     table.timestamp('created_at').defaultTo(knex.fn.now());

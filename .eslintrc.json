@@ -1,6 +1,6 @@
 {
   "extends": [
-    "airbnb",
+    "airbnb-base",
     "plugin:prettier/recommended"
   ],
   "env": {
@@ -12,8 +12,11 @@
   },
   "rules": {
     "prettier/prettier": "error",
-    "no-unused-vars": [2, {"vars": "all", "args": "all"}],
-    "no-console": 2,
+    "no-unused-vars": [2, {
+      "vars": "all",
+      "args": "all"
+    }],
+    "no-console": "warn",
     "func-names": "off",
     "no-process-exit": "off",
     "object-shorthand": [2, "always"],
@@ -22,6 +25,7 @@
       "beforeColon": false,
       "afterColon": true
     }],
+    "eqeqeq": "off",
     "indent": ["warn", 2],
     "max-len": [
       "warn",

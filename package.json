@@ -7,10 +7,12 @@
     "start": "nodemon src/index.js --exec \"node -r @babel/register\"",
     "build": "npm run clean && babel src --out-dir dist",
     "clean": "rimraf dist",
-    "test": "NODE_ENV=test jest --coverage ./src/resources/*.spec.js --testTimeout=10000",
+    "test": "NODE_ENV=testing jest --coverage  --verbose --detectOpenHandles --testTimeout=10000",
     "knex": "node -r esm node_modules/.bin/knex",
-    "db:migrate": "npm run knex migrate:latest",
-    "db:rollback": "npm run knex migrate:rollback"
+    "db:latest": "npm run knex migrate:latest",
+    "db:rollback": "npm run knex migrate:rollback",
+    "latest-test": "NODE_ENV=testing npm run knex migrate:latest ",
+    "rollback-test": "NODE_ENV=testing npm run knex migrate:rollback"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -18,9 +20,17 @@
       "**/src//**/*.js",
       "!**/node_modules/**",
       "!**/vendor/**",
-      "!**/src/specs/**",
+      "**/src/resources/**",
       "!**/coverage/**"
-    ]
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 50,
+        "functions": 50,
+        "lines": 50,
+        "statements": 50
+      }
+    }
   },
   "repository": {
     "type": "git",
@@ -42,14 +52,20 @@
   "homepage": "https://github.com/Kellswork/shopping-site-backend#readme",
   "dependencies": {
     "@babel/runtime": "^7.9.2",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "core-js": "^3.6.4",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
+    "express-jwt": "^5.3.3",
+    "express-validator": "^6.4.0",
+    "helmet": "^3.22.0",
     "jest": "^25.2.4",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^0.20.13",
+    "objection": "^2.1.3",
     "pg": "^7.18.2",
     "rimraf": "^3.0.2"
   },
@@ -61,6 +77,7 @@
     "@babel/preset-env": "^7.9.0",
     "@babel/register": "^7.9.0",
     "babel-eslint": "^10.1.0",
+    "babel-jest": "^25.3.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-config-prettier": "^6.10.1",
