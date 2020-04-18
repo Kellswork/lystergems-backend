@@ -7,8 +7,9 @@ function generateToken(user) {
     {
       id: user.id,
       firtsname: user.firstname,
+      role: user.role,
     },
-    'secrete',
+    process.env.JWT_SECRET,
     { expiresIn: '1d' },
   );
 }
