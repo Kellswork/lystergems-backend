@@ -17,8 +17,7 @@ export const addUserInfo = async (req, res) => {
       password: hashedPassword,
     });
     const token = generateToken(user);
-    return res.status(201).json({
-      message: 'user created successfully',
+    const data = {
       user: {
         id: user.id,
         firstname,
@@ -26,19 +25,20 @@ export const addUserInfo = async (req, res) => {
         email,
       },
       token,
-    });
+    };
+    return formatResponse(res, 'user created successfully', 201, data);
   } catch (error) {
     if (
       error.name == 'UniqueViolationError' &&
       error.columns.includes('email')
     ) {
-      return res.status(400).json({
-        error: 'email has already been registered',
-      });
+      return formatResponse(res, 'email has already been registered', 400);
     }
-    return res.status(500).json({
-      error: 'could not create user, please try again later',
-    });
+    return formatResponse(
+      res,
+      'could not create user, please try again later',
+      500,
+    );
   }
 };
 

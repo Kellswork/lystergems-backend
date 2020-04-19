@@ -33,7 +33,7 @@ describe('Test for user info', () => {
       .post('/api/v1/auth/register')
       .send(user);
     expect(response.statusCode).toBe(400);
-    expect(response.body.error).toEqual('email has already been registered');
+    expect(response.body.message).toEqual('email has already been registered');
   });
 });
 
@@ -44,10 +44,10 @@ describe('Login', () => {
       .send({ email: user.email, password: user.password });
     expect(response.statusCode).toBe(200);
     expect(response.body.message).toEqual('Login successful');
-    expect(response.body.data.user.firstname).toEqual(user.firstname);
-    expect(response.body.data).toHaveProperty('token');
+    expect(response.body.user.firstname).toEqual(user.firstname);
+    expect(response.body).toHaveProperty('token');
     expect(response.headers).toHaveProperty('x-auth-token');
-    expect(response.body.data.user).not.toHaveProperty('password');
+    expect(response.body.user).not.toHaveProperty('password');
   });
 
   it('fails if no user with this email is registered', async () => {
