@@ -21,6 +21,8 @@
       "!**/node_modules/**",
       "!**/vendor/**",
       "**/src/resources/**",
+      "**/src/helpers/**",
+      "**/src/middlewares/**",
       "!**/coverage/**"
     ],
     "coverageThreshold": {
