@@ -2,12 +2,12 @@ import jwt from 'jsonwebtoken';
 
 require('dotenv').config();
 
-function generateToken(user) {
+function generateToken(payload) {
   return jwt.sign(
     {
-      id: user.id,
-      firtsname: user.firstname,
-      role: user.role,
+      id: payload.id,
+      firtsname: payload.firstname,
+      role: payload.role,
     },
     process.env.JWT_SECRET,
     { expiresIn: '1d' },

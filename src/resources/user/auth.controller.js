@@ -1,11 +1,15 @@
-import bcrypt from 'bcryptjs';
-import { createUser } from './models/index.model';
+import { createUser, getUserByEmail } from './models/index.model';
 import generateToken from '../../helpers/generateToken';
+import {
+  hashPassword,
+  validatePassword,
+  formatResponse,
+} from '../../helpers/baseHelper';
 
-const addUserInfo = async (req, res) => {
+export const addUserInfo = async (req, res) => {
   try {
     const { firstname, lastname, email, password } = req.body;
-    const hashedPassword = bcrypt.hashSync(password, 10);
+    const hashedPassword = hashPassword(password);
     const user = await createUser({
       firstname,
       lastname,
@@ -35,6 +39,37 @@ const addUserInfo = async (req, res) => {
     return res.status(500).json({
       error: 'could not create user, please try again later',
     });
+  }
+};
+
+export const login = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const dbUser = await getUserByEmail(email);
+    if (!dbUser[0]) {
+      return res.status(404).json({ message: 'Invalid Email/Password' });
+    }
+
+    if (!validatePassword(password, dbUser[0].password)) {
+      return res.status(404).json({ message: 'Invalid Email/Password' });
+    }
+
+    const user = { ...dbUser[0] };
+    delete user.password;
+    const token = generateToken(user);
+
+    const data = {
+      user: { ...user },
+      token,
+    };
+    return formatResponse(res, 'Login successful', 200, data);
+  } catch (error) {
+    return formatResponse(
+      res,
+      'Unable to login at the moment, please try again later',
+      500,
+      { error },
+    );
   }
 };
 
