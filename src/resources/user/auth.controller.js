@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
-
 import { createUser, getUserByEmail } from './models/index.model';
 import { generateToken } from '../../helpers/jwtHelper';
 import { hashPassword, formatResponse } from '../../helpers/baseHelper';
+import emailService from '../../services/email';
 
 export const addUserInfo = async (req, res) => {
   try {
@@ -80,4 +80,24 @@ export const login = async (req, res) => {
   }
 };
 
-export default addUserInfo;
+export const verifyEmail = async (req, res) => {
+  try {
+    const { token } = req.query;
+    const validateToken = verifyToken(token);
+    // if the token has expired
+    // redirect user to login endpoint
+    // let them know that their token has expired
+    // give them an option of requesting for a new token
+    // generate another token link using generateToken fxn with the user email
+    // send verification message to user email
+    console.log(validateToken);
+    return res.status(200).json({ message: `email has been verified` });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ error: 'verification failed, link is no longer valid' });
+  }
+};
+
+// export default addUserInfo;
