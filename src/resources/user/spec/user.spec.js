@@ -33,7 +33,7 @@ describe('Test for user info', () => {
       .post('/api/v1/auth/register')
       .send(user);
     expect(response.statusCode).toBe(400);
-    expect(response.body.message).toEqual('email has already been registered');
+    expect(response.body.error).toEqual('email has already been registered');
   });
 });
 
@@ -54,8 +54,8 @@ describe('Login', () => {
     const response = await request(app)
       .post('/api/v1/auth/login')
       .send({ email: 'omenkish@gmail.com', password: user.password });
-    expect(response.statusCode).toBe(404);
-    expect(response.body.message).toEqual('Invalid Email/Password');
+    expect(response.statusCode).toBe(400);
+    expect(response.body.error).toEqual('Invalid Email/Password');
   });
 
   it('fails if email is not valid', async () => {
@@ -76,11 +76,11 @@ describe('Login', () => {
       expect.arrayContaining(['Please input a password']),
     );
   });
-  it('fails password is incorrect', async () => {
+  it('fails if password is incorrect', async () => {
     const response = await request(app)
       .post('/api/v1/auth/login')
       .send({ email: user.email, password: 'bad password' });
-    expect(response.statusCode).toBe(404);
-    expect(response.body.message).toEqual('Invalid Email/Password');
+    expect(response.statusCode).toBe(400);
+    expect(response.body.error).toEqual('Invalid Email/Password');
   });
 });

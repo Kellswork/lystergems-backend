@@ -7,17 +7,13 @@ export const hashPassword = (password) => {
   return hash;
 };
 
-export const validatePassword = (newPassword, dbPassword) => {
-  return bcrypt.compareSync(newPassword, dbPassword);
-};
-
 export const formatResponse = (res, responseMessage, statusCode, data) => {
   let response = res;
   if (data && data.token) {
     response = res.header('x-auth-token', data.token);
   }
   return response.status(statusCode).json({
-    message: responseMessage,
+    ...responseMessage,
     ...data,
   });
 };

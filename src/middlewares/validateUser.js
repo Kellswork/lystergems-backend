@@ -1,6 +1,6 @@
 import { check, body, validationResult } from 'express-validator';
 
-const validateUser = [
+export const validateUser = [
   check('firstname')
     .matches(/^[a-zA-Z]+$/i)
     .withMessage('firstname must contain only alphabets')
@@ -80,5 +80,3 @@ export const validateLogin = [
     return next();
   },
 ];
-
-export default validateUser;
