@@ -36,3 +36,51 @@ describe('Test for user info', () => {
     expect(response.body.error).toEqual('email has already been registered');
   });
 });
+
+describe('Login', () => {
+  it('logs in a registered user and returns http code 200', async () => {
+    const response = await request(app)
+      .post('/api/v1/auth/login')
+      .send({ email: user.email, password: user.password });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toEqual('Login successful');
+    expect(response.body.user.firstname).toEqual(user.firstname);
+    expect(response.body).toHaveProperty('token');
+    expect(response.headers).toHaveProperty('x-auth-token');
+    expect(response.body.user).not.toHaveProperty('password');
+  });
+
+  it('fails if no user with this email is registered', async () => {
+    const response = await request(app)
+      .post('/api/v1/auth/login')
+      .send({ email: 'omenkish@gmail.com', password: user.password });
+    expect(response.statusCode).toBe(400);
+    expect(response.body.error).toEqual('Invalid Email/Password');
+  });
+
+  it('fails if email is not valid', async () => {
+    const response = await request(app)
+      .post('/api/v1/auth/login')
+      .send({ email: '', password: user.password });
+    expect(response.statusCode).toBe(400);
+    expect(response.body.error).toEqual(
+      expect.arrayContaining(['Please input a valid email address']),
+    );
+  });
+  it('fails if password is empty', async () => {
+    const response = await request(app)
+      .post('/api/v1/auth/login')
+      .send({ email: user.email, password: '' });
+    expect(response.statusCode).toBe(400);
+    expect(response.body.error).toEqual(
+      expect.arrayContaining(['Please input a password']),
+    );
+  });
+  it('fails if password is incorrect', async () => {
+    const response = await request(app)
+      .post('/api/v1/auth/login')
+      .send({ email: user.email, password: 'bad password' });
+    expect(response.statusCode).toBe(400);
+    expect(response.body.error).toEqual('Invalid Email/Password');
+  });
+});

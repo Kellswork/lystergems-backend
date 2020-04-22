@@ -8,3 +8,7 @@ export function createUser(userInfo) {
 export async function createUserAddress(userAddressInfo) {
   return UserAddress.query().insert(userAddressInfo).returning('*');
 }
+
+export async function getUserByEmail(email) {
+  return User.query().where({ email });
+}
