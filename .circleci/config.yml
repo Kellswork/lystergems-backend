@@ -1,18 +1,93 @@
 version: 2.1
-orbs:
-  node: circleci/node@1.1.6
 jobs:
-  build-and-test:
-    executor:
-      name: node/default
+  build:
+    docker:
+      - image: circleci/node:10.16.0
+        environment:
+           PGHOST: localhost
+           PGUSER: postgres
+           NODE_ENV: testing
+           DIALECT: postgres
+           TEST_URL: process.env.TEST_URL
+
+      - image: circleci/postgres:11
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: shopping_site_test
+          DIALECT: postgres
+          POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD
+
+    #   - image: circleci/node:10
+    #   - image: circleci/postgres:11
+    #     environment:
+    #       POSTGRES_USER: lambda
+    #       POSTGRES_DB: shopping-site-test
+          
+    # environment:
+    #   NODE_ENV: testing
+    #   TEST_URL: postgresql://lambda:kissme22@localhost:5432/shopping-site-test
+    #   POSTGRES_USER: lambda
+    #   POSTGRES_DB: shopping-site-test
+    #   PG_PORT: 5432
     steps:
       - checkout
-      - node/with-cache:
-          steps:
-            - run: npm install
-            - run: npm test
-workflows:
-    build-and-test:
-      jobs:
-        - build-and-test
-        
+      - run:
+          name: update-npm
+          command: 'sudo npm install -g npm@6'
+    
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
+
+      - run:
+          name: install dependencies
+          command: npm install
+      
+      - run:
+          name: Waiting for PostgreSQL to start
+          # command: |
+          #   for i in `seq 1 10`;
+          #   do
+          #     nc -z localhost 5432 && echo Success && exit 0
+          #     echo -n .
+          #     sleep 2
+          #   done
+          #   echo Failed waiting for Postgres && exit 1
+          command:  dockerize -wait tcp://localhost:5432 -timeout 1m
+      # - run:
+      #     name: INSTALL PG CLIENT
+      #     command: sudo apt install -y postgresql-client || true
+      - run: sudo apt-get update
+      - run: sudo apt install -y postgresql-client || true
+
+      - run: 
+          name: Set up DB
+          command: |
+            psql -h localhost -p 5432 -c 'drop database if exists shopping_site_test;' -U postgres
+            psql -h localhost -p 5432 -c 'create database shopping_site_test;' -U postgres
+            psql -h localhost -p 5432 -c "CREATE USER lambda WITH PASSWORD 'kissme22';" -U postgres
+
+
+      # - run:
+      #     name: setup database
+      #     environment: 
+      #     command:  |
+      #       sudo apt-get update
+      #       sudo apt-get install postgresql-client
+      #       dockerize -wait tcp://localhost:5432 -timeout 1m
+
+      - run:
+          name: run migrations
+          command: npm run rollback-test && npm run latest-test
+      
+      - run:
+          name: run tests
+          command: npm test
+
+      # - run:
+      #     name: code-coverage
+      #     command: './node_modules/.bin/nyc report --reporter=text-lcov'
