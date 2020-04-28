@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 require('dotenv').config();
 
-export const jwtHelper = (payload) => {
+export const generateToken = (payload) => {
   return jwt.sign(
     {
       id: payload.id,

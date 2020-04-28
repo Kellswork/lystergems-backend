@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 
 import { createUser, getUserByEmail } from './models/index.model';
-import { jwtHelper } from '../../helpers/jwtHelper';
+import { generateToken } from '../../helpers/jwtHelper';
 import { hashPassword, formatResponse } from '../../helpers/baseHelper';
 
 export const addUserInfo = async (req, res) => {
@@ -14,7 +14,7 @@ export const addUserInfo = async (req, res) => {
       email,
       password: hashedPassword,
     });
-    const token = jwtHelper(user);
+    const token = generateToken(user);
     const data = {
       user: {
         id: user.id,
@@ -63,7 +63,7 @@ export const login = async (req, res) => {
 
     const user = { ...dbUser[0] };
     delete user.password;
-    const token = jwtHelper(user);
+    const token = generateToken(user);
 
     const data = {
       user: { ...user },
