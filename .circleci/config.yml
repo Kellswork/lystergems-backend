@@ -17,18 +17,6 @@ jobs:
           DIALECT: postgres
           POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD
 
-    #   - image: circleci/node:10
-    #   - image: circleci/postgres:11
-    #     environment:
-    #       POSTGRES_USER: lambda
-    #       POSTGRES_DB: shopping-site-test
-          
-    # environment:
-    #   NODE_ENV: testing
-    #   TEST_URL: postgresql://lambda:kissme22@localhost:5432/shopping-site-test
-    #   POSTGRES_USER: lambda
-    #   POSTGRES_DB: shopping-site-test
-    #   PG_PORT: 5432
     steps:
       - checkout
       - run:
@@ -49,18 +37,8 @@ jobs:
       
       - run:
           name: Waiting for PostgreSQL to start
-          # command: |
-          #   for i in `seq 1 10`;
-          #   do
-          #     nc -z localhost 5432 && echo Success && exit 0
-          #     echo -n .
-          #     sleep 2
-          #   done
-          #   echo Failed waiting for Postgres && exit 1
           command:  dockerize -wait tcp://localhost:5432 -timeout 1m
-      # - run:
-      #     name: INSTALL PG CLIENT
-      #     command: sudo apt install -y postgresql-client || true
+  
       - run: sudo apt-get update
       - run: sudo apt install -y postgresql-client || true
 
@@ -70,15 +48,6 @@ jobs:
             psql -h localhost -p 5432 -c 'drop database if exists shopping_site_test;' -U postgres
             psql -h localhost -p 5432 -c 'create database shopping_site_test;' -U postgres
             psql -h localhost -p 5432 -c "CREATE USER lambda WITH PASSWORD 'kissme22';" -U postgres
-
-
-      # - run:
-      #     name: setup database
-      #     environment: 
-      #     command:  |
-      #       sudo apt-get update
-      #       sudo apt-get install postgresql-client
-      #       dockerize -wait tcp://localhost:5432 -timeout 1m
 
       - run:
           name: run migrations
