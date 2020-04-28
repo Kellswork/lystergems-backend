@@ -1,14 +1,13 @@
 version: 2.1
 jobs:
   build:
-    docker:
       - image: circleci/node:10.16.0
         environment:
-           PGHOST: localhost
-           PGUSER: postgres
-           NODE_ENV: testing
-           DIALECT: postgres
-           TEST_URL: process.env.TEST_URL
+            PGHOST: localhost
+            PGUSER: postgres
+            NODE_ENV: testing
+            DIALECT: postgres
+            TEST_URL: process.env.TEST_URL
 
       - image: circleci/postgres:11
         environment:
