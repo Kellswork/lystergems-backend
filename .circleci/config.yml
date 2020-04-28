@@ -22,7 +22,6 @@ jobs:
       - run:
           name: update-npm
           command: 'sudo npm install -g npm@6'
-    
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
 
@@ -34,15 +33,13 @@ jobs:
       - run:
           name: install dependencies
           command: npm install
-      
       - run:
           name: Waiting for PostgreSQL to start
           command:  dockerize -wait tcp://localhost:5432 -timeout 1m
-  
       - run: sudo apt-get update
       - run: sudo apt install -y postgresql-client || true
 
-      - run: 
+      - run:
           name: Set up DB
           command: |
             psql -h localhost -p 5432 -c 'drop database if exists shopping_site_test;' -U postgres
@@ -52,7 +49,6 @@ jobs:
       - run:
           name: run migrations
           command: npm run rollback-test && npm run latest-test
-      
       - run:
           name: run tests
           command: npm test
