@@ -18,7 +18,6 @@ const addCategory = async (req, res) => {
       data,
     );
   } catch (error) {
-    // console.log(error);
     return formatResponse(
       res,
       { error: 'could not create category, please try again later' },

@@ -6,7 +6,7 @@ export const generateToken = (payload) => {
   return jwt.sign(
     {
       id: payload.id,
-      firtsname: payload.firstname,
+      firstname: payload.firstname,
       role: payload.role,
     },
     process.env.JWT_SECRET,
