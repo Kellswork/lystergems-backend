@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 
 import { createUser, getUserByEmail } from './models/index.model';
-import generateToken from '../../helpers/generateToken';
+import { generateToken } from '../../helpers/jwtHelper';
 import { hashPassword, formatResponse } from '../../helpers/baseHelper';
 
 export const addUserInfo = async (req, res) => {

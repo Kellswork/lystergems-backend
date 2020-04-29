@@ -35,6 +35,17 @@ describe('Test for user info', () => {
     expect(response.statusCode).toBe(400);
     expect(response.body.error).toEqual('email has already been registered');
   });
+
+  it('should fail if password and confirmPassword do not match', async () => {
+    user.confirmPassword = 'wedonotmatch';
+    const response = await request(app)
+      .post('/api/v1/auth/register')
+      .send(user);
+    expect(response.statusCode).toBe(400);
+    expect(response.body.error).toEqual(
+      expect.arrayContaining(['Password confirmation does not match password']),
+    );
+  });
 });
 
 describe('Login', () => {
