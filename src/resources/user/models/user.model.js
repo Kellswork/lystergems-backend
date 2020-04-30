@@ -55,7 +55,8 @@ export default class User extends Model {
     // to know why I wanted to call it here => https://vincit.github.io/objection.js/guide/models.html#examples
     return {
       userAddress: {
-        relation: Model.HasManyRelation,
+        // reason for the change: https://vincit.github.io/objection.js/guide/relations.html#examples
+        relation: Model.BelongsToOneRelation,
         ModelClass: path.resolve('models', 'user_address.model.js'),
         join: {
           from: 'users.id',

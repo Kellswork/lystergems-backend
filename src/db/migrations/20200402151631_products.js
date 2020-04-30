@@ -14,7 +14,7 @@ export function up(knex) {
     table.text('image3').nullable();
     table.text('description').notNullable();
     table.integer('quantity').defaultTo(0);
-    table.boolean('availabilty').defaultTo(false);
+    table.boolean('is_available').defaultTo(false);
     table.text('color').nullable();
     table.float('price').unsigned().notNullable();
     table.text('size').defaultTo('N/A');
