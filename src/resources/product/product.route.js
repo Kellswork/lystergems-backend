@@ -7,9 +7,9 @@ const router = Router();
 
 router.post(
   '/product',
-  validateProduct,
   verifyAuth,
   validateAdmin,
+  validateProduct,
   createProduct,
 );
 

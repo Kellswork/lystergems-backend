@@ -36,6 +36,12 @@ const validateProduct = [
     .isLength({ min: 1 })
     .withMessage('please input the product price')
     .trim(),
+  check('quantity')
+    .isNumeric()
+    .withMessage('please input a valid number')
+    .isLength({ min: 1 })
+    .withMessage('please add product quantity')
+    .trim(),
   body('name').custom(async (value) => {
     try {
       const response = await getProductName(value.toLowerCase());

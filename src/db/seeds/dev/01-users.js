@@ -1,8 +1,8 @@
-const hashPassword = require('../../../helpers/baseHelper');
+import { hashPassword } from '../../../helpers/baseHelper';
 
 exports.seed = function (knex) {
   // Deletes ALL existing entries
-  return knex('table_name')
+  return knex('users')
     .del()
     .then(function () {
       // Inserts seed entries
@@ -12,6 +12,7 @@ exports.seed = function (knex) {
           lastname: 'admin',
           email: 'admin@shoppingsite.com',
           password: hashPassword('admin'),
+          role: 'admin',
         },
       ]);
     });
