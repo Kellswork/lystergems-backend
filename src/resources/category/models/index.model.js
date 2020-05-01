@@ -7,3 +7,7 @@ export async function createCategory(category) {
 export async function getCategoryByName(name) {
   return Category.query().where({ name });
 }
+
+export async function getCategoryById(id) {
+  return Category.query().where({ id });
+}
