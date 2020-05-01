@@ -1,9 +1,9 @@
 import Product from './product.models';
 
-export async function addProduct(product) {
+export function addProduct(product) {
   return Product.query().insert(product).returning('*');
 }
 
-export async function getProductName(name) {
+export function getProductName(name) {
   return Product.query().where({ name });
 }
