@@ -3,7 +3,7 @@ import db from '../../../db/dbconfig';
 
 Model.knex(db);
 
-export default class User extends Model {
+export default class Category extends Model {
   static get tableName() {
     return 'categories';
   }

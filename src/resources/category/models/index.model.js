@@ -1,13 +1,13 @@
 import Category from './category.model';
 
-export async function createCategory(category) {
+export function createCategory(category) {
   return Category.query().insert(category).returning('*');
 }
 
-export async function getCategoryByName(name) {
+export function getCategoryByName(name) {
   return Category.query().where({ name });
 }
 
-export async function getCategoryById(id) {
+export function getCategoryById(id) {
   return Category.query().where({ id });
 }
