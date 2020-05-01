@@ -12,7 +12,8 @@
     "db:latest": "npm run knex migrate:latest",
     "db:rollback": "npm run knex migrate:rollback",
     "latest-test": "NODE_ENV=testing npm run knex migrate:latest ",
-    "rollback-test": "NODE_ENV=testing npm run knex migrate:rollback"
+    "rollback-test": "NODE_ENV=testing npm run knex migrate:rollback",
+    "seed:admin": "npm run knex seed:run"
   },
   "jest": {
     "collectCoverageFrom": [

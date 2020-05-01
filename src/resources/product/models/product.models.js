@@ -33,7 +33,7 @@ export default class Product extends Model {
           maxLength: 250,
         },
         price: {
-          type: 'integer',
+          type: 'float',
           minLength: 1,
           maxLength: 50,
         },
