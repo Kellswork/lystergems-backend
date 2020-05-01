@@ -1,6 +1,6 @@
 import Product from './product.models';
 
-export async function createCategory(product) {
+export async function addProduct(product) {
   return Product.query().insert(product).returning('*');
 }
 
