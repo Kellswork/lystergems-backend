@@ -1,3 +1,4 @@
+/* eslint-disable import/no-mutable-exports */
 import request from 'supertest';
 import app from '../../../server';
 import db from '../../../db/dbconfig';
@@ -17,6 +18,7 @@ const user = {
 
 const pass = hashPassword(user.password);
 beforeAll(async () => {
+  await db.raw('truncate users cascade');
   await db.raw('truncate categories cascade');
   await db.raw(
     `INSERT INTO users (firstname, lastname, email, password, role) VALUES('kells', 'leo', 'kelsi3rvvt@gmail.com', '${pass}', 'admin')`,

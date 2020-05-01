@@ -56,8 +56,8 @@ const validateProduct = [
   body('category_id').custom(async (value) => {
     try {
       const response = await getCategoryById(value);
-      if (response.length == 0) {
-          throw new Error('Could not find category with this id');
+      if (response.length <= 0) {
+        throw new Error('Could not find category with this id');
       }
     } catch (error) {
       throw new Error(error);

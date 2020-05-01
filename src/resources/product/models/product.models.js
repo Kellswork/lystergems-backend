@@ -9,10 +9,6 @@ export default class Product extends Model {
     return 'products';
   }
 
-  static get idColumn() {
-    return 'id';
-  }
-
   // json schema validation for insert
   static get jsonSchema() {
     return {
@@ -40,8 +36,6 @@ export default class Product extends Model {
       },
     };
   }
-
-  // this object defines the relations to other models
 
   static get relationMappings() {
     return {

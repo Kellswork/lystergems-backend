@@ -41,7 +41,6 @@ const createProduct = async (req, res) => {
       data,
     );
   } catch (error) {
-    console.log(error);
     return formatResponse(
       res,
       { error: 'could not add product, please try again later' },
