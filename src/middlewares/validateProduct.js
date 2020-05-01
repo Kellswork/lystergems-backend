@@ -1,5 +1,6 @@
 import { body, check, validationResult } from 'express-validator';
 import { getProductName } from '../resources/product/models/index.models';
+import { getCategoryById } from '../resources/category/models/index.model';
 
 const validateProduct = [
   check('category_id')
@@ -47,6 +48,16 @@ const validateProduct = [
       const response = await getProductName(value.toLowerCase());
       if (response.length) {
         throw new Error('A product with this name already exists');
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }),
+  body('category_id').custom(async (value) => {
+    try {
+      const response = await getCategoryById(value);
+      if (response.length == 0) {
+          throw new Error('Could not find category with this id');
       }
     } catch (error) {
       throw new Error(error);

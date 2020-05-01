@@ -14,7 +14,7 @@ const user = {
   password: 'pass12345',
   confirmPassword: 'pass12345',
 };
-describe('Test for user info', () => {
+describe('Register', () => {
   it('POST, status 201', async () => {
     const response = await request(app)
       .post('/api/v1/auth/register')
