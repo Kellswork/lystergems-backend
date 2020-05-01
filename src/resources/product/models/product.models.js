@@ -4,7 +4,7 @@ import db from '../../../db/dbconfig';
 
 Model.knex(db);
 
-export default class Products extends Model {
+export default class Product extends Model {
   static get tableName() {
     return 'products';
   }
