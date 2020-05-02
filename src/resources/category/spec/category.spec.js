@@ -1,4 +1,3 @@
-/* eslint-disable import/no-mutable-exports */
 import request from 'supertest';
 import app from '../../../server';
 import db from '../../../db/dbconfig';

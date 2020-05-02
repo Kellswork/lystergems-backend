@@ -32,7 +32,7 @@ const validateProduct = [
     .withMessage('Product description cannot be more than 50 characters')
     .trim(),
   check('price')
-    .isNumeric()
+    .isFloat()
     .withMessage('price must be float numbers')
     .isLength({ min: 1 })
     .withMessage('please input the product price')
