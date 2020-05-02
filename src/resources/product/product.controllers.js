@@ -18,16 +18,16 @@ const createProduct = async (req, res) => {
       size,
     } = req.body;
     const product = await addProduct({
-      category_id,
+      category_id: Number(category_id),
       name: name.toLowerCase(),
       image1,
       image2,
       image3,
       description,
-      quantity,
+      quantity: Number(quantity),
       is_available,
       color,
-      price,
+      price: parseFloat(price),
       size,
     });
 

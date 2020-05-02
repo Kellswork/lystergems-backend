@@ -16,7 +16,7 @@ export default class Product extends Model {
       required: ['category_id', 'name', 'description', 'price'],
       properties: {
         category_id: {
-          type: 'string',
+          type: 'integer',
         },
         name: {
           type: 'string',

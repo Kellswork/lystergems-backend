@@ -12,7 +12,6 @@ const user = {
   email: 'kelsi3rvvt@gmail.com',
   password: 'pass12345',
   confirmPassword: 'pass12345',
-  role: 'admin',
 };
 
 const pass = hashPassword(user.password);
