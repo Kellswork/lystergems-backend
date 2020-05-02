@@ -1,5 +1,4 @@
 import request from 'supertest';
-// import { body } from 'express-validator';
 import app from '../../../server';
 import db from '../../../db/dbconfig';
 
