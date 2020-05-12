@@ -122,15 +122,13 @@ describe('GET Categories', () => {
     expect(response.statusCode).toBe(401);
   });
 
-  it('should fail if logged in user is not an admin', async () => {
+  it('should fetch categories if logged in user is not an admin', async () => {
     const response = await request(app)
       .get('/api/v1/categories')
       .set({ 'x-auth-token': userToken, Accept: 'application/json' });
 
-    expect(response.statusCode).toBe(403);
-    expect(response.body.error).toEqual(
-      'You are not authorized to perform this action.',
-    );
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toEqual('Categories fetched successfully');
   });
 
   it('should fail if token is invalid', async () => {
