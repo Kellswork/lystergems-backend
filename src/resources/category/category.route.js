@@ -13,6 +13,6 @@ router.post(
   validateAdmin,
   addCategory,
 );
-router.get('/categories', verifyAuth, validateAdmin, fetchAllCategories);
+router.get('/categories', verifyAuth, fetchAllCategories);
 
 export default router;
