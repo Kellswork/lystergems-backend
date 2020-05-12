@@ -4,8 +4,8 @@ import { formatResponse } from '../../helpers/baseHelper';
 
 const createProduct = async (req, res) => {
   try {
+    const { categoryId } = req.params;
     const {
-      category_id,
       name,
       image1,
       image2,
@@ -18,7 +18,7 @@ const createProduct = async (req, res) => {
       size,
     } = req.body;
     const product = await addProduct({
-      category_id: Number(category_id),
+      category_id: Number(categoryId),
       name: name.toLowerCase(),
       image1,
       image2,
