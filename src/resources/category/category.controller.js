@@ -1,7 +1,7 @@
-import { createCategory } from './models/index.model';
+import { createCategory, getAllCategories } from './models/index.model';
 import { formatResponse } from '../../helpers/baseHelper';
 
-const addCategory = async (req, res) => {
+export const addCategory = async (req, res) => {
   try {
     const { name } = req.body;
     const category = await createCategory({ name: name.toLowerCase() });
@@ -27,4 +27,20 @@ const addCategory = async (req, res) => {
   }
 };
 
-export default addCategory;
+export const fetchAllCategories = async (req, res) => {
+  try {
+    const categories = await getAllCategories();
+    return formatResponse(
+      res,
+      { message: 'Categories fetched successfully' },
+      200,
+      { categories },
+    );
+  } catch (error) {
+    return formatResponse(
+      res,
+      { error: 'Error getting categories, please try again later' },
+      500,
+    );
+  }
+};
