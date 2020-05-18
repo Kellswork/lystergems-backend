@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import { addProduct } from './models/index.models';
 import { formatResponse } from '../../helpers/baseHelper';
+import { getCategoryById } from '../category/models/index.model';
 
 const createProduct = async (req, res) => {
   try {
@@ -17,6 +18,16 @@ const createProduct = async (req, res) => {
       price,
       size,
     } = req.body;
+
+    const response = await getCategoryById(categoryId);
+    if (!response.length) {
+      return formatResponse(
+        res,
+        { error: 'Could not find category with id' },
+        404,
+      );
+    }
+
     const product = await addProduct({
       category_id: Number(categoryId),
       name: name.toLowerCase(),

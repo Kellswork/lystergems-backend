@@ -1,6 +1,5 @@
-import { param, body, check, validationResult } from 'express-validator';
+import { body, check, validationResult } from 'express-validator';
 import { getProductName } from '../resources/product/models/index.models';
-import { getCategoryById } from '../resources/category/models/index.model';
 
 const validateProduct = [
   check('name')
@@ -37,16 +36,7 @@ const validateProduct = [
     .isLength({ min: 1 })
     .withMessage('please add product quantity')
     .trim(),
-  param('categoryId').custom(async (value) => {
-    try {
-      const response = await getCategoryById(+value);
-      if (response.length <= 0) {
-        throw new Error('Could not find category with this id');
-      }
-    } catch (error) {
-      throw new Error(error);
-    }
-  }),
+
   body('name').custom(async (value) => {
     try {
       const response = await getProductName(value.toLowerCase());
