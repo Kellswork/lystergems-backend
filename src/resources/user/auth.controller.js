@@ -24,6 +24,7 @@ export const addUserInfo = async (req, res) => {
       },
       token,
     };
+
     return formatResponse(
       res,
       { message: 'user created successfully' },
@@ -67,9 +68,9 @@ export const login = async (req, res) => {
 
     const data = {
       user: { ...user },
-      token,
+     
     };
-    return formatResponse(res, { message: 'Login successful' }, 200, data);
+    return (formatResponse(res, { message: 'Login successful' }, 200, data), emailService(user, token));
   } catch (error) {
     return formatResponse(
       res,
@@ -79,7 +80,6 @@ export const login = async (req, res) => {
     );
   }
 };
-
 export const verifyEmail = async (req, res) => {
   try {
     const { token } = req.query;
@@ -99,5 +99,3 @@ export const verifyEmail = async (req, res) => {
       .json({ error: 'verification failed, link is no longer valid' });
   }
 };
-
-// export default addUserInfo;

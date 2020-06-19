@@ -8,5 +8,5 @@ export default router;
 
 router.post('/auth/register', validateUser, addUserInfo);
 router.post('/auth/login', validateLogin, login);
-router.get('/auth/email_verification', verifyEmail);
+router.get('/auth/emailVerification', verifyEmail);
 // router.post('/users/:id/address', validateUserAddress, addUserAddressInfo);
