@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+require('dotenv').config();
 
 // async..await is not allowed in global scope, must use a wrapper
 async function mailService(user, token) {
@@ -12,19 +13,16 @@ async function mailService(user, token) {
         type: 'OAuth2',
         // move all of this to .env file
         user: 'kellshoppingsite@gmail.com',
-        clientId:
-          '968415738874-8igevv0klj4oaqcmknasec09umu9ssp7.apps.googleusercontent.com',
-        clientSecret: 'fxtfzeSEM7qz_kNEnn-d79h6',
-        refreshToken:
-          '1//04Bp566oJaLbSCgYIARAAGAQSNgF-L9IrhGMqgoYf_igCC8G3PjJtByr_XQ6wYYtHSOZxKNoqHPxX3Igp6EG-eJMkygG5pAKGjw',
-        accessToken:
-          'ya29.a0Ae4lvC0LG8T4eay4nNTQz9tdKqQukYSAYNfd4tJQL2mpNjFQN8Ba0KeikARufJVIiDvJBxulPMFgnONLS8zb5BiSM3RjnJyBv-8AMTqudFVASgYhTkFdqHpurENGM24aU92o_8VzhLa2TEz3EckSj5JUPSZpT-RDmL8',
+        clientId:process.env.clientId,
+        clientSecret:process.env.clientSecret ,
+        refreshToken: process.env.refreshToken,
+        accessToken: process.env.accessToken,
         expires: 3599,
       },
     });
 
     // email verification url
-    const url = `http://localhost:3000/api/v1/auth/email_verification?token=${token}`;
+    const url = `http://localhost:3000/api/v1/auth/emailVerification?token=${token}`;
     // might be moving this to the endpoint or create a function and export it
 
     const info = await transporter.sendMail({
