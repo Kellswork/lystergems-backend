@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
 import { createUser, getUserByEmail } from './models/index.model';
-import { generateToken } from '../../helpers/jwtHelper';
+import { generateToken, verifyToken } from '../../helpers/jwtHelper';
 import { hashPassword, formatResponse } from '../../helpers/baseHelper';
-import emailService from '../../services/email';
+import sendEmailConfirmation from '../../services/email';
 
 export const addUserInfo = async (req, res) => {
   try {
@@ -24,7 +24,7 @@ export const addUserInfo = async (req, res) => {
       },
       token,
     };
-
+    sendEmailConfirmation(data.user, token);
     return formatResponse(
       res,
       { message: 'user created successfully' },
@@ -32,6 +32,7 @@ export const addUserInfo = async (req, res) => {
       data,
     );
   } catch (error) {
+    console.log(error);
     if (
       error.name == 'UniqueViolationError' &&
       error.columns.includes('email')
@@ -68,9 +69,9 @@ export const login = async (req, res) => {
 
     const data = {
       user: { ...user },
-     
+      token,
     };
-    return (formatResponse(res, { message: 'Login successful' }, 200, data), emailService(user, token));
+    return formatResponse(res, { message: 'Login successful' }, 200, data);
   } catch (error) {
     return formatResponse(
       res,
