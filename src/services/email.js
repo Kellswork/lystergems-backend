@@ -55,3 +55,4 @@ const sendEmailConfirmation = (user, token) =>
     .catch((error) => console.log(error));
 
 export default sendEmailConfirmation;
+// "//localhost:3000/api/v1/auth/emailVerification?token={{token}}"

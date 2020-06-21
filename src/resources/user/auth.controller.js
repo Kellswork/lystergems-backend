@@ -1,5 +1,9 @@
 import bcrypt from 'bcryptjs';
-import { createUser, getUserByEmail } from './models/index.model';
+import {
+  createUser,
+  getUserByEmail,
+  updateUserVerification,
+} from './models/index.model';
 import { generateToken, verifyToken } from '../../helpers/jwtHelper';
 import { hashPassword, formatResponse } from '../../helpers/baseHelper';
 import sendEmailConfirmation from '../../services/email';
@@ -91,12 +95,26 @@ export const verifyEmail = async (req, res) => {
     // give them an option of requesting for a new token
     // generate another token link using generateToken fxn with the user email
     // send verification message to user email
-    console.log(validateToken);
-    return res.status(200).json({ message: `email has been verified` });
+    updateUserVerification(validateToken.id);
+    return formatResponse(
+      res,
+      { message: 'email has been verified' },
+      200,
+      validateToken,
+    );
   } catch (error) {
     console.log(error);
     return res
       .status(500)
       .json({ error: 'verification failed, link is no longer valid' });
+  }
+};
+
+export const ResendLink = (req, res) => {
+  sendEmailConfirmation(data.user, token);
+  try {
+    return formatResponse(res, { message: 'email link sent' }, 200);
+  } catch (error) {
+    return formatResponse(res, { message: 'could not send link' }, 500);
   }
 };
