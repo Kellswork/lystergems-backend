@@ -12,6 +12,6 @@ export async function createUserAddress(userAddressInfo) {
 export async function getUserByEmail(email) {
   return User.query().where({ email });
 }
-export async function updateUserVerification(id) {
+export async function verifyUser(id) {
   return User.query().where({ id }).patch({ is_verified: true });
 }
