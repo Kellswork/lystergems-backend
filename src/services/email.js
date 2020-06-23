@@ -1,9 +1,6 @@
 import nodemailer from 'nodemailer';
 import Email from 'email-templates';
 import path from 'path';
-// const nodemailer = require('nodemailer');
-// const Email = require('email-templates');
-// const path = require('path');
 
 require('dotenv').config();
 
