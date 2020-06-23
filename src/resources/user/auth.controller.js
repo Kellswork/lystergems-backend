@@ -14,7 +14,7 @@ export const addUserInfo = async (req, res) => {
       email,
       password: hashedPassword,
     });
-    const token = generateToken(user, '1d');
+    const token = generateToken(user);
     const data = {
       user: {
         id: user.id,
