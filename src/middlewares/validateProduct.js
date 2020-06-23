@@ -1,14 +1,7 @@
 import { body, check, validationResult } from 'express-validator';
 import { getProductName } from '../resources/product/models/index.models';
-import { getCategoryById } from '../resources/category/models/index.model';
 
 const validateProduct = [
-  check('category_id')
-    .isNumeric()
-    .withMessage('category id is not valid')
-    .isLength({ min: 1 })
-    .withMessage('please input a category id')
-    .trim(),
   check('name')
     .matches(/^[a-zA-Z ]+$/i)
     .withMessage('Product name must contain only alphabets')
@@ -43,21 +36,12 @@ const validateProduct = [
     .isLength({ min: 1 })
     .withMessage('please add product quantity')
     .trim(),
+
   body('name').custom(async (value) => {
     try {
       const response = await getProductName(value.toLowerCase());
       if (response.length) {
         throw new Error('A product with this name already exists');
-      }
-    } catch (error) {
-      throw new Error(error);
-    }
-  }),
-  body('category_id').custom(async (value) => {
-    try {
-      const response = await getCategoryById(value);
-      if (response.length <= 0) {
-        throw new Error('Could not find category with this id');
       }
     } catch (error) {
       throw new Error(error);

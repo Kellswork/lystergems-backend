@@ -48,7 +48,7 @@ describe('Product', () => {
   describe('authentication', () => {
     it('should fail if user is not authenticated', async () => {
       const response = await request(app)
-        .post('/api/v1/product')
+        .post('/api/v1/categories/1/products')
         .set({ Accept: 'application/json' })
         .send(product);
       expect(response.statusCode).toBe(401);
@@ -59,7 +59,7 @@ describe('Product', () => {
 
     it('should fail if logged in user is not an admin', async () => {
       const response = await request(app)
-        .post('/api/v1/product')
+        .post('/api/v1/categories/1/products')
         .set({ 'x-auth-token': userToken, Accept: 'application/json' })
         .send(product);
       expect(response.statusCode).toBe(403);
@@ -69,7 +69,7 @@ describe('Product', () => {
     });
     it('should fail if token is invalid', async () => {
       const response = await request(app)
-        .post('/api/v1/product')
+        .post('/api/v1/categories/1/products')
         .set({ 'x-auth-token': 'mumu token lol', Accept: 'application/json' })
         .send(product);
       expect(response.statusCode).toBe(401);
@@ -82,10 +82,9 @@ describe('Product', () => {
         .send({ name: 'wedding rings' });
 
       const response = await request(app)
-        .post('/api/v1/product')
+        .post(`/api/v1/categories/${category.body.id}/products`)
         .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
         .send({
-          category_id: category.body.id,
           name: 'ball point',
           description: `it's a ring that has a ball i dunno mehn`,
           quantity: 100,
@@ -100,8 +99,13 @@ describe('Product', () => {
 
   describe('validation', () => {
     it('should fail if name is empty', async () => {
+      const category = await request(app)
+        .post('/api/v1/categories')
+        .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
+        .send({ name: 'wedding rings' });
+
       const response = await request(app)
-        .post('/api/v1/product')
+        .post(`/api/v1/categories/${category.body.id}/products`)
         .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
         .send({ name: '' });
       expect(response.statusCode).toBe(400);
@@ -113,8 +117,13 @@ describe('Product', () => {
     });
 
     it('should fail if product already exists', async () => {
+      const category = await request(app)
+        .post('/api/v1/categories')
+        .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
+        .send({ name: 'wedding rings' });
+
       const response = await request(app)
-        .post('/api/v1/product')
+        .post(`/api/v1/categories/${category.body.id}/products`)
         .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
         .send(product);
       expect(response.statusCode).toBe(400);

@@ -35,7 +35,7 @@ beforeAll(async () => {
   userToken = userResponse.body.token;
 });
 
-describe('Categories', () => {
+describe('POST Categories', () => {
   it('should fail if user is not authenticated', async () => {
     const response = await request(app)
       .post('/api/v1/categories')
@@ -110,5 +110,43 @@ describe('Categories', () => {
         'Error: A category with this name already exists',
       ]),
     );
+  });
+});
+
+describe('GET Categories', () => {
+  it('should fail if user is not logged in', async () => {
+    const response = await request(app)
+      .get('/api/v1/categories')
+      .set({ Accept: 'application/json' });
+
+    expect(response.statusCode).toBe(401);
+  });
+
+  it('should fetch categories if logged in user is not an admin', async () => {
+    const response = await request(app)
+      .get('/api/v1/categories')
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toEqual('Categories fetched successfully');
+  });
+
+  it('should fail if token is invalid', async () => {
+    const response = await request(app)
+      .get('/api/v1/categories')
+      .set({ 'x-auth-token': 'invalid token', Accept: 'application/json' });
+
+    expect(response.statusCode).toBe(401);
+  });
+
+  it('should fetch categories if logged in user is an admin', async () => {
+    const response = await request(app)
+      .get('/api/v1/categories')
+      .set({ 'x-auth-token': adminToken, Accept: 'application/json' });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toEqual('Categories fetched successfully');
+    expect(response.body.categories.length).toBe(1);
+    expect(response.body.categories[0].name).toEqual('name');
   });
 });

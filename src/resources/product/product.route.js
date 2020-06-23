@@ -6,7 +6,7 @@ import { verifyAuth, validateAdmin } from '../../middlewares/validateUserAuth';
 const router = Router();
 
 router.post(
-  '/product',
+  '/categories/:categoryId/products',
   verifyAuth,
   validateAdmin,
   validateProduct,

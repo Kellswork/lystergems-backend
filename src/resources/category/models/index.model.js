@@ -11,3 +11,7 @@ export async function getCategoryByName(name) {
 export async function getCategoryById(id) {
   return Category.query().where({ id });
 }
+
+export async function getAllCategories() {
+  return Category.query().select('*');
+}
