@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 require('dotenv').config();
 
-export const generateToken = (payload) => {
+export const generateToken = (payload, value) => {
   return jwt.sign(
     {
       id: payload.id,
@@ -10,7 +10,7 @@ export const generateToken = (payload) => {
       role: payload.role,
     },
     process.env.JWT_SECRET,
-    { expiresIn: '1d' },
+    { expiresIn: value },
   );
 };
 

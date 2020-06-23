@@ -1,9 +1,5 @@
 import bcrypt from 'bcryptjs';
-import {
-  createUser,
-  getUserByEmail,
-  updateUserVerification,
-} from './models/index.model';
+import { createUser, getUserByEmail, verifyUser } from './models/index.model';
 import { generateToken, verifyToken } from '../../helpers/jwtHelper';
 import { hashPassword, formatResponse } from '../../helpers/baseHelper';
 import sendEmailConfirmation from '../../services/email';
@@ -18,7 +14,7 @@ export const addUserInfo = async (req, res) => {
       email,
       password: hashedPassword,
     });
-    const token = generateToken(user);
+    const token = generateToken(user, '1d');
     const data = {
       user: {
         id: user.id,
@@ -36,7 +32,6 @@ export const addUserInfo = async (req, res) => {
       data,
     );
   } catch (error) {
-    console.log(error);
     if (
       error.name == 'UniqueViolationError' &&
       error.columns.includes('email')
@@ -89,13 +84,8 @@ export const verifyEmail = async (req, res) => {
   try {
     const { token } = req.query;
     const validateToken = verifyToken(token);
-    // if the token has expired
-    // redirect user to login endpoint
-    // let them know that their token has expired
-    // give them an option of requesting for a new token
-    // generate another token link using generateToken fxn with the user email
-    // send verification message to user email
-    updateUserVerification(validateToken.id);
+
+    verifyUser(validateToken.id);
     return formatResponse(
       res,
       { message: 'email has been verified' },
@@ -103,7 +93,6 @@ export const verifyEmail = async (req, res) => {
       validateToken,
     );
   } catch (error) {
-    console.log(error);
     return res
       .status(500)
       .json({ error: 'verification failed, link is no longer valid' });
