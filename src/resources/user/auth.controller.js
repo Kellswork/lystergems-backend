@@ -98,12 +98,3 @@ export const verifyEmail = async (req, res) => {
       .json({ error: 'verification failed, link is no longer valid' });
   }
 };
-
-// export const ResendLink = (req, res) => {
-//   sendEmailConfirmation(data.user, token);
-//   try {
-//     return formatResponse(res, { message: 'email link sent' }, 200);
-//   } catch (error) {
-//     return formatResponse(res, { message: 'could not send link' }, 500);
-//   }
-// };
