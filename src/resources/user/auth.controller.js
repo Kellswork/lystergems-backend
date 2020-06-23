@@ -25,7 +25,7 @@ export const addUserInfo = async (req, res) => {
       token,
     };
 
-    sendEmailConfirmation(user, token);
+    sendEmailConfirmation(data.user, token);
     return formatResponse(
       res,
       { message: 'user created successfully' },
