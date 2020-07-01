@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import { createUser, getUserByEmail, verifyUser } from './models/index.model';
 import { generateToken, verifyToken } from '../../helpers/jwtHelper';
 import { hashPassword, formatResponse } from '../../helpers/baseHelper';
-import sendEmailConfirmation from '../../services/email';
+import sendEmail from '../../services/email';
 
 export const addUserInfo = async (req, res) => {
   try {
@@ -25,7 +25,7 @@ export const addUserInfo = async (req, res) => {
       token,
     };
 
-    sendEmailConfirmation(user, token);
+    sendEmail(user, token);
     return formatResponse(
       res,
       { message: 'user created successfully' },
@@ -97,5 +97,36 @@ export const verifyEmail = async (req, res) => {
     return res
       .status(500)
       .json({ error: 'verification failed, link is no longer valid' });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const dbUser = await getUserByEmail(email);
+    if (!dbUser[0]) {
+      return res.status(404).json({ error: 'Invalid Email' });
+    }
+    const { id, firstname, lastname } = dbUser[0];
+    const user = {
+      id,
+      firstname,
+      lastname,
+      email,
+    };
+
+    const token = generateToken(user);
+    const result = await sendEmail(user, token, true);
+    console.log('result', result);
+    return res
+      .status(200)
+      .json({ message: 'ResetPassword Link Sent!', result });
+  } catch (error) {
+    return formatResponse(
+      res,
+      { error: 'unable to send message at the moment' },
+      500,
+      { error },
+    );
   }
 };

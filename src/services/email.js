@@ -31,21 +31,28 @@ const email = new Email({
     root: __dirname,
   },
 });
-const sendEmailConfirmation = (user, token) =>
+const sendEmail = (user, token, isReset = false) =>
   email
-    .send({
-      template: path.join(__dirname, 'template'),
-      message: {
-        from: 'LysterGems <support@lystergems.com>', // sender address
-        to: user.email, // list of receivers
+    .send(
+      {
+        template: isReset
+          ? path.join(__dirname, 'resetPassword')
+          : path.join(__dirname, 'confirmEmail'),
+        message: {
+          from: 'LysterGems <support@lystergems.com>', // sender address
+          to: user.email, // list of receivers
+        },
+        locals: {
+          fname: user.firstname,
+          lname: user.lastname,
+          token,
+        },
       },
-      locals: {
-        fname: user.firstname,
-        lname: user.lastname,
-        token,
-      },
-    })
-    .then(() => console.log('Message sent: %s'))
-    .catch((error) => console.log(error));
+      console.log('user', user),
+      console.log('token', token),
+      console.log('isReset', isReset),
+    )
+    .then(() => 'Message sent')
+    .catch((error) => error);
 
-export default sendEmailConfirmation;
+export default sendEmail;
