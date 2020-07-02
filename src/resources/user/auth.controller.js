@@ -99,9 +99,11 @@ export const verifyEmail = async (req, res) => {
       validateToken,
     );
   } catch (error) {
-    return res
-      .status(500)
-      .json({ error: 'verification failed, link is no longer valid' });
+    return formatResponse(
+      res,
+      { error: 'verification failed, link is no longer valid' },
+      500,
+    );
   }
 };
 
@@ -109,9 +111,8 @@ export const resetPasswordLink = async (req, res) => {
   try {
     const { email } = req.body;
     const dbUser = await getUserByEmail(email);
-    if (!dbUser[0]) {
-      return res.status(404).json({ error: 'Invalid Email' });
-    }
+    if (!dbUser[0]) return formatResponse(res, { error: 'Invalid Email' }, 404);
+
     const { id, firstname, lastname } = dbUser[0];
     const user = {
       id,
@@ -122,9 +123,8 @@ export const resetPasswordLink = async (req, res) => {
 
     const token = generateToken(user);
     const result = await sendEmail(user, token, true);
-    if (result == 'message sent') {
-      return res.status(200).json({ message: 'ResetPassword Link Sent!' });
-    }
+    if (result == 'message sent')
+      return formatResponse(res, { message: 'ResetPassword Link Sent!' }, 200);
   } catch (error) {
     return formatResponse(
       res,
@@ -140,17 +140,20 @@ export const newPassword = async (req, res) => {
     const { token } = req.query;
     const payload = verifyToken(token);
     if (!payload)
-      return res
-        .status(401)
-        .json({ message: 'Password token link is invalid or has expired' });
-
+      return formatResponse(
+        res,
+        { message: 'Password token link is invalid or has expired' },
+        401,
+      );
     const { password } = req.body;
     const hashedPassword = hashPassword(password);
     await updateUserPassword(payload.id, hashedPassword);
 
-    return res
-      .status(202)
-      .json({ message: 'Password has been updated succesfully' });
+    return formatResponse(
+      res,
+      { message: 'Password has been updated succesfully' },
+      202,
+    );
   } catch (error) {
     return formatResponse(
       res,
