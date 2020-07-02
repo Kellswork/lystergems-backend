@@ -1,2 +1,8 @@
 <!-- app/templates/contact-request/text.hbs -->
+Hi {{fname}}
 
+Thank you for signing up to shop our lovely collections on LysterGems. Click on the link to confirm your email
+http://localhost:8080/verifyEmail?token={{token}}
+
+If you cannot click on the link, copy and paste the following URL into a new tab in your browser:
+localhost:3000/api/v1/auth/emailVerification?token={{token}}

@@ -1,5 +1,10 @@
 import bcrypt from 'bcryptjs';
-import { createUser, getUserByEmail, verifyUser } from './models/index.model';
+import {
+  createUser,
+  getUserByEmail,
+  verifyUser,
+  updateUserPassword,
+} from './models/index.model';
 import { generateToken, verifyToken } from '../../helpers/jwtHelper';
 import { hashPassword, formatResponse } from '../../helpers/baseHelper';
 import sendEmail from '../../services/email';
@@ -25,7 +30,7 @@ export const addUserInfo = async (req, res) => {
       token,
     };
 
-    sendEmail(user, token);
+    await sendEmail(user, token);
     return formatResponse(
       res,
       { message: 'user created successfully' },
@@ -86,11 +91,11 @@ export const verifyEmail = async (req, res) => {
     const { token } = req.query;
     const validateToken = verifyToken(token);
 
-    verifyUser(validateToken.id);
+    await verifyUser(validateToken.id);
     return formatResponse(
       res,
       { message: 'email has been verified' },
-      200,
+      202,
       validateToken,
     );
   } catch (error) {
@@ -100,7 +105,7 @@ export const verifyEmail = async (req, res) => {
   }
 };
 
-export const resetPassword = async (req, res) => {
+export const resetPasswordLink = async (req, res) => {
   try {
     const { email } = req.body;
     const dbUser = await getUserByEmail(email);
@@ -117,10 +122,35 @@ export const resetPassword = async (req, res) => {
 
     const token = generateToken(user);
     const result = await sendEmail(user, token, true);
-    console.log('result', result);
+    if (result == 'message sent') {
+      return res.status(200).json({ message: 'ResetPassword Link Sent!' });
+    }
+  } catch (error) {
+    return formatResponse(
+      res,
+      { error: 'unable to send message at the moment' },
+      500,
+      { error },
+    );
+  }
+};
+
+export const newPassword = async (req, res) => {
+  try {
+    const { token } = req.query;
+    const payload = verifyToken(token);
+    if (!payload)
+      return res
+        .status(401)
+        .json({ message: 'Password token link is invalid or has expired' });
+
+    const { password } = req.body;
+    const hashedPassword = hashPassword(password);
+    await updateUserPassword(payload.id, hashedPassword);
+
     return res
-      .status(200)
-      .json({ message: 'ResetPassword Link Sent!', result });
+      .status(202)
+      .json({ message: 'Password has been updated succesfully' });
   } catch (error) {
     return formatResponse(
       res,
