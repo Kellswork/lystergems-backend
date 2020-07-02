@@ -7,7 +7,7 @@
     "start": "nodemon src/index.js --exec \"node -r @babel/register\"",
     "build": "npm run clean && babel src --out-dir dist",
     "clean": "rimraf dist",
-    "test": "NODE_ENV=testing jest --coverage  --verbose --detectOpenHandles --forceExit",
+    "test": "NODE_ENV=testing jest --coverage  --verbose --detectOpenHandles --forceExit --testTimeout=15000",
     "knex": "node -r esm node_modules/.bin/knex",
     "db:latest": "npm run knex migrate:latest",
     "db:rollback": "npm run knex migrate:rollback",
