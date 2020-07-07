@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
-import { addProduct } from './models/index.models';
+import { addProduct, getAllProductsInaCategory } from './models/index.models';
 import { formatResponse } from '../../helpers/baseHelper';
 import { getCategoryById } from '../category/models/index.model';
 
-const createProduct = async (req, res) => {
+export const createProduct = async (req, res) => {
   try {
     const { categoryId } = req.params;
     const {
@@ -60,4 +60,23 @@ const createProduct = async (req, res) => {
   }
 };
 
-export default createProduct;
+export const fetchProductsInaCategory = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+    const products = await getAllProductsInaCategory(categoryId);
+    return formatResponse(
+      res,
+      { message: 'products fetched succesfully' },
+      200,
+      {
+        products,
+      },
+    );
+  } catch (error) {
+    return formatResponse(
+      res,
+      { error: 'Error getting categories, please try again later' },
+      500,
+    );
+  }
+};
