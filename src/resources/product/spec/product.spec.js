@@ -64,7 +64,7 @@ describe('Product', () => {
         .send(product);
       expect(response.statusCode).toBe(403);
       expect(response.body.error).toEqual(
-        'You are not authorized to perform this action.',
+        'You are not authorized to perform this action',
       );
     });
     it('should fail if token is invalid', async () => {

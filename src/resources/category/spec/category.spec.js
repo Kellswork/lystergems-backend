@@ -54,7 +54,7 @@ describe('POST Categories', () => {
       .send({ name: 'new category' });
     expect(response.statusCode).toBe(403);
     expect(response.body.error).toEqual(
-      'You are not authorized to perform this action.',
+      'You are not authorized to perform this action',
     );
   });
 
@@ -148,5 +148,79 @@ describe('GET Categories', () => {
     expect(response.body.message).toEqual('Categories fetched successfully');
     expect(response.body.categories.length).toBe(1);
     expect(response.body.categories[0].name).toEqual('name');
+  });
+});
+
+describe('Patch Categories', () => {
+  it('should fail if token is invalid', async () => {
+    const response = await request(app)
+      .patch('/api/v1/categories/1')
+      .set({ 'x-auth-token': 'invalid token', Accept: 'application/json' });
+    expect(response.statusCode).toBe(401);
+  });
+  it('should fail if logged in user is not an admin', async () => {
+    const response = await request(app)
+      .patch('/api/v1/categories/1')
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(403);
+    expect(response.body.error).toEqual(
+      'You are not authorized to perform this action',
+    );
+  });
+
+  it('should fail if name is alphanumeric', async () => {
+    const response = await request(app)
+      .patch('/api/v1/categories/1')
+      .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
+      .send({ name: 'category123' });
+    expect(response.statusCode).toBe(400);
+    expect(response.body.error).toEqual(
+      expect.arrayContaining(['Name must contain only alphabets']),
+    );
+  });
+
+  it('should fail if name is empty', async () => {
+    const response = await request(app)
+      .patch('/api/v1/categories/1')
+      .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
+      .send({ name: '' });
+    expect(response.statusCode).toBe(400);
+    expect(response.body.error).toEqual(
+      expect.arrayContaining([
+        'Category name must be at least 3 characters long',
+      ]),
+    );
+  });
+  it('should fail if category already exists', async () => {
+    const response = await request(app)
+      .patch('/api/v1/categories/1')
+      .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
+      .send({ name: 'name' });
+    expect(response.statusCode).toBe(400);
+    expect(response.body.error).toEqual(
+      expect.arrayContaining([
+        'Error: A category with this name already exists',
+      ]),
+    );
+  });
+  it('should return a 404 if category with id is not found', async () => {
+    const response = await request(app)
+      .patch('/api/v1/categories/2038')
+      .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
+      .send({ name: 'not found' });
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error).toEqual('Category with id not found');
+  });
+  it('should patch categories if logged in user is an admin', async () => {
+    const category = await request(app)
+      .post('/api/v1/categories')
+      .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
+      .send({ name: 'alte glasses' });
+    const response = await request(app)
+      .patch(`/api/v1/categories/${category.body.id}`)
+      .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
+      .send({ name: 'retro glasses' });
+    expect(response.statusCode).toBe(202);
+    expect(response.body.message).toEqual('Category updated successfully');
   });
 });
