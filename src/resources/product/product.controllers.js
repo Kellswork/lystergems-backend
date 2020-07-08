@@ -77,9 +77,10 @@ export const fetchProductsInaCategory = async (req, res) => {
       },
     );
   } catch (error) {
+    console.log(error)
     return formatResponse(
       res,
-      { error: 'Error getting categories, please try again later' },
+      { error: 'Error getting products, please try again later' },
       500,
     );
   }
@@ -91,7 +92,7 @@ export const fetchOneProduct = async (req, res) => {
     const product = await getProductById(id);
     return formatResponse(
       res,
-      { message: 'products fetched succesfully' },
+      { message: 'product fetched succesfully' },
       200,
       {
         product,

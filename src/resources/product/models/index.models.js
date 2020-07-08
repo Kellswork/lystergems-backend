@@ -9,7 +9,7 @@ export async function getProductName(name) {
 }
 
 export async function getProductById(id) {
-  return Product.query().where({ id });
+  return Product.query().where({ id }).first();
 }
 
 export async function getAllProductsInaCategory(id) {

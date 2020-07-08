@@ -1,6 +1,10 @@
 import { Router } from 'express';
 import validateProduct from '../../middlewares/validateProduct';
-import { createProduct, fetchProductsInaCategory } from './product.controllers';
+import {
+  createProduct,
+  fetchProductsInaCategory,
+  fetchOneProduct,
+} from './product.controllers';
 import { verifyAuth, validateAdmin } from '../../middlewares/validateUserAuth';
 
 const router = Router();
@@ -14,5 +18,6 @@ router.post(
 );
 
 router.get('/categories/:categoryId/products', fetchProductsInaCategory);
+router.get('/categories/:categoryId/products/:id', fetchOneProduct);
 
 export default router;
