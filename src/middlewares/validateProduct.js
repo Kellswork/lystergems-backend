@@ -1,7 +1,17 @@
 import { body, check, validationResult } from 'express-validator';
-import { getProductName } from '../resources/product/models/index.models';
+import { getProductByAttribute } from '../resources/product/models/index.models';
 
-const validateProduct = [
+const handleErrors = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      error: errors.array().map((i) => i.msg),
+    });
+  }
+  return next();
+};
+
+export const validateProduct = [
   check('name')
     .matches(/^[a-zA-Z ]+$/i)
     .withMessage('Product name must contain only alphabets')
@@ -36,10 +46,15 @@ const validateProduct = [
     .isLength({ min: 1 })
     .withMessage('please add product quantity')
     .trim(),
+  (req, res, next) => handleErrors(req, res, next),
+];
 
+export const validateNameUniqueness = [
   body('name').custom(async (value) => {
     try {
-      const response = await getProductName(value.toLowerCase());
+      const response = await getProductByAttribute({
+        name: value.toLowerCase(),
+      });
       if (response.length) {
         throw new Error('A product with this name already exists');
       }
@@ -47,15 +62,5 @@ const validateProduct = [
       throw new Error(error);
     }
   }),
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        error: errors.array().map((i) => i.msg),
-      });
-    }
-    return next();
-  },
+  (req, res, next) => handleErrors(req, res, next),
 ];
-
-export default validateProduct;
