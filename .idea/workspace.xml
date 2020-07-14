@@ -26,8 +26,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9f0ee1dc-1a94-4b74-8d73-1c4d49a1d5f1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/resources/category/category.route.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/category/category.route.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/category/spec/category.spec.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/category/spec/category.spec.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/knexfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/knexfile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/db/migrations/20200402151631_products.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/migrations/20200402151631_products.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middlewares/validateCategory.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/validateCategory.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middlewares/validateProduct.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/validateProduct.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/category/models/index.model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/category/models/index.model.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/product/models/index.models.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/product/models/index.models.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/product/product.controllers.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/product/products.controller.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/product/product.route.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/product/product.route.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/product/spec/product.spec.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/product/spec/product.spec.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/user/user.route.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/user/user.route.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +67,8 @@
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="nodejs.jest.jest_package" value="$PROJECT_DIR$/node_modules/jest" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
@@ -68,6 +79,41 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/resources/category" />
     </key>
+  </component>
+  <component name="RunManager" selected="Jest.Product">
+    <configuration name="Product" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/src/resources/product/spec/product.spec.js" />
+      <test-names>
+        <test-name value="Product" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="Product.update product" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/src/resources/product/spec/product.spec.js" />
+      <test-names>
+        <test-name value="Product" />
+        <test-name value="update product" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Jest.Product" />
+        <item itemvalue="Jest.Product.update product" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpringUtil" SPRING_PRE_LOADER_OPTION="true" RAKE_SPRING_PRE_LOADER_OPTION="true" RAILS_SPRING_PRE_LOADER_OPTION="true" />
   <component name="SvnConfiguration">
@@ -118,6 +164,22 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="578" y="279" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1587992854039" />
+    <state width="1638" height="295" key="GridCell.Tab.0.bottom" timestamp="1594664791895">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state width="1638" height="295" key="GridCell.Tab.0.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1594664791895" />
+    <state width="1638" height="295" key="GridCell.Tab.0.center" timestamp="1594664791893">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state width="1638" height="295" key="GridCell.Tab.0.center/0.0.1680.1050@0.0.1680.1050" timestamp="1594664791893" />
+    <state width="1638" height="295" key="GridCell.Tab.0.left" timestamp="1594664791892">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state width="1638" height="295" key="GridCell.Tab.0.left/0.0.1680.1050@0.0.1680.1050" timestamp="1594664791892" />
+    <state width="1638" height="295" key="GridCell.Tab.0.right" timestamp="1594664791894">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state width="1638" height="295" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1594664791894" />
     <state x="341" y="164" key="SettingsEditor" timestamp="1589278334867">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>

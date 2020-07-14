@@ -1,5 +1,5 @@
 import { body, check, validationResult } from 'express-validator';
-import { getCategoryByName } from '../resources/category/models/index.model';
+import { getCategoryByAttribute } from '../resources/category/models/index.model';
 
 const validateCategory = [
   check('name')
@@ -16,7 +16,9 @@ const validateCategory = [
     .trim(),
   body('name').custom(async (value) => {
     try {
-      const response = await getCategoryByName(value.toLowerCase());
+      const response = await getCategoryByAttribute({
+        name: value.toLowerCase(),
+      });
       if (response.length) {
         throw new Error('A category with this name already exists');
       }

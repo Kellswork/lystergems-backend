@@ -1,9 +1,13 @@
 /* eslint-disable camelcase */
-import { addProduct } from './models/index.models';
+import {
+  addProduct,
+  updateProduct,
+  getProductByAttribute,
+} from './models/index.models';
 import { formatResponse } from '../../helpers/baseHelper';
-import { getCategoryById } from '../category/models/index.model';
+import { getCategoryByAttribute } from '../category/models/index.model';
 
-const createProduct = async (req, res) => {
+export const createProduct = async (req, res) => {
   try {
     const { categoryId } = req.params;
     const {
@@ -19,7 +23,7 @@ const createProduct = async (req, res) => {
       size,
     } = req.body;
 
-    const response = await getCategoryById(categoryId);
+    const response = await getCategoryByAttribute({ id: categoryId });
     if (!response.length) {
       return formatResponse(
         res,
@@ -60,4 +64,28 @@ const createProduct = async (req, res) => {
   }
 };
 
-export default createProduct;
+export const update = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const dbProduct = await getProductByAttribute({ id });
+
+    if (!dbProduct.length) {
+      return formatResponse(
+        res,
+        { error: 'No product found with this id' },
+        404,
+      );
+    }
+    const response = await updateProduct(id, req.body);
+
+    return formatResponse(
+      res,
+      { message: 'Product updated successfully' },
+      200,
+      response[0],
+    );
+  } catch (error) {
+    console.log('TTTTTTTTTT', error);
+    return formatResponse(res, { error: 'Unable to update this product' }, 500);
+  }
+};
