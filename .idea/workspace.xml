@@ -26,17 +26,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9f0ee1dc-1a94-4b74-8d73-1c4d49a1d5f1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/knexfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/knexfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/db/migrations/20200402151631_products.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/migrations/20200402151631_products.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/middlewares/validateCategory.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/validateCategory.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/middlewares/validateProduct.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/validateProduct.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/category/models/index.model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/category/models/index.model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/product/models/index.models.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/product/models/index.models.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/product/product.controllers.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/product/products.controller.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/product/product.route.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/product/product.route.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/product/spec/product.spec.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/product/spec/product.spec.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/user/user.route.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/user/user.route.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
