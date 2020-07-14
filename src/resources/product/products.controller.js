@@ -2,7 +2,7 @@
 import {
   addProduct,
   updateProduct,
-  getProductByAttribute,
+  deleteProduct,
 } from './models/index.models';
 import { formatResponse } from '../../helpers/baseHelper';
 import { getCategoryByAttribute } from '../category/models/index.model';
@@ -67,15 +67,6 @@ export const createProduct = async (req, res) => {
 export const update = async (req, res) => {
   try {
     const { id } = req.params;
-    const dbProduct = await getProductByAttribute({ id });
-
-    if (!dbProduct.length) {
-      return formatResponse(
-        res,
-        { error: 'No product found with this id' },
-        404,
-      );
-    }
     const response = await updateProduct(id, req.body);
 
     return formatResponse(
@@ -85,7 +76,21 @@ export const update = async (req, res) => {
       response[0],
     );
   } catch (error) {
-    console.log('TTTTTTTTTT', error);
     return formatResponse(res, { error: 'Unable to update this product' }, 500);
+  }
+};
+
+export const removeProduct = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await deleteProduct(id);
+
+    return formatResponse(
+      res,
+      { message: 'Product deleted successfully' },
+      204,
+    );
+  } catch (error) {
+    return formatResponse(res, { error: 'Unable to delete this product' }, 500);
   }
 };
