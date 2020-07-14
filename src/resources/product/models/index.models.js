@@ -14,3 +14,7 @@ export async function updateProduct(id, updatedProduct) {
     .where({ id })
     .returning('*');
 }
+
+export async function deleteProduct(id) {
+  return Product.query().where({ id }).del();
+}

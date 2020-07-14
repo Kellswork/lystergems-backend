@@ -1,5 +1,6 @@
 import { body, check, validationResult } from 'express-validator';
 import { getProductByAttribute } from '../resources/product/models/index.models';
+import { formatResponse } from '../helpers/baseHelper';
 
 const handleErrors = (req, res, next) => {
   const errors = validationResult(req);
@@ -64,3 +65,20 @@ export const validateNameUniqueness = [
   }),
   (req, res, next) => handleErrors(req, res, next),
 ];
+
+export const checkIfProductExists = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const dbProduct = await getProductByAttribute({ id });
+    if (!dbProduct.length) {
+      return formatResponse(
+        res,
+        { message: 'No product found with this id' },
+        200,
+      );
+    }
+  } catch (error) {
+    return formatResponse(res, { error: 'An error occurred' }, 500);
+  }
+  return next();
+};
