@@ -89,7 +89,6 @@ describe('Login', () => {
   it('fails if password is incorrect', async () => {
     const response = await request(app)
       .post('/api/v1/auth/login')
-
       .send({ email: user.email, password: 'bad password' });
     expect(response.statusCode).toBe(400);
     expect(response.body.error).toEqual('Invalid Email/Password');
