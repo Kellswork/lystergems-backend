@@ -203,12 +203,12 @@ describe('Patch Categories', () => {
       ]),
     );
   });
-  it('should return a 404 if category with id is not found', async () => {
+  it('should return an error message if category with id is not found', async () => {
     const response = await request(app)
       .patch('/api/v1/categories/2038')
       .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
       .send({ name: 'not found' });
-    expect(response.statusCode).toBe(404);
+    expect(response.statusCode).toBe(200);
     expect(response.body.error).toEqual('Category with id not found');
   });
   it('should patch categories if logged in user is an admin', async () => {
@@ -241,11 +241,11 @@ describe('Delete Categories', () => {
       'You are not authorized to perform this action',
     );
   });
-  it('should return a 404 if category with id is not found', async () => {
+  it('should return a error message if category with id is not found', async () => {
     const response = await request(app)
       .delete('/api/v1/categories/2038')
       .set({ 'x-auth-token': adminToken, Accept: 'application/json' });
-    expect(response.statusCode).toBe(404);
+    expect(response.statusCode).toBe(200);
     expect(response.body.error).toEqual('Category with id not found');
   });
   it('should delete categories if logged in user is an admin', async () => {
@@ -257,7 +257,7 @@ describe('Delete Categories', () => {
       .delete(`/api/v1/categories/${category.body.id}`)
       .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
       .send({ name: 'retro glasses' });
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(204);
     expect(response.body.message).toEqual('Category has been deleted');
   });
 });

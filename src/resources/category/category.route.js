@@ -1,6 +1,9 @@
 import { Router } from 'express';
 
-import validateCategory from '../../middlewares/validateCategory';
+import {
+  validateCategory,
+  checkIfCategoryExists,
+} from '../../middlewares/validateCategory';
 import {
   addCategory,
   fetchAllCategories,
@@ -23,10 +26,17 @@ router.patch(
   '/categories/:id',
   verifyAuth,
   validateAdmin,
+  checkIfCategoryExists,
   validateCategory,
   editCategory,
 );
 
-router.delete('/categories/:id', verifyAuth, validateAdmin, deleteACategory);
+router.delete(
+  '/categories/:id',
+  verifyAuth,
+  validateAdmin,
+  checkIfCategoryExists,
+  deleteACategory,
+);
 
 export default router;

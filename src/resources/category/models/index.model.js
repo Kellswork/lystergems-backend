@@ -4,12 +4,8 @@ export async function createCategory(category) {
   return Category.query().insert(category).returning('*');
 }
 
-export async function getCategoryByName(name) {
-  return Category.query().where({ name });
-}
-
-export async function getCategoryById(id) {
-  return Category.query().where({ id });
+export async function getCategoryByAttribute(attribute) {
+  return Category.query().where({ ...attribute });
 }
 
 export async function getAllCategories() {

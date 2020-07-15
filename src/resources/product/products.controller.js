@@ -2,10 +2,12 @@
 import {
   addProduct,
   getAllProductsInaCategory,
-  getProductById,
+  getProductByAttribute,
+  updateProduct,
+  deleteProduct,
 } from './models/index.models';
 import { formatResponse } from '../../helpers/baseHelper';
-import { getCategoryById } from '../category/models/index.model';
+import { getCategoryByAttribute } from '../category/models/index.model';
 
 export const createProduct = async (req, res) => {
   try {
@@ -23,7 +25,7 @@ export const createProduct = async (req, res) => {
       size,
     } = req.body;
 
-    const response = await getCategoryById(categoryId);
+    const response = await getCategoryByAttribute({ id: categoryId });
     if (!response.length) {
       return formatResponse(
         res,
@@ -77,7 +79,6 @@ export const fetchProductsInaCategory = async (req, res) => {
       },
     );
   } catch (error) {
-    console.log(error)
     return formatResponse(
       res,
       { error: 'Error getting products, please try again later' },
@@ -89,7 +90,7 @@ export const fetchProductsInaCategory = async (req, res) => {
 export const fetchOneProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await getProductById(id);
+    const product = await getProductByAttribute(id);
     return formatResponse(
       res,
       { message: 'product fetched succesfully' },
@@ -104,5 +105,35 @@ export const fetchOneProduct = async (req, res) => {
       { error: 'Error getting products, please try again later' },
       500,
     );
+  }
+};
+export const update = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await updateProduct(id, req.body);
+
+    return formatResponse(
+      res,
+      { message: 'Product updated successfully' },
+      200,
+      response[0],
+    );
+  } catch (error) {
+    return formatResponse(res, { error: 'Unable to update this product' }, 500);
+  }
+};
+
+export const removeProduct = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await deleteProduct(id);
+
+    return formatResponse(
+      res,
+      { message: 'Product deleted successfully' },
+      204,
+    );
+  } catch (error) {
+    return formatResponse(res, { error: 'Unable to delete this product' }, 500);
   }
 };

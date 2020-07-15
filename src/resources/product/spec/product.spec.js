@@ -26,8 +26,10 @@ const product = {
 const pass = hashPassword(user.password);
 beforeAll(async () => {
   await db.raw('truncate users cascade');
+  await db.raw('truncate categories cascade');
   await db.raw(
-    `INSERT INTO users (firstname, lastname, email, password, role) VALUES('kells', 'leo', 'kelsi3rvvt@gmail.com', '${pass}', 'admin')`,
+    `INSERT INTO users (firstname, lastname, email, password, role) 
+            VALUES('${user.firstname}', '${user.lastname}', '${user.email}', '${pass}', 'admin')`,
   );
 
   const loginResponse = await request(app)
@@ -74,6 +76,30 @@ describe('POST Product', () => {
         'You are not authorized to perform this action',
       );
     });
+    it('should fail if token is invalid', async () => {
+      const response = await request(app)
+        .post('/api/v1/categories/1/products')
+        .set({ 'x-auth-token': 'mumu token lol', Accept: 'application/json' })
+        .send(product);
+      expect(response.statusCode).toBe(401);
+    });
+
+    it('should fail if category doesnt exist', async () => {
+      const response = await request(app)
+        .post('/api/v1/categories/10/products')
+        .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
+        .send(product);
+      expect(response.statusCode).toBe(404);
+    });
+
+    it('should fail if category id is not a number', async () => {
+      const response = await request(app)
+        .post('/api/v1/categories/bad_id/products')
+        .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
+        .send(product);
+      expect(response.statusCode).toBe(500);
+    });
+
     it('adds a product if logged in user is an admin', async () => {
       const category = await request(app)
         .post('/api/v1/categories')
@@ -90,9 +116,67 @@ describe('POST Product', () => {
           price: 2.99,
           is_available: true,
         });
-
       expect(response.statusCode).toBe(201);
       expect(response.body.message).toEqual('Product added successfully');
+    });
+  });
+
+  describe('update product', () => {
+    it('should fail if user is not authenticated', async () => {
+      const response = await request(app)
+        .patch('/api/v1/products/1')
+        .set({ Accept: 'application/json' })
+        .send(product);
+      expect(response.statusCode).toBe(401);
+      expect(response.body.error).toEqual(
+        'Access denied. You are not authorized to access this route',
+      );
+    });
+
+    it('should fail if user is not an admin', async () => {
+      const response = await request(app)
+        .patch('/api/v1/products/1')
+        .set({ 'x-auth-token': userToken, Accept: 'application/json' })
+        .send(product);
+      expect(response.statusCode).toBe(403);
+      expect(response.body.error).toEqual(
+        'You are not authorized to perform this action.',
+      );
+    });
+
+    it('should fail if product id does not exist', async () => {
+      const response = await request(app)
+        .patch('/api/v1/products/10010')
+        .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
+        .send(product);
+      expect(response.statusCode).toBe(200);
+    });
+
+    it('should fail if product id is not a number', async () => {
+      const response = await request(app)
+        .patch('/api/v1/products/bad_id')
+        .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
+        .send(product);
+      expect(response.statusCode).toBe(500);
+    });
+
+    it('should update the product', async () => {
+      const dbProducts = await db.raw('SELECT * FROM products');
+      const dbProduct = dbProducts.rows[0];
+      const image1 = 'www.image.jpg';
+      const description = 'I have been changed!';
+      dbProduct.image1 = image1;
+      dbProduct.description = description;
+
+      const response = await request(app)
+        .patch(`/api/v1/products/${dbProduct.id}`)
+        .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
+        .send(dbProduct);
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body.message).toEqual('Product updated successfully');
+      expect(response.body.image1).toEqual(image1);
+      expect(response.body.description).toEqual(description);
     });
   });
 
@@ -131,6 +215,54 @@ describe('POST Product', () => {
           'Error: A product with this name already exists',
         ]),
       );
+    });
+  });
+
+  describe('delete product', () => {
+    it('should fail if user is not authenticated', async () => {
+      const response = await request(app)
+        .delete('/api/v1/products/1')
+        .set({ Accept: 'application/json' })
+        .send(product);
+      expect(response.statusCode).toBe(401);
+      expect(response.body.error).toEqual(
+        'Access denied. You are not authorized to access this route',
+      );
+    });
+
+    it('should fail if user is not an admin', async () => {
+      const response = await request(app)
+        .delete('/api/v1/products/1')
+        .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+      expect(response.statusCode).toBe(403);
+      expect(response.body.error).toEqual(
+        'You are not authorized to perform this action.',
+      );
+    });
+
+    it('should fail if product id does not exist', async () => {
+      const response = await request(app)
+        .patch('/api/v1/products/10010')
+        .set({ 'x-auth-token': adminToken, Accept: 'application/json' });
+      expect(response.statusCode).toBe(200);
+    });
+
+    it('should fail if product id is not a number', async () => {
+      const response = await request(app)
+        .delete('/api/v1/products/bad_id')
+        .set({ 'x-auth-token': adminToken, Accept: 'application/json' });
+      expect(response.statusCode).toBe(500);
+    });
+
+    it('should delete the product', async () => {
+      const dbProducts = await db.raw('SELECT * FROM products');
+      const dbProduct = dbProducts.rows[0];
+
+      const response = await request(app)
+        .delete(`/api/v1/products/${dbProduct.id}`)
+        .set({ 'x-auth-token': adminToken, Accept: 'application/json' });
+
+      expect(response.statusCode).toBe(204);
     });
   });
 });

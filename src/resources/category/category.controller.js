@@ -1,7 +1,6 @@
 import {
   createCategory,
   getAllCategories,
-  getCategoryById,
   patchCategory,
   deleteCategory,
 } from './models/index.model';
@@ -55,10 +54,7 @@ export const editCategory = async (req, res) => {
   try {
     const { id } = req.params;
     const { name } = req.body;
-    let category = await getCategoryById(id);
-    if (!category[0])
-      return formatResponse(res, { error: 'Category with id not found' }, 404);
-    category = await patchCategory(id, name);
+    await patchCategory(id, name);
     return formatResponse(
       res,
       { message: 'Category updated successfully' },
@@ -76,12 +72,8 @@ export const editCategory = async (req, res) => {
 export const deleteACategory = async (req, res) => {
   try {
     const { id } = req.params;
-    let category = await getCategoryById(id);
-    if (!category[0])
-      return formatResponse(res, { error: 'Category with id not found' }, 404);
-
-    category = await deleteCategory(id);
-    return formatResponse(res, { message: 'Category has been deleted' }, 200);
+    await deleteCategory(id);
+    return formatResponse(res, { message: 'Category has been deleted' }, 204);
   } catch (error) {
     return formatResponse(
       res,

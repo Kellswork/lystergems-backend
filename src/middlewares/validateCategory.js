@@ -1,7 +1,8 @@
 import { body, check, validationResult } from 'express-validator';
-import { getCategoryByName } from '../resources/category/models/index.model';
+import { getCategoryByAttribute } from '../resources/category/models/index.model';
+import { formatResponse } from '../helpers/baseHelper';
 
-const validateCategory = [
+export const validateCategory = [
   check('name')
     .matches(/^[a-zA-Z ]+$/i)
     .withMessage('Name must contain only alphabets')
@@ -16,7 +17,9 @@ const validateCategory = [
     .trim(),
   body('name').custom(async (value) => {
     try {
-      const response = await getCategoryByName(value.toLowerCase());
+      const response = await getCategoryByAttribute({
+        name: value.toLowerCase(),
+      });
       if (response.length) {
         throw new Error('A category with this name already exists');
       }
@@ -35,4 +38,19 @@ const validateCategory = [
   },
 ];
 
-export default validateCategory;
+export const checkIfCategoryExists = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const dbCategory = await getCategoryByAttribute({ id });
+    if (!dbCategory.length) {
+      return formatResponse(
+        res,
+        { message: 'No category found with this id' },
+        200,
+      );
+    }
+  } catch (error) {
+    return formatResponse(res, { error: 'An error occurred' }, 500);
+  }
+  return next();
+};
