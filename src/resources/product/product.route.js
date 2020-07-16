@@ -25,7 +25,7 @@ router.post(
 );
 
 router.get('/categories/:categoryId/products', fetchProductsInaCategory);
-router.get('/categories/:categoryId/products/:id', fetchOneProduct);
+router.get('/products/:id', fetchOneProduct);
 router.patch(
   '/products/:id',
   verifyAuth,

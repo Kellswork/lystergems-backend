@@ -152,15 +152,24 @@ describe('GET Categories', () => {
 });
 
 describe('Patch Categories', () => {
+  let catID;
+
   it('should fail if token is invalid', async () => {
+    const category = await request(app)
+      .post('/api/v1/categories/')
+      .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
+      .send({ name: 'keul' });
+
+    catID = category.body.id;
+
     const response = await request(app)
-      .patch('/api/v1/categories/1')
+      .patch(`/api/v1/categories/${catID}`)
       .set({ 'x-auth-token': 'invalid token', Accept: 'application/json' });
     expect(response.statusCode).toBe(401);
   });
   it('should fail if logged in user is not an admin', async () => {
     const response = await request(app)
-      .patch('/api/v1/categories/1')
+      .patch(`/api/v1/categories/${catID}`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' });
     expect(response.statusCode).toBe(403);
     expect(response.body.error).toEqual(
@@ -170,7 +179,7 @@ describe('Patch Categories', () => {
 
   it('should fail if name is alphanumeric', async () => {
     const response = await request(app)
-      .patch('/api/v1/categories/1')
+      .patch(`/api/v1/categories/${catID}`)
       .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
       .send({ name: 'category123' });
     expect(response.statusCode).toBe(400);
@@ -181,7 +190,7 @@ describe('Patch Categories', () => {
 
   it('should fail if name is empty', async () => {
     const response = await request(app)
-      .patch('/api/v1/categories/1')
+      .patch(`/api/v1/categories/${catID}`)
       .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
       .send({ name: '' });
     expect(response.statusCode).toBe(400);
@@ -193,7 +202,7 @@ describe('Patch Categories', () => {
   });
   it('should fail if category already exists', async () => {
     const response = await request(app)
-      .patch('/api/v1/categories/1')
+      .patch(`/api/v1/categories/${catID}`)
       .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
       .send({ name: 'name' });
     expect(response.statusCode).toBe(400);
@@ -209,7 +218,7 @@ describe('Patch Categories', () => {
       .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
       .send({ name: 'not found' });
     expect(response.statusCode).toBe(200);
-    expect(response.body.error).toEqual('Category with id not found');
+    expect(response.body.message).toEqual('No category found with this id');
   });
   it('should patch categories if logged in user is an admin', async () => {
     const category = await request(app)
@@ -246,7 +255,7 @@ describe('Delete Categories', () => {
       .delete('/api/v1/categories/2038')
       .set({ 'x-auth-token': adminToken, Accept: 'application/json' });
     expect(response.statusCode).toBe(200);
-    expect(response.body.error).toEqual('Category with id not found');
+    expect(response.body.message).toEqual('No category found with this id');
   });
   it('should delete categories if logged in user is an admin', async () => {
     const category = await request(app)
@@ -258,6 +267,5 @@ describe('Delete Categories', () => {
       .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
       .send({ name: 'retro glasses' });
     expect(response.statusCode).toBe(204);
-    expect(response.body.message).toEqual('Category has been deleted');
   });
 });

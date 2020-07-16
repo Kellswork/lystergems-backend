@@ -140,7 +140,7 @@ describe('POST Product', () => {
         .send(product);
       expect(response.statusCode).toBe(403);
       expect(response.body.error).toEqual(
-        'You are not authorized to perform this action.',
+        'You are not authorized to perform this action',
       );
     });
 
@@ -236,7 +236,7 @@ describe('POST Product', () => {
         .set({ 'x-auth-token': userToken, Accept: 'application/json' });
       expect(response.statusCode).toBe(403);
       expect(response.body.error).toEqual(
-        'You are not authorized to perform this action.',
+        'You are not authorized to perform this action',
       );
     });
 
@@ -268,7 +268,6 @@ describe('POST Product', () => {
 });
 
 describe('GET Products in a category', () => {
-  let catID;
   let prodID;
 
   it('should fetch all products in a category', async () => {
@@ -288,7 +287,6 @@ describe('GET Products in a category', () => {
         is_available: true,
       });
 
-    catID = category.body.id;
     prodID = prod.body.product.id;
 
     const response = await request(app).get(
@@ -299,9 +297,7 @@ describe('GET Products in a category', () => {
     expect(response.body.products.length).toBe(1);
   });
   it('should fetch a product with the id', async () => {
-    const response = await request(app).get(
-      `/api/v1/categories/${catID}/products/${prodID}`,
-    );
+    const response = await request(app).get(`/api/v1/products/${prodID}`);
     expect(response.statusCode).toBe(200);
     expect(response.body.message).toEqual('product fetched succesfully');
     expect(response.body.product.name).toEqual('shocker wave ring');

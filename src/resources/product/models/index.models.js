@@ -19,10 +19,6 @@ export async function deleteProduct(id) {
   return Product.query().where({ id }).del();
 }
 
-export async function getProductById(id) {
-  return Product.query().where({ id }).first();
-}
-
 export async function getAllProductsInaCategory(id) {
   return Product.query().select('*').where({ category_id: id });
 }

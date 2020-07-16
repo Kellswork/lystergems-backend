@@ -90,13 +90,13 @@ export const fetchProductsInaCategory = async (req, res) => {
 export const fetchOneProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await getProductByAttribute(id);
+    const product = await getProductByAttribute({ id });
     return formatResponse(
       res,
       { message: 'product fetched succesfully' },
       200,
       {
-        product,
+        product: product[0],
       },
     );
   } catch (error) {
