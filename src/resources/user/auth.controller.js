@@ -95,7 +95,7 @@ export const verifyEmail = async (req, res) => {
     return formatResponse(
       res,
       { message: 'email has been verified' },
-      202,
+      200,
       validateToken,
     );
   } catch (error) {
@@ -152,7 +152,7 @@ export const newPassword = async (req, res) => {
     return formatResponse(
       res,
       { message: 'Password has been updated succesfully' },
-      202,
+      200,
     );
   } catch (error) {
     return formatResponse(
