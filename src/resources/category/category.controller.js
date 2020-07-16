@@ -54,11 +54,12 @@ export const editCategory = async (req, res) => {
   try {
     const { id } = req.params;
     const { name } = req.body;
-    await patchCategory(id, name);
+    const category = await patchCategory(id, name);
     return formatResponse(
       res,
       { message: 'Category updated successfully' },
-      202,
+      200,
+      { category: category[0] },
     );
   } catch (error) {
     return formatResponse(

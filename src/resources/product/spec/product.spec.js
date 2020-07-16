@@ -175,8 +175,8 @@ describe('POST Product', () => {
 
       expect(response.statusCode).toBe(200);
       expect(response.body.message).toEqual('Product updated successfully');
-      expect(response.body.image1).toEqual(image1);
-      expect(response.body.description).toEqual(description);
+      expect(response.body.product.image1).toEqual(image1);
+      expect(response.body.product.description).toEqual(description);
     });
   });
 

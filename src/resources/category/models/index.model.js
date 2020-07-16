@@ -15,7 +15,8 @@ export async function getAllCategories() {
 export async function patchCategory(id, name) {
   return Category.query()
     .where({ id })
-    .patch({ name, updated_at: Category.fn.now() });
+    .patch({ name, updated_at: Category.fn.now() })
+    .returning('*');
 }
 
 export async function deleteCategory(id) {

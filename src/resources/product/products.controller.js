@@ -116,7 +116,7 @@ export const update = async (req, res) => {
       res,
       { message: 'Product updated successfully' },
       200,
-      response[0],
+      { product: response[0] },
     );
   } catch (error) {
     return formatResponse(res, { error: 'Unable to update this product' }, 500);

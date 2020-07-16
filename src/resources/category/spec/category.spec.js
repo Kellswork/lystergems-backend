@@ -229,8 +229,9 @@ describe('Patch Categories', () => {
       .patch(`/api/v1/categories/${category.body.id}`)
       .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
       .send({ name: 'retro glasses' });
-    expect(response.statusCode).toBe(202);
+    expect(response.statusCode).toBe(200);
     expect(response.body.message).toEqual('Category updated successfully');
+    expect(response.body.category.name).toEqual('retro glasses');
   });
 });
 
