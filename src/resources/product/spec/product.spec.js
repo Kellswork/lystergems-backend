@@ -46,7 +46,7 @@ beforeAll(async () => {
   userToken = userResponse.body.token;
 });
 
-describe('Product', () => {
+describe('POST Product', () => {
   describe('authentication', () => {
     it('should fail if user is not authenticated', async () => {
       const response = await request(app)
@@ -58,6 +58,13 @@ describe('Product', () => {
         'Access denied. You are not authorized to access this route',
       );
     });
+    it('should fail if token is invalid', async () => {
+      const response = await request(app)
+        .post('/api/v1/categories/1/products')
+        .set({ 'x-auth-token': 'mumu token lol', Accept: 'application/json' })
+        .send(product);
+      expect(response.statusCode).toBe(401);
+    });
 
     it('should fail if logged in user is not an admin', async () => {
       const response = await request(app)
@@ -66,7 +73,7 @@ describe('Product', () => {
         .send(product);
       expect(response.statusCode).toBe(403);
       expect(response.body.error).toEqual(
-        'You are not authorized to perform this action.',
+        'You are not authorized to perform this action',
       );
     });
     it('should fail if token is invalid', async () => {
@@ -133,7 +140,7 @@ describe('Product', () => {
         .send(product);
       expect(response.statusCode).toBe(403);
       expect(response.body.error).toEqual(
-        'You are not authorized to perform this action.',
+        'You are not authorized to perform this action',
       );
     });
 
@@ -168,8 +175,8 @@ describe('Product', () => {
 
       expect(response.statusCode).toBe(200);
       expect(response.body.message).toEqual('Product updated successfully');
-      expect(response.body.image1).toEqual(image1);
-      expect(response.body.description).toEqual(description);
+      expect(response.body.product.image1).toEqual(image1);
+      expect(response.body.product.description).toEqual(description);
     });
   });
 
@@ -229,7 +236,7 @@ describe('Product', () => {
         .set({ 'x-auth-token': userToken, Accept: 'application/json' });
       expect(response.statusCode).toBe(403);
       expect(response.body.error).toEqual(
-        'You are not authorized to perform this action.',
+        'You are not authorized to perform this action',
       );
     });
 
@@ -257,5 +264,42 @@ describe('Product', () => {
 
       expect(response.statusCode).toBe(204);
     });
+  });
+});
+
+describe('GET Products in a category', () => {
+  let prodID;
+
+  it('should fetch all products in a category', async () => {
+    const category = await request(app)
+      .post('/api/v1/categories/')
+      .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
+      .send({ name: 'necklaces' });
+
+    const prod = await request(app)
+      .post(`/api/v1/categories/${category.body.id}/products`)
+      .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
+      .send({
+        name: 'shocker wave ring',
+        description: `it's a ring that shocks you cause its awesome what!`,
+        quantity: 20,
+        price: 10.99,
+        is_available: true,
+      });
+
+    prodID = prod.body.product.id;
+
+    const response = await request(app).get(
+      `/api/v1/categories/${category.body.id}/products`,
+    );
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toEqual('products fetched succesfully');
+    expect(response.body.products.length).toBe(1);
+  });
+  it('should fetch a product with the id', async () => {
+    const response = await request(app).get(`/api/v1/products/${prodID}`);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toEqual('product fetched succesfully');
+    expect(response.body.product.name).toEqual('shocker wave ring');
   });
 });

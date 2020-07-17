@@ -1,6 +1,8 @@
 /* eslint-disable camelcase */
 import {
   addProduct,
+  getAllProductsInaCategory,
+  getProductByAttribute,
   updateProduct,
   deleteProduct,
 } from './models/index.models';
@@ -64,6 +66,47 @@ export const createProduct = async (req, res) => {
   }
 };
 
+export const fetchProductsInaCategory = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+    const products = await getAllProductsInaCategory(categoryId);
+    return formatResponse(
+      res,
+      { message: 'products fetched succesfully' },
+      200,
+      {
+        products,
+      },
+    );
+  } catch (error) {
+    return formatResponse(
+      res,
+      { error: 'Error getting products, please try again later' },
+      500,
+    );
+  }
+};
+
+export const fetchOneProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await getProductByAttribute({ id });
+    return formatResponse(
+      res,
+      { message: 'product fetched succesfully' },
+      200,
+      {
+        product: product[0],
+      },
+    );
+  } catch (error) {
+    return formatResponse(
+      res,
+      { error: 'Error getting products, please try again later' },
+      500,
+    );
+  }
+};
 export const update = async (req, res) => {
   try {
     const { id } = req.params;
@@ -73,7 +116,7 @@ export const update = async (req, res) => {
       res,
       { message: 'Product updated successfully' },
       200,
-      response[0],
+      { product: response[0] },
     );
   } catch (error) {
     return formatResponse(res, { error: 'Unable to update this product' }, 500);

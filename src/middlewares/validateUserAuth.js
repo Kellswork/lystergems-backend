@@ -22,7 +22,7 @@ export const validateAdmin = (req, res, next) => {
   if (role !== 'admin') {
     return formatResponse(
       res,
-      { error: 'You are not authorized to perform this action.' },
+      { error: 'You are not authorized to perform this action' },
       403,
     );
   }

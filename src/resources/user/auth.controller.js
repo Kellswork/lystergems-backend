@@ -1,8 +1,13 @@
 import bcrypt from 'bcryptjs';
-import { createUser, getUserByEmail, verifyUser } from './models/index.model';
+import {
+  createUser,
+  getUserByEmail,
+  verifyUser,
+  updateUserPassword,
+} from './models/index.model';
 import { generateToken, verifyToken } from '../../helpers/jwtHelper';
 import { hashPassword, formatResponse } from '../../helpers/baseHelper';
-import sendEmailConfirmation from '../../services/email';
+import sendEmail from '../../services/email';
 
 export const addUserInfo = async (req, res) => {
   try {
@@ -25,7 +30,7 @@ export const addUserInfo = async (req, res) => {
       token,
     };
 
-    sendEmailConfirmation(user, token);
+    await sendEmail(user, token);
     return formatResponse(
       res,
       { message: 'user created successfully' },
@@ -86,7 +91,7 @@ export const verifyEmail = async (req, res) => {
     const { token } = req.query;
     const validateToken = verifyToken(token);
 
-    verifyUser(validateToken.id);
+    await verifyUser(validateToken.id);
     return formatResponse(
       res,
       { message: 'email has been verified' },
@@ -94,8 +99,67 @@ export const verifyEmail = async (req, res) => {
       validateToken,
     );
   } catch (error) {
-    return res
-      .status(500)
-      .json({ error: 'verification failed, link is no longer valid' });
+    return formatResponse(
+      res,
+      { error: 'verification failed, link is no longer valid' },
+      500,
+    );
+  }
+};
+
+export const resetPasswordLink = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const dbUser = await getUserByEmail(email);
+    if (!dbUser[0]) return formatResponse(res, { error: 'Invalid Email' }, 404);
+
+    const { id, firstname, lastname } = dbUser[0];
+    const user = {
+      id,
+      firstname,
+      lastname,
+      email,
+    };
+
+    const token = generateToken(user);
+    const result = await sendEmail(user, token, true);
+    if (result == 'message sent')
+      return formatResponse(res, { message: 'ResetPassword Link Sent!' }, 200);
+  } catch (error) {
+    return formatResponse(
+      res,
+      { error: 'unable to send message at the moment' },
+      500,
+      { error },
+    );
+  }
+};
+
+export const newPassword = async (req, res) => {
+  try {
+    const { token } = req.query;
+    const payload = verifyToken(token);
+    if (!payload)
+      return formatResponse(
+        res,
+        { message: 'Password token link is invalid or has expired' },
+        401,
+      );
+    const { password } = req.body;
+    const hashedPassword = hashPassword(password);
+    await updateUserPassword(payload.id, hashedPassword);
+
+    return formatResponse(
+      res,
+      { message: 'Password has been updated succesfully' },
+      200,
+    );
+  } catch (error) {
+    return formatResponse(
+      res,
+      { error: 'unable to send message at the moment' },
+      500,
+      { error },
+    );
   }
 };
