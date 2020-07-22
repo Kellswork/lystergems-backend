@@ -1,4 +1,5 @@
-const { check, validationResult } = require('express-validator');
+import { check } from 'express-validator';
+import { handleErrors } from '../helpers/baseHelper';
 
 const validateUserAddress = [
   check('user_id')
@@ -49,15 +50,7 @@ const validateUserAddress = [
     .isLength({ max: 50 })
     .trim(),
 
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        error: errors.array().map((i) => i.msg),
-      });
-    }
-    next();
-  },
+  (req, res, next) => handleErrors(req, res, next),
 ];
 
 export default validateUserAddress;

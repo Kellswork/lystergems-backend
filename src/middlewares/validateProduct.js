@@ -1,16 +1,6 @@
-import { body, check, validationResult } from 'express-validator';
+import { body, check } from 'express-validator';
 import { getProductByAttribute } from '../resources/product/models/index.models';
-import { formatResponse } from '../helpers/baseHelper';
-
-const handleErrors = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({
-      error: errors.array().map((i) => i.msg),
-    });
-  }
-  return next();
-};
+import { formatResponse, handleErrors } from '../helpers/baseHelper';
 
 export const validateProduct = [
   check('name')

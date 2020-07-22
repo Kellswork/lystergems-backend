@@ -1,4 +1,5 @@
-import { check, body, validationResult } from 'express-validator';
+import { check, body } from 'express-validator';
+import { handleErrors } from '../helpers/baseHelper';
 
 export const validateUser = [
   check('firstname')
@@ -51,15 +52,7 @@ export const validateUser = [
     return true;
   }),
 
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        error: errors.array().map((i) => i.msg),
-      });
-    }
-    next();
-  },
+  (req, res, next) => handleErrors(req, res, next),
 ];
 
 export const validateLogin = [
@@ -70,13 +63,5 @@ export const validateLogin = [
       min: 1,
     })
     .withMessage('Please input a password'),
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        error: errors.array().map((i) => i.msg),
-      });
-    }
-    return next();
-  },
+  (req, res, next) => handleErrors(req, res, next),
 ];
