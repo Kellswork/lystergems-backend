@@ -9,7 +9,7 @@ async function createOrder(order, products) {
         product.product_quantity = prod.quantity;
         return product;
       });
-
+      console.log('============', order);
       const createdOrder = await trx('orders').insert({ ...order }, '*');
       transformedProducts.forEach((product) => {
         const { id } = createdOrder[0];
