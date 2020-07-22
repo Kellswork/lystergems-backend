@@ -1,19 +1,19 @@
 import createOrder from './models/index.model';
 import { formatResponse } from '../../helpers/baseHelper';
 
-const addOrder = async (req, res) => {
+const create = async (req, res) => {
   const { id } = req.user;
+  const { order, products } = req.body;
   req.body.user_id = id;
   try {
-    const order = await createOrder(req.body);
-
-    return formatResponse(
-      res,
-      { message: 'Order created successfully' },
-      201,
-      order,
-    );
+    const orderResponse = await createOrder(order, products);
+    return formatResponse(res, { message: 'Order created successfully' }, 201, {
+      order: orderResponse,
+    });
   } catch (error) {
+    if (error.constraint === 'order_products_product_id_foreign') {
+      return formatResponse(res, { error: 'Products Ids do not exist' }, 500);
+    }
     return formatResponse(
       res,
       { error: 'could not create order, please try again later' },
@@ -22,4 +22,4 @@ const addOrder = async (req, res) => {
   }
 };
 
-export default addOrder;
+export default create;

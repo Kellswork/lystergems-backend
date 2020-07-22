@@ -1,10 +1,10 @@
 import { Router } from 'express';
 
 import { verifyAuth } from '../../middlewares/validateUserAuth';
-import addOrder from './orders.controller';
+import create from './orders.controller';
 
 const router = Router();
 
-router.post('/orders', verifyAuth, addOrder);
+router.post('/orders', verifyAuth, create);
 
 export default router;
