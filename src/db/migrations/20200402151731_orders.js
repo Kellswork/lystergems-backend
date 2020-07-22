@@ -7,7 +7,9 @@ export function up(knex) {
       .inTable('users')
       .onUpdate('CASCADE')
       .onDelete('CASCADE');
-    table.enu('status', ['pending', 'in_transit', 'delivered', 'cancelled']);
+    table
+      .enu('status', ['pending', 'in_transit', 'delivered', 'cancelled'])
+      .defaultTo('pending');
     table.float('shipping_fee');
     table.text('shipping_address').notNullable();
     table.timestamp('shipped_time').nullable();
