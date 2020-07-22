@@ -43,7 +43,7 @@ describe('POST Order', () => {
       const response = await request(app)
         .post('/api/v1/orders')
         .set({ Accept: 'application/json' })
-        .send({ order, products: {} });
+        .send({ ...order, products: {} });
       expect(response.statusCode).toBe(401);
       expect(response.body.error).toEqual(
         'Access denied. You are not authorized to access this route',
@@ -54,7 +54,7 @@ describe('POST Order', () => {
       const response = await request(app)
         .post('/api/v1/orders')
         .set({ 'x-auth-token': userToken, Accept: 'application/json' })
-        .send({ order, products: fakeProducts });
+        .send({ ...order, products: fakeProducts });
       expect(response.statusCode).toBe(500);
       expect(response.body.error).toEqual('Products Ids do not exist');
     });
@@ -72,9 +72,87 @@ describe('POST Order', () => {
       const response = await request(app)
         .post('/api/v1/orders')
         .set({ 'x-auth-token': userToken, Accept: 'application/json' })
-        .send({ order, products });
+        .send({ ...order, products });
       expect(response.statusCode).toBe(201);
       expect(response.body.message).toEqual('Order created successfully');
     });
+
+    it('should fail if address is empty', async () => {
+      const badOrder = { ...order };
+      badOrder.shipping_address = '';
+      const response = await request(app)
+        .post('/api/v1/orders')
+        .set({ 'x-auth-token': userToken, Accept: 'application/json' })
+        .send({ ...badOrder, products: fakeProducts });
+      expect(response.statusCode).toBe(400);
+      expect(response.body.error).toEqual(
+        expect.arrayContaining(['Please input the shipping address']),
+      );
+    });
+
+    it('should fail if address is not up to 3 characters', async () => {
+      const badOrder = { ...order };
+      badOrder.shipping_address = 'No';
+      const response = await request(app)
+        .post('/api/v1/orders')
+        .set({ 'x-auth-token': userToken, Accept: 'application/json' })
+        .send({ ...badOrder, products: fakeProducts });
+      expect(response.statusCode).toBe(400);
+      expect(response.body.error).toEqual(
+        expect.arrayContaining(['Address must be at least 3 characters']),
+      );
+    });
+
+    it('should fail if shipping_fee is empty', async () => {
+      const badOrder = { ...order };
+      badOrder.shipping_fee = '';
+      const response = await request(app)
+        .post('/api/v1/orders')
+        .set({ 'x-auth-token': userToken, Accept: 'application/json' })
+        .send({ ...badOrder, products: fakeProducts });
+      expect(response.statusCode).toBe(400);
+      expect(response.body.error).toEqual(
+        expect.arrayContaining(['Please input the shipping fee']),
+      );
+    });
+
+    it('should fail if shipping_fee is not a floating number', async () => {
+      const badOrder = { ...order };
+      badOrder.shipping_fee = '1i';
+      const response = await request(app)
+        .post('/api/v1/orders')
+        .set({ 'x-auth-token': userToken, Accept: 'application/json' })
+        .send({ ...badOrder, products: fakeProducts });
+      expect(response.statusCode).toBe(400);
+      expect(response.body.error).toEqual(
+        expect.arrayContaining(['Shipping fee must be a float number']),
+      );
+    });
+  });
+
+  it('should fail if total price is empty', async () => {
+    const badOrder = { ...order };
+    badOrder.total_price = '';
+    const response = await request(app)
+      .post('/api/v1/orders')
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' })
+      .send({ ...badOrder, products: fakeProducts });
+    expect(response.statusCode).toBe(400);
+    expect(response.body.error).toEqual(
+      expect.arrayContaining(['Please input the total price']),
+    );
+  });
+
+  it('should fail if total price is not a floating number', async () => {
+    const badOrder = { ...order };
+    badOrder.total_price = '1i';
+    const response = await request(app)
+      .post('/api/v1/orders')
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' })
+      .send({ ...badOrder, products: fakeProducts });
+    expect(response.statusCode).toBe(400);
+    expect(response.body.error).toEqual(
+      expect.arrayContaining(['Total price must be a float number']),
+    );
   });
 });

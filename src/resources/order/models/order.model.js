@@ -33,7 +33,7 @@ export default class Order extends Model {
         },
         shipping_address: {
           type: 'float',
-          minLength: 1,
+          minLength: 3,
           maxLength: 200,
         },
         total_price: {
