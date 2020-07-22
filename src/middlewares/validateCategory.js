@@ -1,6 +1,6 @@
-import { body, check, validationResult } from 'express-validator';
+import { body, check } from 'express-validator';
 import { getCategoryByAttribute } from '../resources/category/models/index.model';
-import { formatResponse } from '../helpers/baseHelper';
+import { formatResponse, handleErrors} from '../helpers/baseHelper';
 
 export const validateCategory = [
   check('name')
@@ -27,15 +27,7 @@ export const validateCategory = [
       throw new Error(error);
     }
   }),
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        error: errors.array().map((i) => i.msg),
-      });
-    }
-    return next();
-  },
+  (req, res, next) => handleErrors(req, res, next),
 ];
 
 export const checkIfCategoryExists = async (req, res, next) => {

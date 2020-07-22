@@ -1,14 +1,5 @@
-import { check, validationResult } from 'express-validator';
-
-const handleErrors = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({
-      error: errors.array().map((i) => i.msg),
-    });
-  }
-  return next();
-};
+import { check } from 'express-validator';
+import { handleErrors } from '../helpers/baseHelper';
 
 const validateOrder = [
   check('shipping_address')
