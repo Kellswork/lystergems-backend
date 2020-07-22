@@ -1,4 +1,3 @@
-import path from 'path';
 import { Model } from 'objection';
 import db from '../../../db/dbconfig';
 
@@ -13,12 +12,7 @@ export default class Order extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: [
-        'user_id',
-        'status',
-        'shipping_fee',
-        'shipping_address',
-      ],
+      required: ['user_id', 'status', 'shipping_fee', 'shipping_address'],
       properties: {
         user_id: {
           type: 'integer',
