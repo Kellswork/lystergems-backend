@@ -12,7 +12,13 @@ export default class Order extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['user_id', 'status', 'shipping_fee', 'shipping_address'],
+      required: [
+        'user_id',
+        'status',
+        'shipping_fee',
+        'shipping_address',
+        'total_price',
+      ],
       properties: {
         user_id: {
           type: 'integer',
@@ -29,6 +35,9 @@ export default class Order extends Model {
           type: 'float',
           minLength: 1,
           maxLength: 200,
+        },
+        total_price: {
+          type: 'float',
         },
       },
     };
