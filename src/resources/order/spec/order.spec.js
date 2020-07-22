@@ -16,6 +16,7 @@ const order = {
   status: 'pending',
   shipping_address: 'No 1 my street, my city, ,my state',
   shipping_fee: 3.99,
+  total_price: 10.99,
 };
 
 const fakeProducts = [
@@ -65,6 +66,7 @@ describe('POST Order', () => {
         const prod = {};
         prod.id = product.id;
         prod.quantity = idx + 1;
+        prod.total_price = 10.0 + idx * 2;
         return prod;
       });
       const response = await request(app)

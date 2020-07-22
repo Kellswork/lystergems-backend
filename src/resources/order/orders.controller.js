@@ -11,6 +11,7 @@ const create = async (req, res) => {
       order: orderResponse,
     });
   } catch (error) {
+    console.log(':::::::::::', error);
     if (error.constraint === 'order_products_product_id_foreign') {
       return formatResponse(res, { error: 'Products Ids do not exist' }, 500);
     }
