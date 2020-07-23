@@ -1,19 +1,14 @@
+/* eslint-disable camelcase */
 import createOrder from './models/index.model';
 import { formatResponse } from '../../helpers/baseHelper';
 
-const create = async (req, res) => {
+const addOrder = async (req, res) => {
   const { id } = req.user;
-  const {
-    shipping_address,
-    status,
-    shipping_fee,
-    total_price,
-    products,
-  } = req.body;
-  req.body.user_id = id;
+  const { shipping_address, shipping_fee, total_price, products } = req.body;
+
   const order = {
+    user_id: id,
     shipping_address,
-    status,
     shipping_fee,
     total_price,
   };
@@ -35,4 +30,4 @@ const create = async (req, res) => {
   }
 };
 
-export default create;
+export default addOrder;
