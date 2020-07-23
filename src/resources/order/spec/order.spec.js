@@ -13,7 +13,6 @@ const user = {
 };
 
 const order = {
-  status: 'pending',
   shipping_address: 'No 1 my street, my city, ,my state',
   shipping_fee: 3.99,
   total_price: 10.99,
@@ -73,6 +72,7 @@ describe('POST Order', () => {
         .post('/api/v1/orders')
         .set({ 'x-auth-token': userToken, Accept: 'application/json' })
         .send({ ...order, products });
+      console.log(':::::::::::::', response.body);
       expect(response.statusCode).toBe(201);
       expect(response.body.message).toEqual('Order created successfully');
     });
