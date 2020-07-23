@@ -65,7 +65,7 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "express-handlebars": "^4.0.4",
-    "express-jwt": "^5.3.3",
+    "express-jwt": "^6.0.0",
     "express-validator": "^6.4.0",
     "helmet": "^3.22.0",
     "jest": "^25.2.4",
