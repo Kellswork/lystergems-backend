@@ -72,7 +72,6 @@ describe('POST Order', () => {
         .post('/api/v1/orders')
         .set({ 'x-auth-token': userToken, Accept: 'application/json' })
         .send({ ...order, products });
-      console.log(':::::::::::::', response.body);
       expect(response.statusCode).toBe(201);
       expect(response.body.message).toEqual('Order created successfully');
     });
