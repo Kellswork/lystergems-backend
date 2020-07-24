@@ -1,6 +1,7 @@
 import { body, check } from 'express-validator';
 import { getCategoryByAttribute } from '../resources/category/models/index.model';
-import { formatResponse, handleErrors} from '../helpers/baseHelper';
+import { formatResponse } from '../helpers/baseHelper';
+import handleErrors from './baseMiddleware';
 
 export const validateCategory = [
   check('name')

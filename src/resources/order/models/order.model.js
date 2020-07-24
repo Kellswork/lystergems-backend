@@ -43,3 +43,5 @@ export default class Order extends Model {
     };
   }
 }
+
+export const STATUSES = ['pending', 'in_transit', 'delivered', 'cancelled'];
