@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
-import createOrder from './models/index.model';
+import { createOrder, updateStatus } from './models/index.model';
 import { formatResponse } from '../../helpers/baseHelper';
 
-const addOrder = async (req, res) => {
+export const addOrder = async (req, res) => {
   const { id } = req.user;
   const { shipping_address, shipping_fee, total_price, products } = req.body;
 
@@ -30,4 +30,21 @@ const addOrder = async (req, res) => {
   }
 };
 
-export default addOrder;
+export const updateOrder = async (req, res) => {
+  const { id, status } = req.body;
+  try {
+    const response = await updateStatus(id, status);
+    return formatResponse(
+      res,
+      { message: 'Order status successfully updated' },
+      200,
+      { order: response[0] },
+    );
+  } catch (e) {
+    return formatResponse(
+      res,
+      { error: 'Cannot update order at the moment, try again later' },
+      500,
+    );
+  }
+};
