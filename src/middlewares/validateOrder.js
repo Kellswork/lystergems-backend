@@ -36,10 +36,10 @@ export const checkStatus = (req, res, next) => {
   const { status } = req.body;
 
   if (STATUSES.includes(status)) {
-    return formatResponse(res, { error: 'Status is not valid' }, 400);
+    return next();
   }
 
-  return next();
+  return formatResponse(res, { error: 'Status is not valid' }, 400);
 };
 
 const isOperationValid = (orderStatus, newStatus) => {
@@ -52,15 +52,14 @@ const isOperationValid = (orderStatus, newStatus) => {
   return true;
 };
 
-export const validateStatusUpdate = (req, res, next) => {
+export const validateStatusUpdate = async (req, res, next) => {
   const { id } = req.params;
   const newStatus = req.body.status;
 
-  const getOrder = getOrderByAttribute({ id });
-  if (!getOrder) {
+  const getOrder = await getOrderByAttribute({ id });
+  if (!getOrder.length) {
     return formatResponse(res, { message: 'Order not found' }, 404);
   }
-
   const { status } = getOrder[0];
 
   if (status === 'cancelled') {
@@ -74,7 +73,9 @@ export const validateStatusUpdate = (req, res, next) => {
   if (!isOperationValid(status, newStatus)) {
     return formatResponse(
       res,
-      { message: `The status of this order cannot be updated to ${newStatus}` },
+      {
+        message: `The status of this order cannot be updated to ${newStatus}`,
+      },
       400,
     );
   }
