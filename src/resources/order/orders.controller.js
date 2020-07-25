@@ -31,7 +31,7 @@ export const addOrder = async (req, res) => {
 };
 
 export const updateOrder = async (req, res) => {
-  const { id, status } = req.body;
+  const { id, status } = req;
   try {
     const response = await updateStatus(id, status);
     return formatResponse(
@@ -40,7 +40,7 @@ export const updateOrder = async (req, res) => {
       200,
       { order: response[0] },
     );
-  } catch (e) {
+  } catch (error) {
     return formatResponse(
       res,
       { error: 'Cannot update order at the moment, try again later' },
