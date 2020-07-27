@@ -1,5 +1,11 @@
 /* eslint-disable camelcase */
-import { createOrder, updateStatus } from './models/index.model';
+import {
+  createOrder,
+  updateStatus,
+  getOrderWithProducts,
+  formatOrderFromResponse,
+  getProducts,
+} from './models/index.model';
 import { formatResponse } from '../../helpers/baseHelper';
 
 export const addOrder = async (req, res) => {
@@ -44,6 +50,30 @@ export const updateOrder = async (req, res) => {
     return formatResponse(
       res,
       { error: 'Cannot update order at the moment, try again later' },
+      500,
+    );
+  }
+};
+
+export const getOrderById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await getOrderWithProducts(id);
+    const order = formatOrderFromResponse(response.rows[0]);
+    order.products = getProducts(response.rows);
+    const data = {
+      order,
+    };
+    return formatResponse(
+      res,
+      { message: 'Order fetched successfully' },
+      200,
+      data,
+    );
+  } catch (error) {
+    return formatResponse(
+      res,
+      { error: 'Cannot fetch order at the moment, try again later' },
       500,
     );
   }
