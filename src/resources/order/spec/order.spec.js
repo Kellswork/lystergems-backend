@@ -5,6 +5,7 @@ import { hashPassword } from '../../../helpers/baseHelper';
 
 let userToken;
 let adminToken;
+let otherUserToken;
 let newOrder;
 
 const user = {
@@ -29,10 +30,18 @@ const fakeProducts = [
 
 const pass = hashPassword(user.password);
 beforeAll(async () => {
-  await db.raw('DELETE FROM users');
+  await db.raw('truncate users cascade');
   await db.raw('truncate orders cascade');
   await db.raw(
     `INSERT INTO users (firstname, lastname, email, password, role) VALUES('kells1', 'leo1', 'order@gmail1.com', '${pass}', 'admin')`,
+  );
+
+  const cat = await db.raw(
+    `INSERT INTO categories (name) VALUES('kells1') returning id`,
+  );
+
+  await db.raw(
+    `INSERT INTO products (category_id, name, description, quantity, price) VALUES ('${cat.rows[0].id}','new name', 'new description', '13', '14.99')`,
   );
   const loginResponse = await request(app)
     .post('/api/v1/auth/login')
@@ -46,6 +55,13 @@ beforeAll(async () => {
     .set('content-type', 'application/json')
     .send(user);
   userToken = userResponse.body.token;
+
+  user.email = 'aloy@gmail.com';
+  const otherUserResponse = await request(app)
+    .post('/api/v1/auth/register')
+    .set('content-type', 'application/json')
+    .send(user);
+  otherUserToken = otherUserResponse.body.token;
 });
 
 describe('POST Order', () => {
@@ -204,7 +220,7 @@ describe('PATCH order', () => {
 
   it('should fail if order does not exist', async () => {
     const response = await request(app)
-      .patch('/api/v1/orders/90000')
+      .patch(`/api/v1/orders/${newOrder.id * 14}`)
       .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
       .send({ status: 'in_transit' });
     expect(response.statusCode).toBe(404);
@@ -261,5 +277,63 @@ describe('PATCH order', () => {
       .send({ status: 'in_transit' });
     expect(response.statusCode).toBe(400);
     expect(response.body.message).toEqual('Cannot update a cancelled order');
+  });
+});
+
+describe('GET orders', () => {
+  it('should fail if user is not authenticated', async () => {
+    const response = await request(app)
+      .get(`/api/v1/orders/${newOrder.id}`)
+      .set({ Accept: 'application/json' });
+    expect(response.statusCode).toBe(401);
+    expect(response.body.error).toEqual(
+      'Access denied. You are not authorized to access this route',
+    );
+  });
+
+  it('should fail if order does not exist', async () => {
+    const response = await request(app)
+      .get(`/api/v1/orders/${newOrder.id * 5}`)
+      .set({ 'x-auth-token': adminToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(404);
+    expect(response.body.message).toEqual('Order not found');
+  });
+
+  it('should fail if order id is not an integer', async () => {
+    const response = await request(app)
+      .get('/api/v1/orders/900p')
+      .set({ 'x-auth-token': adminToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(500);
+    expect(response.body.error).toEqual('An error occurred');
+  });
+
+  it('should fail if user is neither owner nor admin', async () => {
+    const response = await request(app)
+      .get(`/api/v1/orders/${newOrder.id}`)
+      .set({ 'x-auth-token': otherUserToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(401);
+    expect(response.body.error).toEqual(
+      'You are not allowed to access this order',
+    );
+  });
+
+  it('should fetch order if user is the owner', async () => {
+    const response = await request(app)
+      .get(`/api/v1/orders/${newOrder.id}`)
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.order.id).toEqual(newOrder.id);
+    expect(response.body.message).toEqual('Order fetched successfully');
+  });
+
+  it('should fail if there is no product', async () => {
+    await db.raw('DELETE FROM products');
+    const response = await request(app)
+      .get(`/api/v1/orders/${newOrder.id}`)
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(500);
+    expect(response.body.error).toEqual(
+      'Cannot fetch order at the moment, try again later',
+    );
   });
 });
