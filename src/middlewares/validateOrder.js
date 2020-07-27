@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { check } from 'express-validator';
 import handleErrors from './baseMiddleware';
 import { STATUSES } from '../resources/order/models/order.model';
@@ -52,15 +53,42 @@ const isOperationValid = (orderStatus, newStatus) => {
   return true;
 };
 
-export const validateStatusUpdate = async (req, res, next) => {
+export const checkIfOrderExists = async (req, res, next) => {
   const { id } = req.params;
+  try {
+    const dbProduct = await getOrderByAttribute({ id });
+    if (!dbProduct.length) {
+      return formatResponse(res, { message: 'Order not found' }, 404);
+    }
+    // eslint-disable-next-line prefer-destructuring
+    req.order = dbProduct[0];
+    return next();
+  } catch (error) {
+    return formatResponse(res, { error: 'An error occurred' }, 500);
+  }
+};
+
+export const restrictAccessToOwnerAndAdmin = (req, res, next) => {
+  const {
+    user,
+    order: { user_id },
+  } = req;
+
+  if (user.id === user_id || user.role.toLowerCase() === 'admin') {
+    return next();
+  }
+  return formatResponse(
+    res,
+    { error: 'You are not allowed to access this order' },
+    401,
+  );
+};
+
+export const validateStatusUpdate = async (req, res, next) => {
+  const { order } = req;
   const newStatus = req.body.status;
 
-  const getOrder = await getOrderByAttribute({ id });
-  if (!getOrder.length) {
-    return formatResponse(res, { message: 'Order not found' }, 404);
-  }
-  const { status } = getOrder[0];
+  const { status } = order;
 
   if (status === 'cancelled') {
     return formatResponse(
@@ -80,7 +108,7 @@ export const validateStatusUpdate = async (req, res, next) => {
     );
   }
 
-  req.id = getOrder[0].id;
+  req.id = order.id;
   req.status = newStatus;
 
   return next();
