@@ -15,7 +15,7 @@ module.exports = {
     useNullAsDefault: true,
   },
 
-  testing: {
+  test: {
     client: 'pg',
     connection: process.env.TEST_URL,
     migrations: {
