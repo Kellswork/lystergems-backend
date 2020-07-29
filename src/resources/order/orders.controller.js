@@ -1,8 +1,14 @@
 /* eslint-disable camelcase */
-import createOrder from './models/index.model';
+import {
+  createOrder,
+  updateStatus,
+  getOrderWithProducts,
+  formatOrderFromResponse,
+  getProducts,
+} from './models/index.model';
 import { formatResponse } from '../../helpers/baseHelper';
 
-const addOrder = async (req, res) => {
+export const addOrder = async (req, res) => {
   const { id } = req.user;
   const { shipping_address, shipping_fee, total_price, products } = req.body;
 
@@ -30,4 +36,45 @@ const addOrder = async (req, res) => {
   }
 };
 
-export default addOrder;
+export const updateOrder = async (req, res) => {
+  const { id, status } = req;
+  try {
+    const response = await updateStatus(id, status);
+    return formatResponse(
+      res,
+      { message: 'Order status successfully updated' },
+      200,
+      { order: response[0] },
+    );
+  } catch (error) {
+    return formatResponse(
+      res,
+      { error: 'Cannot update order at the moment, try again later' },
+      500,
+    );
+  }
+};
+
+export const getOrderById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await getOrderWithProducts(id);
+    const order = formatOrderFromResponse(response.rows[0]);
+    order.products = getProducts(response.rows);
+    const data = {
+      order,
+    };
+    return formatResponse(
+      res,
+      { message: 'Order fetched successfully' },
+      200,
+      data,
+    );
+  } catch (error) {
+    return formatResponse(
+      res,
+      { error: 'Cannot fetch order at the moment, try again later' },
+      500,
+    );
+  }
+};

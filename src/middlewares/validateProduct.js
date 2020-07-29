@@ -1,6 +1,7 @@
 import { body, check } from 'express-validator';
 import { getProductByAttribute } from '../resources/product/models/index.models';
-import { formatResponse, handleErrors } from '../helpers/baseHelper';
+import { formatResponse } from '../helpers/baseHelper';
+import handleErrors from './baseMiddleware';
 
 export const validateProduct = [
   check('name')

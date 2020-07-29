@@ -1,5 +1,5 @@
 import { check, body } from 'express-validator';
-import { handleErrors } from '../helpers/baseHelper';
+import handleErrors from './baseMiddleware';
 
 export const validateUser = [
   check('firstname')

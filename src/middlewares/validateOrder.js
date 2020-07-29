@@ -1,7 +1,11 @@
+/* eslint-disable camelcase */
 import { check } from 'express-validator';
-import { handleErrors } from '../helpers/baseHelper';
+import handleErrors from './baseMiddleware';
+import { STATUSES } from '../resources/order/models/order.model';
+import { formatResponse } from '../helpers/baseHelper';
+import { getOrderByAttribute } from '../resources/order/models/index.model';
 
-const validateOrder = [
+export const validateOrder = [
   check('shipping_address')
     .isLength({ min: 1 })
     .withMessage('Please input the shipping address')
@@ -29,4 +33,83 @@ const validateOrder = [
   (req, res, next) => handleErrors(req, res, next),
 ];
 
-export default validateOrder;
+export const checkStatus = (req, res, next) => {
+  const { status } = req.body;
+
+  if (STATUSES.includes(status)) {
+    return next();
+  }
+
+  return formatResponse(res, { error: 'Status is not valid' }, 400);
+};
+
+const isOperationValid = (orderStatus, newStatus) => {
+  if (
+    (orderStatus === 'pending' && newStatus !== 'on_transit') ||
+    (orderStatus === 'in_transit' && newStatus !== 'delivered')
+  )
+    return false;
+
+  return true;
+};
+
+export const checkIfOrderExists = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const dbProduct = await getOrderByAttribute({ id });
+    if (!dbProduct.length) {
+      return formatResponse(res, { message: 'Order not found' }, 404);
+    }
+    // eslint-disable-next-line prefer-destructuring
+    req.order = dbProduct[0];
+    return next();
+  } catch (error) {
+    return formatResponse(res, { error: 'An error occurred' }, 500);
+  }
+};
+
+export const restrictAccessToOwnerAndAdmin = (req, res, next) => {
+  const {
+    user,
+    order: { user_id },
+  } = req;
+
+  if (user.id === user_id || user.role.toLowerCase() === 'admin') {
+    return next();
+  }
+  return formatResponse(
+    res,
+    { error: 'You are not allowed to access this order' },
+    401,
+  );
+};
+
+export const validateStatusUpdate = async (req, res, next) => {
+  const { order } = req;
+  const newStatus = req.body.status;
+
+  const { status } = order;
+
+  if (status === 'cancelled') {
+    return formatResponse(
+      res,
+      { message: 'Cannot update a cancelled order' },
+      400,
+    );
+  }
+
+  if (!isOperationValid(status, newStatus)) {
+    return formatResponse(
+      res,
+      {
+        message: `The status of this order cannot be updated to ${newStatus}`,
+      },
+      400,
+    );
+  }
+
+  req.id = order.id;
+  req.status = newStatus;
+
+  return next();
+};
