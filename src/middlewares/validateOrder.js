@@ -45,7 +45,7 @@ export const checkStatus = (req, res, next) => {
 
 const isOperationValid = (orderStatus, newStatus) => {
   if (
-    (orderStatus === 'pending' && newStatus !== 'on_transit') ||
+    (orderStatus === 'pending' && newStatus !== 'in_transit') ||
     (orderStatus === 'in_transit' && newStatus !== 'delivered')
   )
     return false;
@@ -90,10 +90,10 @@ export const validateStatusUpdate = async (req, res, next) => {
 
   const { status } = order;
 
-  if (status === 'cancelled') {
+  if (status === 'cancelled' || status === 'delivered') {
     return formatResponse(
       res,
-      { message: 'Cannot update a cancelled order' },
+      { message: `Cannot update a ${status} order` },
       400,
     );
   }
