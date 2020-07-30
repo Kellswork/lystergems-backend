@@ -25,6 +25,10 @@ export async function updateStatus(orderId, status) {
   return Order.query().patch({ status }).where({ id: orderId }).returning('*');
 }
 
+export async function updateShippedOrDeliveredTime(orderId, column) {
+  return db.raw(`UPDATE orders SET ${column} = NOW() WHERE id = ?`, [orderId]);
+}
+
 export async function getOrderByAttribute(attribute) {
   return Order.query()
     .where({ ...attribute })

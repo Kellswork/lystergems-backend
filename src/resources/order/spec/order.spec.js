@@ -278,6 +278,20 @@ describe('PATCH order', () => {
     expect(response.statusCode).toBe(400);
     expect(response.body.message).toEqual('Cannot update a cancelled order');
   });
+
+  it('should fail if order is delivered', async () => {
+    const updateOrder = await db.raw(
+      `UPDATE orders SET status = 'delivered' WHERE id='${newOrder.id}' returning id`,
+    );
+
+    const { id } = updateOrder.rows[0];
+    const response = await request(app)
+      .patch(`/api/v1/orders/${id}`)
+      .set({ 'x-auth-token': adminToken, Accept: 'application/json' })
+      .send({ status: 'in_transit' });
+    expect(response.statusCode).toBe(400);
+    expect(response.body.message).toEqual('Cannot update a delivered order');
+  });
 });
 
 describe('GET orders', () => {

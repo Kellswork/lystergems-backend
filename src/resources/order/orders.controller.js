@@ -5,6 +5,7 @@ import {
   getOrderWithProducts,
   formatOrderFromResponse,
   getProducts,
+  updateShippedOrDeliveredTime,
 } from './models/index.model';
 import { formatResponse } from '../../helpers/baseHelper';
 
@@ -38,7 +39,15 @@ export const addOrder = async (req, res) => {
 
 export const updateOrder = async (req, res) => {
   const { id, status } = req;
+  const columns = {
+    in_transit: 'shipped_time',
+    delivered: 'delivered_at',
+  };
+
   try {
+    if (status === 'in_transit' || status === 'delivered') {
+      await updateShippedOrDeliveredTime(id, columns[status]);
+    }
     const response = await updateStatus(id, status);
     return formatResponse(
       res,
