@@ -388,7 +388,9 @@ describe('CANCEL order', () => {
     const response = await request(app)
       .patch(`/api/v1/orders/${id}/cancel`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+
     expect(response.statusCode).toBe(200);
+    expect(response.body.order.status).toBe('cancelled');
     expect(response.body.message).toEqual(
       'Order status successfully cancelled',
     );
