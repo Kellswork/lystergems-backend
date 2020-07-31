@@ -351,3 +351,46 @@ describe('GET orders', () => {
     );
   });
 });
+
+describe('CANCEL order', () => {
+  it('should fail if user is not authenticated', async () => {
+    const response = await request(app)
+      .patch(`/api/v1/orders/${newOrder.id}/cancel`)
+      .set({ Accept: 'application/json' });
+    expect(response.statusCode).toBe(401);
+    expect(response.body.error).toEqual(
+      'Access denied. You are not authorized to access this route',
+    );
+  });
+
+  it('should fail if user is not the owner', async () => {
+    const response = await request(app)
+      .patch(`/api/v1/orders/${newOrder.id}/cancel`)
+      .set({ 'x-auth-token': otherUserToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(400);
+    expect(response.body.error).toEqual('Only the owner can cancel an order');
+  });
+
+  it('should fail if order is not pending', async () => {
+    const response = await request(app)
+      .patch(`/api/v1/orders/${newOrder.id}/cancel`)
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(400);
+    expect(response.body.error).toEqual('Only pending orders can be cancelled');
+  });
+
+  it('should cancel order', async () => {
+    const updateOrder = await db.raw(
+      `UPDATE orders SET status = 'pending' WHERE id='${newOrder.id}' returning *`,
+    );
+
+    const { id } = updateOrder.rows[0];
+    const response = await request(app)
+      .patch(`/api/v1/orders/${id}/cancel`)
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toEqual(
+      'Order status successfully cancelled',
+    );
+  });
+});

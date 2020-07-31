@@ -87,3 +87,24 @@ export const getOrderById = async (req, res) => {
     );
   }
 };
+
+export const cancelOrder = async (req, res) => {
+  const {
+    order: { id },
+  } = req;
+  try {
+    const response = await updateStatus(id, 'cancelled');
+    return formatResponse(
+      res,
+      { message: 'Order status successfully cancelled' },
+      200,
+      { order: response[0] },
+    );
+  } catch (error) {
+    return formatResponse(
+      res,
+      { error: 'Cannot cancel order at the moment, try again later' },
+      500,
+    );
+  }
+};

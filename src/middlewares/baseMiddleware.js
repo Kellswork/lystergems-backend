@@ -10,4 +10,8 @@ const handleErrors = (req, res, next) => {
   return next();
 };
 
+export const isAdmin = (user) => user.role.toLowerCase() === 'admin';
+
+export const userIsOwner = (user, ownerId) => user.id === ownerId;
+
 export default handleErrors;
