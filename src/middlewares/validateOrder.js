@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { check } from 'express-validator';
-import handleErrors from './baseMiddleware';
+import handleErrors, { userIsOwner, isAdmin } from './baseMiddleware';
 import { STATUSES } from '../resources/order/models/order.model';
 import { formatResponse } from '../helpers/baseHelper';
 import { getOrderByAttribute } from '../resources/order/models/index.model';
@@ -74,9 +74,8 @@ export const restrictAccessToOwnerAndAdmin = (req, res, next) => {
     order: { user_id },
   } = req;
 
-  if (user.id === user_id || user.role.toLowerCase() === 'admin') {
-    return next();
-  }
+  if (userIsOwner(user, user_id) || isAdmin(user)) return next();
+
   return formatResponse(
     res,
     { error: 'You are not allowed to access this order' },
@@ -112,4 +111,24 @@ export const validateStatusUpdate = async (req, res, next) => {
   req.status = newStatus;
 
   return next();
+};
+
+export const checkIfUserIsOwner = (req, res, next) => {
+  if (userIsOwner(req.user, req.order.user_id)) return next();
+
+  return formatResponse(
+    res,
+    { error: 'Only the owner can cancel an order' },
+    400,
+  );
+};
+
+export const allowOnlyPendingOrder = (req, res, next) => {
+  if (req.order.status === 'pending') return next();
+
+  return formatResponse(
+    res,
+    { error: 'Only pending orders can be cancelled' },
+    400,
+  );
 };

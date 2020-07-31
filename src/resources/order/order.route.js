@@ -1,13 +1,20 @@
 import { Router } from 'express';
 
 import { verifyAuth, validateAdmin } from '../../middlewares/validateUserAuth';
-import { addOrder, updateOrder, getOrderById } from './orders.controller';
+import {
+  addOrder,
+  updateOrder,
+  getOrderById,
+  cancelOrder,
+} from './orders.controller';
 import {
   validateOrder,
   validateStatusUpdate,
   checkStatus,
   checkIfOrderExists,
   restrictAccessToOwnerAndAdmin,
+  checkIfUserIsOwner,
+  allowOnlyPendingOrder,
 } from '../../middlewares/validateOrder';
 
 const router = Router();
@@ -30,6 +37,15 @@ router.get(
   checkIfOrderExists,
   restrictAccessToOwnerAndAdmin,
   getOrderById,
+);
+
+router.patch(
+  '/orders/:id/cancel',
+  verifyAuth,
+  checkIfOrderExists,
+  checkIfUserIsOwner,
+  allowOnlyPendingOrder,
+  cancelOrder,
 );
 
 export default router;
