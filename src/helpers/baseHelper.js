@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import db from '../db/dbconfig';
 
 export const hashPassword = (password) => {
   const salt = bcrypt.genSaltSync(10);
@@ -16,4 +17,10 @@ export const formatResponse = (res, responseMessage, statusCode, data) => {
     ...responseMessage,
     ...data,
   });
+};
+
+export const getItemByAttribute = (model, attribute, attributeValue) => {
+  return db.raw(
+    `SELECT * FROM ${model} WHERE ${attribute} = ${attributeValue}`,
+  );
 };
