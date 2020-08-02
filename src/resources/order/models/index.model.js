@@ -29,12 +29,6 @@ export async function updateShippedOrDeliveredTime(orderId, column) {
   return db.raw(`UPDATE orders SET ${column} = NOW() WHERE id = ?`, [orderId]);
 }
 
-export async function getOrderByAttribute(attribute) {
-  return Order.query()
-    .where({ ...attribute })
-    .returning('*');
-}
-
 export async function getOrderWithProducts(orderId) {
   return db.raw(
     `SELECT o.*, p.id AS product_id, p.name AS name,
