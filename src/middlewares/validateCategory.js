@@ -1,6 +1,5 @@
 import { body, check } from 'express-validator';
-import { getCategoryByAttribute } from '../resources/category/models/index.model';
-import { formatResponse } from '../helpers/baseHelper';
+import { formatResponse, getItemByAttribute } from '../helpers/baseHelper';
 import handleErrors from './baseMiddleware';
 
 export const validateCategory = [
@@ -18,10 +17,12 @@ export const validateCategory = [
     .trim(),
   body('name').custom(async (value) => {
     try {
-      const response = await getCategoryByAttribute({
-        name: value.toLowerCase(),
-      });
-      if (response.length) {
+      const response = await getItemByAttribute(
+        'categories',
+        'name',
+        value.toLowerCase(),
+      );
+      if (response.rows.length) {
         throw new Error('A category with this name already exists');
       }
     } catch (error) {
@@ -34,8 +35,8 @@ export const validateCategory = [
 export const checkIfCategoryExists = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const dbCategory = await getCategoryByAttribute({ id });
-    if (!dbCategory.length) {
+    const dbCategory = await getItemByAttribute('categories', 'id', id);
+    if (!dbCategory.rows.length) {
       return formatResponse(
         res,
         { message: 'No category found with this id' },

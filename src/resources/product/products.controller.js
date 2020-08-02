@@ -6,7 +6,6 @@ import {
   deleteProduct,
 } from './models/index.models';
 import { formatResponse, getItemByAttribute } from '../../helpers/baseHelper';
-import { getCategoryByAttribute } from '../category/models/index.model';
 
 export const createProduct = async (req, res) => {
   try {
@@ -24,8 +23,8 @@ export const createProduct = async (req, res) => {
       size,
     } = req.body;
 
-    const response = await getCategoryByAttribute({ id: categoryId });
-    if (!response.length) {
+    const response = await getItemByAttribute('categories', 'id', categoryId);
+    if (!response.rows.length) {
       return formatResponse(
         res,
         { error: 'Could not find category with id' },
