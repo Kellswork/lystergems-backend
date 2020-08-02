@@ -2,11 +2,10 @@
 import {
   addProduct,
   getAllProductsInaCategory,
-  getProductByAttribute,
   updateProduct,
   deleteProduct,
 } from './models/index.models';
-import { formatResponse } from '../../helpers/baseHelper';
+import { formatResponse, getItemByAttribute } from '../../helpers/baseHelper';
 import { getCategoryByAttribute } from '../category/models/index.model';
 
 export const createProduct = async (req, res) => {
@@ -90,13 +89,13 @@ export const fetchProductsInaCategory = async (req, res) => {
 export const fetchOneProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await getProductByAttribute({ id });
+    const product = await getItemByAttribute('products', 'id', id);
     return formatResponse(
       res,
       { message: 'product fetched succesfully' },
       200,
       {
-        product: product[0],
+        product: product.rows[0],
       },
     );
   } catch (error) {
