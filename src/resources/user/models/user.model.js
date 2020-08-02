@@ -56,7 +56,7 @@ export default class User extends Model {
     return {
       userAddress: {
         // reason for the change: https://vincit.github.io/objection.js/guide/relations.html#examples
-        relation: Model.BelongsToOneRelation,
+        relation: Model.HasOneRelation,
         ModelClass: path.resolve('models', 'user_address.model.js'),
         join: {
           from: 'users.id',

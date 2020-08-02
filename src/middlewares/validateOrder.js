@@ -2,8 +2,7 @@
 import { check } from 'express-validator';
 import handleErrors, { userIsOwner, isAdmin } from './baseMiddleware';
 import { STATUSES } from '../resources/order/models/order.model';
-import { formatResponse } from '../helpers/baseHelper';
-import { getOrderByAttribute } from '../resources/order/models/index.model';
+import { formatResponse, getItemByAttribute } from '../helpers/baseHelper';
 
 export const validateOrder = [
   check('shipping_address')
@@ -56,12 +55,12 @@ const isOperationValid = (orderStatus, newStatus) => {
 export const checkIfOrderExists = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const dbProduct = await getOrderByAttribute({ id });
-    if (!dbProduct.length) {
+    const dbOrder = await getItemByAttribute('orders', 'id', id);
+    if (!dbOrder.rows.length) {
       return formatResponse(res, { message: 'Order not found' }, 404);
     }
     // eslint-disable-next-line prefer-destructuring
-    req.order = dbProduct[0];
+    req.order = dbOrder.rows[0];
     return next();
   } catch (error) {
     return formatResponse(res, { error: 'An error occurred' }, 500);
