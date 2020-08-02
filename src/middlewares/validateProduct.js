@@ -1,6 +1,5 @@
 import { body, check } from 'express-validator';
-import { getProductByAttribute } from '../resources/product/models/index.models';
-import { formatResponse } from '../helpers/baseHelper';
+import { formatResponse, getItemByAttribute } from '../helpers/baseHelper';
 import handleErrors from './baseMiddleware';
 
 export const validateProduct = [
@@ -44,10 +43,12 @@ export const validateProduct = [
 export const validateNameUniqueness = [
   body('name').custom(async (value) => {
     try {
-      const response = await getProductByAttribute({
-        name: value.toLowerCase(),
-      });
-      if (response.length) {
+      const response = await getItemByAttribute(
+        'products',
+        'name',
+        value.toLowerCase(),
+      );
+      if (response.rows.length) {
         throw new Error('A product with this name already exists');
       }
     } catch (error) {
@@ -60,8 +61,8 @@ export const validateNameUniqueness = [
 export const checkIfProductExists = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const dbProduct = await getProductByAttribute({ id });
-    if (!dbProduct.length) {
+    const dbProduct = await getItemByAttribute('products', 'id', id);
+    if (!dbProduct.rows.length) {
       return formatResponse(
         res,
         { message: 'No product found with this id' },

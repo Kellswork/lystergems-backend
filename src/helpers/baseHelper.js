@@ -21,6 +21,6 @@ export const formatResponse = (res, responseMessage, statusCode, data) => {
 
 export const getItemByAttribute = (model, attribute, attributeValue) => {
   return db.raw(
-    `SELECT * FROM ${model} WHERE ${attribute} = ${attributeValue}`,
+    `SELECT * FROM ${model} WHERE ${attribute} = '${attributeValue}'`,
   );
 };
