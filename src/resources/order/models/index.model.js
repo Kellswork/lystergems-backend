@@ -69,3 +69,7 @@ export function getProducts(response) {
     return product;
   });
 }
+
+export async function fetchOrders() {
+  return Order.query().select('*');
+}
