@@ -6,6 +6,7 @@ import {
   formatOrderFromResponse,
   getProducts,
   updateShippedOrDeliveredTime,
+  fetchOrders,
 } from './models/index.model';
 import { formatResponse } from '../../helpers/baseHelper';
 
@@ -104,6 +105,24 @@ export const cancelOrder = async (req, res) => {
     return formatResponse(
       res,
       { error: 'Cannot cancel order at the moment, try again later' },
+      500,
+    );
+  }
+};
+
+export const getAllOrders = async (req, res) => {
+  try {
+    const orders = fetchOrders();
+    console.log(orders);
+    return formatResponse(
+      res,
+      { message: `${(await orders).length} Orders found` },
+      200,
+    );
+  } catch (error) {
+    return formatResponse(
+      res,
+      { error: 'Cannot get orders at the moment, try again later' },
       500,
     );
   }

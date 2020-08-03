@@ -6,6 +6,7 @@ import {
   updateOrder,
   getOrderById,
   cancelOrder,
+  getAllOrders
 } from './orders.controller';
 import {
   validateOrder,
@@ -29,6 +30,8 @@ router.patch(
   validateStatusUpdate,
   updateOrder,
 );
+
+router.get('/orders', verifyAuth, validateAdmin, getAllOrders);
 
 // I will move this to users route when we start working on the users functionalities
 router.get(

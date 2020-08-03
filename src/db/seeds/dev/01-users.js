@@ -14,6 +14,18 @@ exports.seed = function (knex) {
           password: hashPassword('admin'),
           role: 'admin',
         },
+        {
+          firstname: 'kelly',
+          lastname: 'obi',
+          email: 'kellyobi@gmail.com',
+          password: hashPassword('12345'),
+        },
+        {
+          firstname: 'Kev',
+          lastname: 'omenkish',
+          email: 'kev@gmail.com',
+          password: hashPassword('12345'),
+        },
       ]);
     });
 };
