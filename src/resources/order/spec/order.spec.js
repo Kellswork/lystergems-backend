@@ -445,7 +445,6 @@ describe('GET ALL orders', () => {
     const response = await request(app)
       .get('/api/v1/orders?page=1&pageSize=1')
       .set({ 'x-auth-token': adminToken, Accept: 'application/json' });
-    console.log('resssss', response.body);
     expect(response.statusCode).toBe(200);
     expect(response.body.message).toBe('2 Orders found');
     expect(response.body.nextPage).toEqual(2);

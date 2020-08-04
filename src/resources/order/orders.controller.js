@@ -116,8 +116,8 @@ export const cancelOrder = async (req, res) => {
 export const getAllOrders = async (req, res) => {
   try {
     let { page, pageSize } = req.query;
-    page = parseInt(page, 10);
-    pageSize = parseInt(pageSize, 10);
+    page = parseInt(page, 10) || 1;
+    pageSize = parseInt(pageSize, 10) || 10;
 
     const orders = await fetchOrders(page - 1, pageSize);
     const ordersFormat = formatAllOrdersResponse(orders.results);
