@@ -70,7 +70,7 @@ export const fetchProductsInaCategory = async (req, res) => {
     const products = await getAllProductsInaCategory(categoryId);
     return formatResponse(
       res,
-      { message: `${products.length} products found ` },
+      { message: 'products fetched succesfully' },
       200,
       {
         products,
