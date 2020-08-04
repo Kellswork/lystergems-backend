@@ -31,7 +31,7 @@ router.patch(
   updateOrder,
 );
 
-router.get('/orders', verifyAuth, validateAdmin, getAllOrders);
+router.get('/orders?page&pageSize', verifyAuth, validateAdmin, getAllOrders);
 
 // I will move this to users route when we start working on the users functionalities
 router.get(
