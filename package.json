@@ -14,8 +14,7 @@
     "latest-test": "NODE_ENV=testing npm run knex migrate:latest ",
     "clear-db": "NODE_ENV=testing npm run rollback-test && npm run latest-test",
     "rollback-test": "NODE_ENV=testing npm run knex migrate:rollback",
-    "seed:admin": "npm run knex seed:run",
-    "seed:orders":"NODE_ENV=testing npm run knex seed:run --specific=04-orders.js"
+    "seed:admin": "npm run knex seed:run"
   },
   "jest": {
     "collectCoverageFrom": [
