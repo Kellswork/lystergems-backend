@@ -53,18 +53,10 @@ describe('CREATE Address', () => {
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...address });
     expect(response.statusCode).toBe(201);
+    expect(response.body.userAddress.city).toEqual(address.city);
     expect(response.body.message).toEqual(
       'Address has been added successfully',
     );
-  });
-
-  it('should fail if user already has an address', async () => {
-    const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
-      .set({ 'x-auth-token': userToken, Accept: 'application/json' })
-      .send({ ...address });
-    expect(response.statusCode).toBe(400);
-    expect(response.body.error).toEqual('You already have an address');
   });
 
   it('should fail if phone number is empty', async () => {
