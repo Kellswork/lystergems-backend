@@ -49,13 +49,32 @@ export default class User extends Model {
   }
 
   static get relationMappings() {
+<<<<<<< HEAD
     return {
       userAddress: {
         relation: Model.HasManyRelation,
         ModelClass: path.resolve('models', 'user_address.model.js'),
+=======
+    // best to use a file path for ModelClass eslint won't let me call it here
+    // to know why I wanted to call it here => https://vincit.github.io/objection.js/guide/models.html#examples
+    const Order = require('../../order/models/order.model');
+    return {
+      userAddress: {
+        // reason for the change: https://vincit.github.io/objection.js/guide/relations.html#examples
+        relation: Model.BelongsToOneRelation,
+        modelClass: path.resolve('models', 'user_address.model.js'),
+>>>>>>> add pagination
         join: {
           from: 'users.id',
           to: 'user_address.user_id',
+        },
+      },
+      orders: {
+        relation: Model.HasManyRelation,
+        modelClass: Order,
+        join: {
+          from: 'users.id',
+          to: 'orders.user_id',
         },
       },
     };

@@ -70,6 +70,12 @@ export function getProducts(response) {
   });
 }
 
-export async function fetchOrders() {
-  return Order.query().select('*');
+export async function fetchOrders(page, pageSize) {
+  console.log('model-page', page);
+  console.log('model-pageSize', pageSize);
+  return Order.query()
+    .withGraphFetched('user')
+    .select('*')
+    .orderBy('created_at')
+    .page(page, pageSize);
 }

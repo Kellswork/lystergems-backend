@@ -1,4 +1,7 @@
+/* eslint-disable vars-on-top */
+/* eslint-disable no-var */
 /* eslint-disable camelcase */
+import { request } from 'express';
 import {
   createOrder,
   updateStatus,
@@ -112,14 +115,35 @@ export const cancelOrder = async (req, res) => {
 
 export const getAllOrders = async (req, res) => {
   try {
-    const orders = fetchOrders();
-    console.log(orders);
+    console.log(req.query);
+    let { page, pageSize } = req.query;
+    page = parseInt(page, 10);
+    pageSize = parseInt(pageSize, 10);
+
+    const endIndex = page * pageSize;
+    const orders = await fetchOrders(page - 1, pageSize);
+    console.log('second', page);
+    const startIndex = (page - 1) * pageSize;
+    console.log('start-index', startIndex);
+    console.log('end-index', endIndex);
+    if (startIndex > 0) var previousPage = page - 1;
+    if (endIndex < orders.total) var nextPage = page + 1;
+    console.log('prev', previousPage);
+    console.log('next', nextPage);
+    const data = {
+      previousPage,
+      nextPage,
+      orders: orders.results,
+    };
+    // console.log('order', orders.results);
     return formatResponse(
       res,
-      { message: `${(await orders).length} Orders found` },
+      { message: `${orders.total} Orders found` },
       200,
+      data,
     );
   } catch (error) {
+    console.log(error);
     return formatResponse(
       res,
       { error: 'Cannot get orders at the moment, try again later' },
