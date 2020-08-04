@@ -10,6 +10,7 @@ import {
   getProducts,
   updateShippedOrDeliveredTime,
   fetchOrders,
+  formatAllOrdersResponse,
 } from './models/index.model';
 import { formatResponse } from '../../helpers/baseHelper';
 
@@ -122,6 +123,10 @@ export const getAllOrders = async (req, res) => {
 
     const endIndex = page * pageSize;
     const orders = await fetchOrders(page - 1, pageSize);
+    const ordersFormat = formatAllOrdersResponse(orders.results);
+    console.log('OR', orders.results);
+    console.log('OF', ordersFormat);
+
     console.log('second', page);
     const startIndex = (page - 1) * pageSize;
     console.log('start-index', startIndex);
@@ -133,7 +138,7 @@ export const getAllOrders = async (req, res) => {
     const data = {
       previousPage,
       nextPage,
-      orders: orders.results,
+      orders: ordersFormat,
     };
     // console.log('order', orders.results);
     return formatResponse(

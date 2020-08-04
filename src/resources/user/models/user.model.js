@@ -16,6 +16,22 @@ export default class User extends Model {
     return 'id';
   }
 
+  static get modifiers() {
+    return {
+      name(builder) {
+        builder.select('firstname', 'lastname');
+      },
+    };
+  }
+
+  static get virtualAttributes() {
+    return ['fullName'];
+  }
+
+  fullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
+
   // json schema validation for insert
   static get jsonSchema() {
     return {

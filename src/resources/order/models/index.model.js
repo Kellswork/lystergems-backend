@@ -1,5 +1,6 @@
 import Order from './order.model';
 import db from '../../../db/dbconfig';
+import { response } from 'express';
 
 export async function createOrder(order, products) {
   // eslint-disable-next-line no-return-await
@@ -71,11 +72,25 @@ export function getProducts(response) {
 }
 
 export async function fetchOrders(page, pageSize) {
-  console.log('model-page', page);
-  console.log('model-pageSize', pageSize);
   return Order.query()
-    .withGraphFetched('user')
+    .withGraphFetched('user(name)')
+    .modifiers({
+      selectFirstnameAndLastname(user) {
+        user.select('firstname', 'lastname');
+      },
+    })
     .select('*')
     .orderBy('created_at')
     .page(page, pageSize);
+}
+
+export function formatAllOrdersResponse(orderResponse) {
+  return orderResponse.map((order) => {
+    const details = {};
+    details.id = order.id;
+    details.status = order.status;
+    details.created_at = order.created_at;
+    details.purchasedBy = { user_id: order.user_id, ...order.user };
+    return details;
+  });
 }
