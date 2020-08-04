@@ -1,7 +1,6 @@
 /* eslint-disable vars-on-top */
 /* eslint-disable no-var */
 /* eslint-disable camelcase */
-import { request } from 'express';
 import {
   createOrder,
   updateStatus,
@@ -12,7 +11,7 @@ import {
   fetchOrders,
   formatAllOrdersResponse,
 } from './models/index.model';
-import { formatResponse } from '../../helpers/baseHelper';
+import { formatResponse, pagination } from '../../helpers/baseHelper';
 
 export const addOrder = async (req, res) => {
   const { id } = req.user;
@@ -116,31 +115,18 @@ export const cancelOrder = async (req, res) => {
 
 export const getAllOrders = async (req, res) => {
   try {
-    console.log(req.query);
     let { page, pageSize } = req.query;
     page = parseInt(page, 10);
     pageSize = parseInt(pageSize, 10);
 
-    const endIndex = page * pageSize;
     const orders = await fetchOrders(page - 1, pageSize);
     const ordersFormat = formatAllOrdersResponse(orders.results);
-    console.log('OR', orders.results);
-    console.log('OF', ordersFormat);
-
-    console.log('second', page);
-    const startIndex = (page - 1) * pageSize;
-    console.log('start-index', startIndex);
-    console.log('end-index', endIndex);
-    if (startIndex > 0) var previousPage = page - 1;
-    if (endIndex < orders.total) var nextPage = page + 1;
-    console.log('prev', previousPage);
-    console.log('next', nextPage);
+    const { previousPage, nextPage } = pagination(page, pageSize, orders);
     const data = {
       previousPage,
       nextPage,
       orders: ordersFormat,
     };
-    // console.log('order', orders.results);
     return formatResponse(
       res,
       { message: `${orders.total} Orders found` },
@@ -148,7 +134,6 @@ export const getAllOrders = async (req, res) => {
       data,
     );
   } catch (error) {
-    console.log(error);
     return formatResponse(
       res,
       { error: 'Cannot get orders at the moment, try again later' },
