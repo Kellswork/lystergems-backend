@@ -24,3 +24,11 @@ export const getItemByAttribute = (model, attribute, attributeValue) => {
     `SELECT * FROM ${model} WHERE ${attribute} = '${attributeValue}'`,
   );
 };
+export const pagination = (page, pageSize, orders) => {
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = page * pageSize;
+  const obj = {};
+  if (startIndex > 0) obj.previousPage = page - 1;
+  if (endIndex < orders.total) obj.nextPage = page + 1;
+  return obj;
+};
