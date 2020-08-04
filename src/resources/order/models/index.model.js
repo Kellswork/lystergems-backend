@@ -1,6 +1,5 @@
 import Order from './order.model';
 import db from '../../../db/dbconfig';
-import { response } from 'express';
 
 export async function createOrder(order, products) {
   // eslint-disable-next-line no-return-await
