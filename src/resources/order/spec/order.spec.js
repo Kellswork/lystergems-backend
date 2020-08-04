@@ -396,3 +396,31 @@ describe('CANCEL order', () => {
     );
   });
 });
+
+describe('GET ALL orders', () => {
+  it('should fail if user is not authenticated', async () => {
+    const response = await request(app)
+      .get('/api/v1/orders')
+      .set({ Accept: 'application/json' });
+    expect(response.statusCode).toBe(401);
+    expect(response.body.error).toEqual(
+      'Access denied. You are not authorized to access this route',
+    );
+  });
+  it('should fail if user is not an admin', async () => {
+    const response = await request(app)
+      .get('/api/v1/orders')
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(403);
+    expect(response.body.error).toEqual(
+      'You are not authorized to perform this action',
+    );
+  });
+  it('should fetch orders if user is admin with a limit', async () => {
+    const response = await request(app)
+      .get('/api/v1/orders')
+      .set({ 'x-auth-token': adminToken, Accept: 'application/json' });
+    console.log('hetttttt', response.body);
+    expect(response.statusCode).toBe(200);
+  });
+});
