@@ -6,7 +6,7 @@ import {
   updateOrder,
   getOrderById,
   cancelOrder,
-  getAllOrders
+  getAllOrders,
 } from './orders.controller';
 import {
   validateOrder,

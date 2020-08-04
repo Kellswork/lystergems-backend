@@ -422,4 +422,32 @@ describe('GET ALL orders', () => {
       .set({ 'x-auth-token': adminToken, Accept: 'application/json' });
     expect(response.statusCode).toBe(200);
   });
+  it('should be paginated', async () => {
+    const dbProducts = await db.raw('SELECT id FROM products');
+
+    const products = dbProducts.rows.map((product, idx) => {
+      const prod = {};
+      prod.id = product.id;
+      prod.quantity = idx + 1;
+      prod.total_price = 12.0 + idx * 2;
+      return prod;
+    });
+    const sampleOrder = {
+      shipping_address: 'No 3 my street, my city, ,my state',
+      shipping_fee: 4.99,
+      total_price: 12.99,
+    };
+    await request(app)
+      .post('/api/v1/orders')
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' })
+      .send({ ...sampleOrder, products });
+
+    const response = await request(app)
+      .get('/api/v1/orders?page=1&pageSize=1')
+      .set({ 'x-auth-token': adminToken, Accept: 'application/json' });
+    console.log('resssss', response.body);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toBe('2 Orders found');
+    expect(response.body.nextPage).toEqual(2);
+  });
 });
