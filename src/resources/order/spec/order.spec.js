@@ -420,7 +420,6 @@ describe('GET ALL orders', () => {
     const response = await request(app)
       .get('/api/v1/orders')
       .set({ 'x-auth-token': adminToken, Accept: 'application/json' });
-    console.log('hetttttt', response.body);
     expect(response.statusCode).toBe(200);
   });
 });
