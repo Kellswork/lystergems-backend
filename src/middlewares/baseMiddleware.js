@@ -14,4 +14,14 @@ export const isAdmin = (user) => user.role.toLowerCase() === 'admin';
 
 export const userIsOwner = (user, ownerId) => user.id === ownerId;
 
+export const checkUserId = (req, res, next) => {
+  const { id } = req.user;
+  req.body.user_id = id;
+  if (req.user.id != req.params.userId)
+    return res
+      .status(401)
+      .json({ error: "You cannot access an address you didn't create" });
+  return next();
+};
+
 export default handleErrors;
