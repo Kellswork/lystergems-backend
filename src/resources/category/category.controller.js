@@ -3,7 +3,6 @@ import {
   getAllCategories,
   patchCategory,
   deleteCategory,
-  
 } from './models/index.model';
 import { formatResponse } from '../../helpers/baseHelper';
 

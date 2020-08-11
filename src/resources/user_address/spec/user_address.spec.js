@@ -237,7 +237,7 @@ describe('UPDATE Address', () => {
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...addressUpdate });
     expect(response.statusCode).toBe(401);
-    expect(response.body.message).toEqual(
+    expect(response.body.error).toEqual(
       "You cannot access an address you didn't create",
     );
   });
@@ -458,7 +458,7 @@ describe('GET One user address', () => {
   });
 });
 
-describe('Delete user address', () => {
+describe('DELETE user address', () => {
   it('should fail if user is not authenticated', async () => {
     const response = await request(app).get(
       `/api/v1/users/${dbUser.id}/address`,
@@ -467,12 +467,6 @@ describe('Delete user address', () => {
     expect(response.body.error).toEqual(
       'Access denied. You are not authorized to access this route',
     );
-  });
-  it('should return a 404 if address id is not found', async () => {
-    const response = await request(app)
-      .delete(`/api/v1/users/${dbUser.id}/address/infinity`)
-      .set({ 'x-auth-token': userToken, Accept: 'application/json' });
-    expect(response.statusCode).toBe(404);
   });
   it('should delete the address', async () => {
     const response = await request(app)
