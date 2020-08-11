@@ -11,3 +11,6 @@ export async function patchUserAddress(id, address) {
     .returning('*')
     .first();
 }
+export async function fetchUserAddresses(userId) {
+  return UserAddress.query().select('*').where({ user_id: userId });
+}

@@ -29,6 +29,7 @@ const addressUpdate = {
   country: 'Myy country',
   zipcode: '123456',
 };
+let addressData;
 
 beforeAll(async () => {
   await db.raw('truncate users cascade');
@@ -214,8 +215,6 @@ describe('CREATE Address', () => {
 });
 
 describe('UPDATE Address', () => {
-  let addressData;
-
   it('should fail if user is not authenticated', async () => {
     addressData = await request(app)
       .post(`/api/v1/users/${dbUser.id}/address`)
@@ -239,10 +238,10 @@ describe('UPDATE Address', () => {
       .send({ ...addressUpdate });
     expect(response.statusCode).toBe(401);
     expect(response.body.message).toEqual(
-      "You cannot update an address you didn't create",
+      "You cannot access an address you didn't create",
     );
   });
-  it('should update an address for the logged in user', async () => {
+  it('should access an address for the logged in user', async () => {
     const response = await request(app)
       .patch(
         `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
@@ -406,6 +405,36 @@ describe('UPDATE Address', () => {
     expect(response.statusCode).toBe(400);
     expect(response.body.error).toEqual(
       expect.arrayContaining(['Country cannot exceed 50 characters']),
+    );
+  });
+});
+
+describe('GET all user addresses', () => {
+  it('should fail if user is not authenticated', async () => {
+    const response = await request(app).get(
+      `/api/v1/users/${dbUser.id}/address`,
+    );
+    expect(response.statusCode).toBe(401);
+    expect(response.body.error).toEqual(
+      'Access denied. You are not authorized to access this route',
+    );
+  });
+  it('should fetch all addresses created by the user with the id', async () => {
+    const response = await request(app)
+      .get(`/api/v1/users/1111/address`)
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(401);
+    expect(response.body.error).toEqual(
+      "You cannot access an address you didn't create",
+    );
+  });
+  it('should fetch all addresses created by the user with the id', async () => {
+    const response = await request(app)
+      .get(`/api/v1/users/${dbUser.id}/address`)
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toEqual(
+      `${response.body.userAddress.length} found`,
     );
   });
 });
