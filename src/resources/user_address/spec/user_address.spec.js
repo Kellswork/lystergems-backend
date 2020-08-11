@@ -214,9 +214,17 @@ describe('CREATE Address', () => {
 });
 
 describe('UPDATE Address', () => {
+  let addressData;
+
   it('should fail if user is not authenticated', async () => {
-    const response = await request(app)
+    addressData = await request(app)
       .post(`/api/v1/users/${dbUser.id}/address`)
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' })
+      .send({ ...address });
+    const response = await request(app)
+      .patch(
+        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+      )
       .set({ Accept: 'application/json' })
       .send({ ...addressUpdate });
     expect(response.statusCode).toBe(401);
@@ -225,13 +233,8 @@ describe('UPDATE Address', () => {
     );
   });
   it('should fail if loggedin user id is not the same as the user id saved', async () => {
-    const data = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
-      .set({ 'x-auth-token': userToken, Accept: 'application/json' })
-      .send({ ...address });
-
     const response = await request(app)
-      .post(`/api/v1/users/3/address/${data}`)
+      .patch(`/api/v1/users/10/address/${addressData.body.userAddress.id}`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...addressUpdate });
     expect(response.statusCode).toBe(401);
@@ -241,21 +244,26 @@ describe('UPDATE Address', () => {
   });
   it('should update an address for the logged in user', async () => {
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address/10`)
+      .patch(
+        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+      )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...addressUpdate });
+
     expect(response.statusCode).toBe(200);
-    expect(response.body.userAddress.city).toEqual(address.city);
+    expect(response.body.userAddress.city).toEqual(addressUpdate.city);
     expect(response.body.message).toEqual(
       'Address has been updated successfully',
     );
   });
 
   it('should fail if phone number is empty', async () => {
-    const newAddress = { ...address };
+    const newAddress = { ...addressUpdate };
     newAddress.phone_number = '';
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .patch(
+        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+      )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -265,10 +273,12 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if phone number is too long', async () => {
-    const newAddress = { ...address };
+    const newAddress = { ...addressUpdate };
     newAddress.phone_number = '1234567808765435678';
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .patch(
+        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+      )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -278,10 +288,12 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if street address is empty', async () => {
-    const newAddress = { ...address };
+    const newAddress = { ...addressUpdate };
     newAddress.street_address = '';
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .patch(
+        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+      )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -291,10 +303,12 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if street address is too long', async () => {
-    const newAddress = { ...address };
+    const newAddress = { ...addressUpdate };
     newAddress.street_address = 'hello there,'.trim().repeat(10);
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .patch(
+        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+      )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -306,10 +320,12 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if city is empty', async () => {
-    const newAddress = { ...address };
+    const newAddress = { ...addressUpdate };
     newAddress.city = '';
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .patch(
+        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+      )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -319,10 +335,12 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if city is too long', async () => {
-    const newAddress = { ...address };
+    const newAddress = { ...addressUpdate };
     newAddress.city = 'hello there,I'.trim().repeat(4);
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .patch(
+        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+      )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -332,10 +350,12 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if state is empty', async () => {
-    const newAddress = { ...address };
+    const newAddress = { ...addressUpdate };
     newAddress.state = '';
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .patch(
+        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+      )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -345,10 +365,12 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if state is too long', async () => {
-    const newAddress = { ...address };
+    const newAddress = { ...addressUpdate };
     newAddress.state = 'hello there,I'.trim().repeat(4);
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .patch(
+        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+      )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -358,10 +380,12 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if country is empty', async () => {
-    const newAddress = { ...address };
+    const newAddress = { ...addressUpdate };
     delete newAddress.country;
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .patch(
+        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+      )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -371,10 +395,12 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if country is too long', async () => {
-    const newAddress = { ...address };
+    const newAddress = { ...addressUpdate };
     newAddress.country = 'hello there,I'.trim().repeat(4);
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .patch(
+        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+      )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);

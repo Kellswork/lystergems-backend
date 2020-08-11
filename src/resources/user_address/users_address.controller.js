@@ -19,8 +19,9 @@ export const addUserAddress = async (req, res) => {
 export const updateUserAddress = async (req, res) => {
   const { id } = req.user;
   req.body.user_id = id;
+
   try {
-    if (req.user.id !== req.params.userId)
+    if (req.user.id != req.params.userId)
       // change this after creating get all and get one
       return res
         .status(401)
