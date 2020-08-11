@@ -438,3 +438,48 @@ describe('GET all user addresses', () => {
     );
   });
 });
+describe('GET One user address', () => {
+  it('should fail if user is not authenticated', async () => {
+    const response = await request(app).get(
+      `/api/v1/users/${dbUser.id}/address`,
+    );
+    expect(response.statusCode).toBe(401);
+    expect(response.body.error).toEqual(
+      'Access denied. You are not authorized to access this route',
+    );
+  });
+  it('should fetch the address with id created by the user', async () => {
+    const response = await request(app)
+      .get(`/api/v1/users/${dbUser.id}/address/1`)
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toBe('address fetched successfully');
+    expect(response.body.userAddress.id).toBe(1);
+  });
+});
+
+describe('Delete user address', () => {
+  it('should fail if user is not authenticated', async () => {
+    const response = await request(app).get(
+      `/api/v1/users/${dbUser.id}/address`,
+    );
+    expect(response.statusCode).toBe(401);
+    expect(response.body.error).toEqual(
+      'Access denied. You are not authorized to access this route',
+    );
+  });
+  it('should return a 404 if address id is not found', async () => {
+    const response = await request(app)
+      .delete(`/api/v1/users/${dbUser.id}/address/infinity`)
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(404);
+  });
+  it('should delete the address', async () => {
+    const response = await request(app)
+      .delete(`/api/v1/users/${dbUser.id}/address/1`)
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toBe('address deleted successfully');
+    expect(response.body.userAddress).toBe(1);
+  });
+});

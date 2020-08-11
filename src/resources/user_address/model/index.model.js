@@ -14,3 +14,13 @@ export async function patchUserAddress(id, address) {
 export async function fetchUserAddresses(userId) {
   return UserAddress.query().select('*').where({ user_id: userId });
 }
+export async function fetchOneUserAddress(userId, addressId) {
+  return UserAddress.query()
+    .select('*')
+    .where({ user_id: userId, id: addressId })
+    .first();
+}
+
+export async function deleteOneUserAddress(userId, addressId) {
+  return UserAddress.query().where({ user_id: userId, id: addressId }).del();
+}
