@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import addUserAddress from './users_address.controller';
+import { addUserAddress, updateUserAddress } from './users_address.controller';
 import { verifyAuth } from '../../middlewares/validateUserAuth';
 import validateUserAddress from '../../middlewares/validateUserAddress';
 
@@ -10,6 +10,13 @@ router.post(
   verifyAuth,
   validateUserAddress,
   addUserAddress,
+);
+
+router.patch(
+  '/users/:userId/address/:addressId',
+  verifyAuth,
+  validateUserAddress,
+  updateUserAddress,
 );
 
 export default router;
