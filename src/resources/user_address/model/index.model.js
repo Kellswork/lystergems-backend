@@ -1,7 +1,12 @@
 import UserAddress from './user_address.model';
 
-async function createUserAddress(address) {
+export async function createUserAddress(address) {
   return UserAddress.query().insert(address).returning('*');
 }
 
-export default createUserAddress;
+export async function patchUserAddress(id, address) {
+  return UserAddress.query()
+    .where({ id })
+    .patch({ ...address, updated_at: UserAddress.fn.now() })
+    .returning('*');
+}
