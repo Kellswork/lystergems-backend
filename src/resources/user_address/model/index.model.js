@@ -8,5 +8,6 @@ export async function patchUserAddress(id, address) {
   return UserAddress.query()
     .where({ id })
     .patch({ ...address, updated_at: UserAddress.fn.now() })
-    .returning('*');
+    .returning('*')
+    .first();
 }

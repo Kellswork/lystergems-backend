@@ -9,5 +9,9 @@
       }
     ]
   ],
-  "plugins": [ "@babel/plugin-transform-runtime" ]
+  "sourceMaps": true,
+  "retainLines": true,
+  "plugins": [
+    "@babel/plugin-transform-runtime"
+  ]
 }
