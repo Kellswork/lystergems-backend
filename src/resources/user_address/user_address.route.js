@@ -2,7 +2,9 @@ import { Router } from 'express';
 import {
   addUserAddress,
   updateUserAddress,
-  GetUserAddresses,
+  getUserAddresses,
+  getOneUserAddress,
+  deleteUserAddress,
 } from './users_address.controller';
 import { verifyAuth } from '../../middlewares/validateUserAuth';
 import validateUserAddress from '../../middlewares/validateUserAddress';
@@ -23,6 +25,13 @@ router.patch(
   updateUserAddress,
 );
 
-router.get('/users/:userId/address', verifyAuth, GetUserAddresses);
+router.get('/users/:userId/address', verifyAuth, getUserAddresses);
+
+router.get('/users/:userId/address/:addressId', verifyAuth, getOneUserAddress);
+router.delete(
+  '/users/:userId/address/:addressId',
+  verifyAuth,
+  deleteUserAddress,
+);
 
 export default router;
