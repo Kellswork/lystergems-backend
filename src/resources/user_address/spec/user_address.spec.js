@@ -47,7 +47,7 @@ beforeAll(async () => {
 describe('CREATE Address', () => {
   it('should fail if user is not authenticated', async () => {
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .post(`/api/v1/users/${dbUser.id}/addresses`)
       .set({ Accept: 'application/json' })
       .send({ ...address });
     expect(response.statusCode).toBe(401);
@@ -58,7 +58,7 @@ describe('CREATE Address', () => {
 
   it('should create an address for the logged in user', async () => {
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .post(`/api/v1/users/${dbUser.id}/addresses`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...address });
     expect(response.statusCode).toBe(201);
@@ -72,7 +72,7 @@ describe('CREATE Address', () => {
     const newAddress = { ...address };
     newAddress.phone_number = '';
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .post(`/api/v1/users/${dbUser.id}/addresses`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -85,7 +85,7 @@ describe('CREATE Address', () => {
     const newAddress = { ...address };
     newAddress.phone_number = '';
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .post(`/api/v1/users/${dbUser.id}/addresses`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -98,7 +98,7 @@ describe('CREATE Address', () => {
     const newAddress = { ...address };
     newAddress.phone_number = '1234567808765435678';
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .post(`/api/v1/users/${dbUser.id}/addresses`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -111,7 +111,7 @@ describe('CREATE Address', () => {
     const newAddress = { ...address };
     newAddress.street_address = '';
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .post(`/api/v1/users/${dbUser.id}/addresses`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -124,7 +124,7 @@ describe('CREATE Address', () => {
     const newAddress = { ...address };
     newAddress.street_address = 'hello there,'.trim().repeat(10);
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .post(`/api/v1/users/${dbUser.id}/addresses`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -139,7 +139,7 @@ describe('CREATE Address', () => {
     const newAddress = { ...address };
     newAddress.city = '';
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .post(`/api/v1/users/${dbUser.id}/addresses`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -152,7 +152,7 @@ describe('CREATE Address', () => {
     const newAddress = { ...address };
     newAddress.city = 'hello there,I'.trim().repeat(4);
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .post(`/api/v1/users/${dbUser.id}/addresses`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -165,7 +165,7 @@ describe('CREATE Address', () => {
     const newAddress = { ...address };
     newAddress.state = '';
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .post(`/api/v1/users/${dbUser.id}/addresses`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -178,7 +178,7 @@ describe('CREATE Address', () => {
     const newAddress = { ...address };
     newAddress.state = 'hello there,I'.trim().repeat(4);
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .post(`/api/v1/users/${dbUser.id}/addresses`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -191,7 +191,7 @@ describe('CREATE Address', () => {
     const newAddress = { ...address };
     delete newAddress.country;
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .post(`/api/v1/users/${dbUser.id}/addresses`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -204,7 +204,7 @@ describe('CREATE Address', () => {
     const newAddress = { ...address };
     newAddress.country = 'hello there,I'.trim().repeat(4);
     const response = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .post(`/api/v1/users/${dbUser.id}/addresses`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
     expect(response.statusCode).toBe(400);
@@ -217,11 +217,11 @@ describe('CREATE Address', () => {
 describe('UPDATE Address', () => {
   it('should fail if user is not authenticated', async () => {
     addressData = await request(app)
-      .post(`/api/v1/users/2/address`)
+      .post(`/api/v1/users/2/addresses`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...address });
     const response = await request(app)
-      .patch(`/api/v1/users/3/address/3`)
+      .patch(`/api/v1/users/3/addresses/3`)
       .set({ Accept: 'application/json' })
       .send({ ...updatedAddress });
     expect(response.statusCode).toBe(401);
@@ -231,7 +231,7 @@ describe('UPDATE Address', () => {
   });
   it('should fail if logged in user is not the address owner', async () => {
     const response = await request(app)
-      .patch(`/api/v1/users/10/address/${addressData.body.userAddress.id}`)
+      .patch(`/api/v1/users/10/addresses/${addressData.body.userAddress.id}`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...updatedAddress });
     expect(response.statusCode).toBe(401);
@@ -242,7 +242,7 @@ describe('UPDATE Address', () => {
   it('should access an address for the logged in user', async () => {
     const response = await request(app)
       .patch(
-        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+        `/api/v1/users/${dbUser.id}/addresses/${addressData.body.userAddress.id}`,
       )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...updatedAddress });
@@ -259,7 +259,7 @@ describe('UPDATE Address', () => {
     newAddress.phone_number = '';
     const response = await request(app)
       .patch(
-        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+        `/api/v1/users/${dbUser.id}/addresses/${addressData.body.userAddress.id}`,
       )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
@@ -274,7 +274,7 @@ describe('UPDATE Address', () => {
     newAddress.phone_number = '1234567808765435678';
     const response = await request(app)
       .patch(
-        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+        `/api/v1/users/${dbUser.id}/addresses/${addressData.body.userAddress.id}`,
       )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
@@ -289,7 +289,7 @@ describe('UPDATE Address', () => {
     newAddress.street_address = '';
     const response = await request(app)
       .patch(
-        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+        `/api/v1/users/${dbUser.id}/addresses/${addressData.body.userAddress.id}`,
       )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
@@ -304,7 +304,7 @@ describe('UPDATE Address', () => {
     newAddress.street_address = 'hello there,'.trim().repeat(10);
     const response = await request(app)
       .patch(
-        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+        `/api/v1/users/${dbUser.id}/addresses/${addressData.body.userAddress.id}`,
       )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
@@ -321,7 +321,7 @@ describe('UPDATE Address', () => {
     newAddress.city = '';
     const response = await request(app)
       .patch(
-        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+        `/api/v1/users/${dbUser.id}/addresses/${addressData.body.userAddress.id}`,
       )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
@@ -336,7 +336,7 @@ describe('UPDATE Address', () => {
     newAddress.city = 'hello there,I'.trim().repeat(4);
     const response = await request(app)
       .patch(
-        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+        `/api/v1/users/${dbUser.id}/addresses/${addressData.body.userAddress.id}`,
       )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
@@ -351,7 +351,7 @@ describe('UPDATE Address', () => {
     newAddress.state = '';
     const response = await request(app)
       .patch(
-        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+        `/api/v1/users/${dbUser.id}/addresses/${addressData.body.userAddress.id}`,
       )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
@@ -366,7 +366,7 @@ describe('UPDATE Address', () => {
     newAddress.state = 'hello there,I'.trim().repeat(4);
     const response = await request(app)
       .patch(
-        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+        `/api/v1/users/${dbUser.id}/addresses/${addressData.body.userAddress.id}`,
       )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
@@ -381,7 +381,7 @@ describe('UPDATE Address', () => {
     delete newAddress.country;
     const response = await request(app)
       .patch(
-        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+        `/api/v1/users/${dbUser.id}/addresses/${addressData.body.userAddress.id}`,
       )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
@@ -396,7 +396,7 @@ describe('UPDATE Address', () => {
     newAddress.country = 'hello there,I'.trim().repeat(4);
     const response = await request(app)
       .patch(
-        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
+        `/api/v1/users/${dbUser.id}/addresses/${addressData.body.userAddress.id}`,
       )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...newAddress });
@@ -410,7 +410,7 @@ describe('UPDATE Address', () => {
 describe('GET all user addresses', () => {
   it('should fail if user is not authenticated', async () => {
     const response = await request(app).get(
-      `/api/v1/users/${dbUser.id}/address`,
+      `/api/v1/users/${dbUser.id}/addresses`,
     );
     expect(response.statusCode).toBe(401);
     expect(response.body.error).toEqual(
@@ -419,7 +419,7 @@ describe('GET all user addresses', () => {
   });
   it('should fetch all addresses created by the user with the id', async () => {
     const response = await request(app)
-      .get(`/api/v1/users/1111/address`)
+      .get(`/api/v1/users/1111/addresses`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' });
     expect(response.statusCode).toBe(401);
     expect(response.body.error).toEqual(
@@ -428,7 +428,7 @@ describe('GET all user addresses', () => {
   });
   it('should fetch all addresses created by the user with the id', async () => {
     const response = await request(app)
-      .get(`/api/v1/users/${dbUser.id}/address`)
+      .get(`/api/v1/users/${dbUser.id}/addresses`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' });
     expect(response.statusCode).toBe(200);
     expect(response.body.message).toEqual(
@@ -439,7 +439,7 @@ describe('GET all user addresses', () => {
 describe('GET One user address', () => {
   it('should fail if user is not authenticated', async () => {
     const response = await request(app).get(
-      `/api/v1/users/${dbUser.id}/address`,
+      `/api/v1/users/${dbUser.id}/addresses`,
     );
     expect(response.statusCode).toBe(401);
     expect(response.body.error).toEqual(
@@ -448,7 +448,7 @@ describe('GET One user address', () => {
   });
   it('should fetch the address with id created by the user', async () => {
     const response = await request(app)
-      .get(`/api/v1/users/${dbUser.id}/address/1`)
+      .get(`/api/v1/users/${dbUser.id}/addresses/1`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' });
     expect(response.statusCode).toBe(200);
     expect(response.body.message).toBe('address fetched successfully');
@@ -459,7 +459,7 @@ describe('GET One user address', () => {
 describe('DELETE user address', () => {
   it('should fail if user is not authenticated', async () => {
     const response = await request(app).get(
-      `/api/v1/users/${dbUser.id}/address`,
+      `/api/v1/users/${dbUser.id}/addresses`,
     );
     expect(response.statusCode).toBe(401);
     expect(response.body.error).toEqual(
@@ -468,7 +468,7 @@ describe('DELETE user address', () => {
   });
   it('should fail if logged in user is not the address owner', async () => {
     const response = await request(app)
-      .patch(`/api/v1/users/10/address/${addressData.body.userAddress.id}`)
+      .patch(`/api/v1/users/10/addresses/${addressData.body.userAddress.id}`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...updatedAddress });
     expect(response.statusCode).toBe(401);
@@ -478,7 +478,7 @@ describe('DELETE user address', () => {
   });
   it('should delete the address', async () => {
     const response = await request(app)
-      .delete(`/api/v1/users/${dbUser.id}/address/1`)
+      .delete(`/api/v1/users/${dbUser.id}/addresses/1`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' });
     expect(response.statusCode).toBe(200);
     expect(response.body.message).toBe('address deleted successfully');
