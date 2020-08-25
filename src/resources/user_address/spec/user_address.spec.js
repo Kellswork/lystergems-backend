@@ -21,7 +21,7 @@ const address = {
   country: 'My country',
   zipcode: '123456',
 };
-const addressUpdate = {
+const updatedAddress = {
   phone_number: '008812343353',
   street_address: '123 my street, my street',
   city: 'myy city',
@@ -217,25 +217,23 @@ describe('CREATE Address', () => {
 describe('UPDATE Address', () => {
   it('should fail if user is not authenticated', async () => {
     addressData = await request(app)
-      .post(`/api/v1/users/${dbUser.id}/address`)
+      .post(`/api/v1/users/2/address`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...address });
     const response = await request(app)
-      .patch(
-        `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
-      )
+      .patch(`/api/v1/users/3/address/3`)
       .set({ Accept: 'application/json' })
-      .send({ ...addressUpdate });
+      .send({ ...updatedAddress });
     expect(response.statusCode).toBe(401);
     expect(response.body.error).toEqual(
       'Access denied. You are not authorized to access this route',
     );
   });
-  it('should fail if loggedin user id is not the same as the user id saved', async () => {
+  it('should fail if logged in user is not the address owner', async () => {
     const response = await request(app)
       .patch(`/api/v1/users/10/address/${addressData.body.userAddress.id}`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
-      .send({ ...addressUpdate });
+      .send({ ...updatedAddress });
     expect(response.statusCode).toBe(401);
     expect(response.body.error).toEqual(
       "You cannot access an address you didn't create",
@@ -247,17 +245,17 @@ describe('UPDATE Address', () => {
         `/api/v1/users/${dbUser.id}/address/${addressData.body.userAddress.id}`,
       )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
-      .send({ ...addressUpdate });
+      .send({ ...updatedAddress });
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.userAddress.city).toEqual(addressUpdate.city);
+    expect(response.body.userAddress.city).toEqual(updatedAddress.city);
     expect(response.body.message).toEqual(
       'Address has been updated successfully',
     );
   });
 
   it('should fail if phone number is empty', async () => {
-    const newAddress = { ...addressUpdate };
+    const newAddress = { ...updatedAddress };
     newAddress.phone_number = '';
     const response = await request(app)
       .patch(
@@ -272,7 +270,7 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if phone number is too long', async () => {
-    const newAddress = { ...addressUpdate };
+    const newAddress = { ...updatedAddress };
     newAddress.phone_number = '1234567808765435678';
     const response = await request(app)
       .patch(
@@ -287,7 +285,7 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if street address is empty', async () => {
-    const newAddress = { ...addressUpdate };
+    const newAddress = { ...updatedAddress };
     newAddress.street_address = '';
     const response = await request(app)
       .patch(
@@ -302,7 +300,7 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if street address is too long', async () => {
-    const newAddress = { ...addressUpdate };
+    const newAddress = { ...updatedAddress };
     newAddress.street_address = 'hello there,'.trim().repeat(10);
     const response = await request(app)
       .patch(
@@ -319,7 +317,7 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if city is empty', async () => {
-    const newAddress = { ...addressUpdate };
+    const newAddress = { ...updatedAddress };
     newAddress.city = '';
     const response = await request(app)
       .patch(
@@ -334,7 +332,7 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if city is too long', async () => {
-    const newAddress = { ...addressUpdate };
+    const newAddress = { ...updatedAddress };
     newAddress.city = 'hello there,I'.trim().repeat(4);
     const response = await request(app)
       .patch(
@@ -349,7 +347,7 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if state is empty', async () => {
-    const newAddress = { ...addressUpdate };
+    const newAddress = { ...updatedAddress };
     newAddress.state = '';
     const response = await request(app)
       .patch(
@@ -364,7 +362,7 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if state is too long', async () => {
-    const newAddress = { ...addressUpdate };
+    const newAddress = { ...updatedAddress };
     newAddress.state = 'hello there,I'.trim().repeat(4);
     const response = await request(app)
       .patch(
@@ -379,7 +377,7 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if country is empty', async () => {
-    const newAddress = { ...addressUpdate };
+    const newAddress = { ...updatedAddress };
     delete newAddress.country;
     const response = await request(app)
       .patch(
@@ -394,7 +392,7 @@ describe('UPDATE Address', () => {
   });
 
   it('should fail if country is too long', async () => {
-    const newAddress = { ...addressUpdate };
+    const newAddress = { ...updatedAddress };
     newAddress.country = 'hello there,I'.trim().repeat(4);
     const response = await request(app)
       .patch(
@@ -466,6 +464,16 @@ describe('DELETE user address', () => {
     expect(response.statusCode).toBe(401);
     expect(response.body.error).toEqual(
       'Access denied. You are not authorized to access this route',
+    );
+  });
+  it('should fail if logged in user is not the address owner', async () => {
+    const response = await request(app)
+      .patch(`/api/v1/users/10/address/${addressData.body.userAddress.id}`)
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' })
+      .send({ ...updatedAddress });
+    expect(response.statusCode).toBe(401);
+    expect(response.body.error).toEqual(
+      "You cannot access an address you didn't create",
     );
   });
   it('should delete the address', async () => {

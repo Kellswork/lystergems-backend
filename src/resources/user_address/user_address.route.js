@@ -13,30 +13,35 @@ import { checkUserId } from '../../middlewares/baseMiddleware';
 const router = Router();
 
 router.post(
-  '/users/:id/address',
+  '/users/:id/addresses',
   verifyAuth,
   validateUserAddress,
   addUserAddress,
 );
 
 router.patch(
-  '/users/:userId/address/:addressId',
+  '/users/:userId/addresses/:addressId',
   verifyAuth,
   checkUserId,
   validateUserAddress,
   updateUserAddress,
 );
 
-router.get('/users/:userId/address', verifyAuth, checkUserId, getUserAddresses);
+router.get(
+  '/users/:userId/addresses',
+  verifyAuth,
+  checkUserId,
+  getUserAddresses,
+);
 
 router.get(
-  '/users/:userId/address/:addressId',
+  '/users/:userId/addresses/:addressId',
   verifyAuth,
   checkUserId,
   getOneUserAddress,
 );
 router.delete(
-  '/users/:userId/address/:addressId',
+  '/users/:userId/addresses/:addressId',
   verifyAuth,
   checkUserId,
   deleteUserAddress,
