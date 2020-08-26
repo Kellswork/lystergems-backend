@@ -1,4 +1,4 @@
-import Product from './product.models';
+import Product from './product.model';
 
 export async function addProduct(product) {
   return Product.query().insert(product).returning('*');
