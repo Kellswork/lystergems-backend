@@ -13,11 +13,15 @@ export const addProductToWishlist = async (req, res) => {
     if (isProductInList.length > 0)
       return formatResponse(
         res,
-        { message: 'product has already been added to wishlist' },
+        { error: 'product has already been added to wishlist' },
         400,
       );
-
-    const wishlist = await addToWishlist(req.body);
+    // eslint-disable-next-line camelcase
+    const { user_id, product_id } = req.body;
+    const wishlist = await addToWishlist({
+      user_id,
+      product_id: parseInt(product_id, 0),
+    });
     const data = {
       wishlist,
     };
@@ -30,7 +34,7 @@ export const addProductToWishlist = async (req, res) => {
       data,
     );
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
     return formatResponse(
       res,
       {
