@@ -6,10 +6,16 @@ import {
   RemoveOneProductInWishlist,
 } from './wishlist.controller';
 import { checkUserId } from '../../middlewares/baseMiddleware';
+import validateWishlist from '../../middlewares/validateWishlist';
 
 const router = Router();
 
-router.post('/users/:userId/wishlists', verifyAuth, addProductToWishlist);
+router.post(
+  '/users/:userId/wishlists',
+  verifyAuth,
+  validateWishlist,
+  addProductToWishlist,
+);
 
 router.get(
   '/users/:userId/wishlists',
