@@ -1,5 +1,9 @@
 import { formatResponse } from '../../helpers/baseHelper';
-import { addToWishlist, fetchUserWishlist } from './model/index.model';
+import {
+  addToWishlist,
+  fetchUserWishlist,
+  deleteOneProductInWishlist,
+} from './model/index.model';
 
 export const addProductToWishlist = async (req, res) => {
   const { id } = req.user;
@@ -57,6 +61,35 @@ export const getUserWishlist = async (req, res) => {
     return formatResponse(
       res,
       { error: 'could not get wishlist, please try again later' },
+      500,
+    );
+  }
+};
+
+export const RemoveOneProductInWishlist = async (req, res) => {
+  const { id } = req.user;
+  req.body.user_id = id;
+  try {
+    const wishlistItem = await deleteOneProductInWishlist(
+      req.params.userId,
+      req.params.productId,
+    );
+    const data = {
+      wishlistItem,
+    };
+    return formatResponse(
+      res,
+      { message: 'product has been removed from wishlist' },
+      200,
+      data,
+    );
+  } catch (error) {
+    return formatResponse(
+      res,
+      {
+        error:
+          'could not get remove product from wishlist, please try again later',
+      },
       500,
     );
   }
