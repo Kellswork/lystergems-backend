@@ -67,6 +67,7 @@ export default class User extends Model {
   static get relationMappings() {
     // best to use a file path for ModelClass eslint won't let me call it here
     // to know why I wanted to call it here => https://vincit.github.io/objection.js/guide/models.html#examples
+    // eslint-disable-next-line global-require
     const Order = require('../../order/models/order.model');
     return {
       userAddress: {
