@@ -1,4 +1,5 @@
 import { formatResponse } from '../../helpers/baseHelper';
+import addToWishlist from './model/index.model';
 
 const addProductToWishlist = async (req, res) => {
   const { id } = req.user;
@@ -17,10 +18,11 @@ const addProductToWishlist = async (req, res) => {
       data,
     );
   } catch (error) {
+    console.log(error);
     return formatResponse(
       res,
       {
-        error: 'could not add product to wishlist, please try again later',
+        error: 'could not save product to wishlist, please try again later',
       },
       500,
     );
