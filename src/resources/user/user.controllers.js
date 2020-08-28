@@ -3,8 +3,6 @@ import { formatResponse } from '../../helpers/baseHelper';
 import { fetchUserDetails, patchUserProfile } from './models/index.model';
 
 export const getUserProfile = async (req, res) => {
-  const { id } = req.user;
-  req.body.user_id = id;
   try {
     const profile = await fetchUserDetails(req.params.userId);
     const {
@@ -29,7 +27,7 @@ export const getUserProfile = async (req, res) => {
     return formatResponse(
       res,
       {
-        message: `${profile.length} profile found`,
+        message: `${[profile].length} profile found`,
       },
       200,
       data,
@@ -56,7 +54,6 @@ export const updateUserProfile = async (req, res) => {
       data,
     );
   } catch (error) {
-    console.log(error);
     return formatResponse(
       res,
       { error: 'could not update address, please try again later' },

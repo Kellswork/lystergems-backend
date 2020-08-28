@@ -23,6 +23,5 @@ export async function patchUserProfile(id, profile) {
   return User.query()
     .where({ id })
     .patch({ ...profile, updated_at: User.fn.now() })
-    .returning('*')
-    .first();
+    .returning('*');
 }

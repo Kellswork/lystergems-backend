@@ -18,6 +18,7 @@ import {
 } from '../../middlewares/validateOrder';
 import { getOrderById } from '../order/orders.controller';
 import { getUserProfile, updateUserProfile } from './user.controllers';
+import { checkUserId } from '../../middlewares/baseMiddleware';
 
 const router = Router();
 
@@ -33,10 +34,11 @@ router.get(
   restrictAccessToOwnerAndAdmin,
   getOrderById,
 );
-router.get('/users/:userId/profile', verifyAuth, getUserProfile);
+router.get('/users/:userId/profile', verifyAuth, checkUserId, getUserProfile);
 router.patch(
   '/users/:userId/profile',
   verifyAuth,
+  checkUserId,
   validateprofile,
   updateUserProfile,
 );

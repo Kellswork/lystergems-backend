@@ -15,8 +15,8 @@ export const isAdmin = (user) => user.role.toLowerCase() === 'admin';
 export const userIsOwner = (user, ownerId) => user.id === ownerId;
 
 export const checkUserId = (req, res, next) => {
-  const { id } = req.user;
-  req.body.user_id = id;
+  // const { id } = req.user;
+  // req.body.user_id = id;
   if (req.user.id != req.params.userId)
     return res
       .status(401)

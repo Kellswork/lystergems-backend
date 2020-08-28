@@ -239,7 +239,7 @@ describe('UPDATE Address', () => {
       "You cannot access a resource you didn't create",
     );
   });
-  it('should access an address for the logged in user', async () => {
+  it('should update an address for the logged in user', async () => {
     const response = await request(app)
       .patch(
         `/api/v1/users/${dbUser.id}/addresses/${addressData.body.userAddress.id}`,
