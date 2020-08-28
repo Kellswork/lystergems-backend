@@ -24,14 +24,6 @@ export default class User extends Model {
     };
   }
 
-  static get virtualAttributes() {
-    return ['fullName'];
-  }
-
-  fullName() {
-    return `${this.firstName} ${this.lastName}`;
-  }
-
   // json schema validation for insert
   static get jsonSchema() {
     return {

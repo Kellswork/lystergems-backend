@@ -1,36 +1,46 @@
-import {
-  fetchUserOrders,
-  formatAllOrdersResponse,
-} from '../order/models/index.model';
-import { pagination, formatResponse } from '../../helpers/baseHelper';
+/* eslint-disable camelcase */
+import { formatResponse } from '../../helpers/baseHelper';
+import { fetchUserDetails } from './models/index.model';
 
-const getUserOrders = async (req, res) => {
+const getUserProfile = async (req, res) => {
+  const { id } = req.user;
+  req.body.user_id = id;
   try {
-    let { page, pageSize } = req.query;
-    page = parseInt(page, 10) || 1;
-    pageSize = parseInt(pageSize, 10) || 10;
-
-    const orders = await fetchUserOrders(page - 1, pageSize, req.params.userId);
-    const ordersFormat = formatAllOrdersResponse(orders.results);
-    const { previousPage, nextPage } = pagination(page, pageSize, orders);
+    const profile = await fetchUserDetails(req.params.userId);
+    const {
+      firstname,
+      lastname,
+      email,
+      role,
+      is_verified,
+      created_at,
+      updated_at,
+    } = profile;
     const data = {
-      previousPage,
-      nextPage,
-      orders: ordersFormat,
+      id: profile.id,
+      firstname,
+      lastname,
+      email,
+      role,
+      is_verified,
+      created_at,
+      updated_at,
     };
     return formatResponse(
       res,
-      { message: `${orders.total} Orders found` },
+      {
+        message: `${profile.length} profile found`,
+      },
       200,
       data,
     );
   } catch (error) {
     return formatResponse(
       res,
-      { error: 'Cannot get orders at the moment, try again later' },
+      { error: 'could not get user profile, please try again later' },
       500,
     );
   }
 };
 
-export default getUserOrders;
+export default getUserProfile;

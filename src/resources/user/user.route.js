@@ -13,6 +13,7 @@ import {
   checkIfOrderExists,
 } from '../../middlewares/validateOrder';
 import { getOrderById } from '../order/orders.controller';
+import getUserProfile from './user.controllers';
 
 const router = Router();
 
@@ -28,5 +29,6 @@ router.get(
   restrictAccessToOwnerAndAdmin,
   getOrderById,
 );
+router.get('/users/:userId/profile', verifyAuth, getUserProfile);
 
 export default router;

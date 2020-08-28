@@ -14,3 +14,7 @@ export async function verifyUser(id) {
 export async function updateUserPassword(id, password) {
   return User.query().where({ id }).patch({ password });
 }
+
+export async function fetchUserDetails(id) {
+  return User.query().where({ id }).first();
+}
