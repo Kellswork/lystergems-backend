@@ -4,6 +4,7 @@
   "description": "backend for the shopping site project I am bulding",
   "main": "index.js",
   "scripts": {
+    "heroku": "npm run build && node dist/index.js",
     "start": "nodemon src/index.js --exec \"node -r @babel/register\"",
     "build": "npm run clean && babel src --out-dir dist",
     "clean": "rimraf dist",
@@ -95,5 +96,8 @@
     "nodemon": "^2.0.2",
     "prettier": "^2.0.2",
     "supertest": "^4.0.2"
+  },
+  "engines": {
+    "node": "14.x"
   }
 }
