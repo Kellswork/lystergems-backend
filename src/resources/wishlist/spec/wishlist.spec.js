@@ -2,12 +2,14 @@ import request from 'supertest';
 import app from '../../../server';
 import db from '../../../db/dbconfig';
 import { hashPassword } from '../../../helpers/baseHelper';
+import Product from '../../product/models/product.model';
 
 let adminToken;
 let userToken;
 let dbUser;
 let category;
 let product;
+let wishlistItem;
 
 const user = {
   firstname: 'kells',
@@ -75,11 +77,11 @@ describe('POST to wishlist', () => {
       .post(`/api/v1/users/${dbUser.id}/wishlists`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ product_id: Number(product.body.product.id) });
-    console.log('product_iddd', product.body.product.id);
     expect(response.statusCode).toBe(201);
     expect(response.body.wishlist.product_id).toEqual(product.body.product.id);
     expect(response.body.wishlist.user_id).toEqual(dbUser.id);
     expect(response.body.message).toEqual('Product has been saved to wishlist');
+    wishlistItem = response.body.wishlist;
   });
   it('should fail if product_id is empty', async () => {
     const response = await request(app)
@@ -110,5 +112,66 @@ describe('POST to wishlist', () => {
     expect(response.body.error).toEqual(
       'product has already been added to wishlist',
     );
+  });
+});
+
+describe('Get User wishlists', () => {
+  it('should fail if user is not authenticated', async () => {
+    const response = await request(app).get(
+      `/api/v1/users/${dbUser.id}/wishlists`,
+    );
+    expect(response.statusCode).toBe(401);
+    expect(response.body.error).toEqual(
+      'Access denied. You are not authorized to access this route',
+    );
+  });
+  it('should fail if logged in user is not the wishlist owner', async () => {
+    const response = await request(app)
+      .get(`/api/v1/users/1111/wishlists`)
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(401);
+    expect(response.body.error).toEqual(
+      "You cannot access a resource you didn't create",
+    );
+  });
+  it('should return all products in user wishlist', async () => {
+    const response = await request(app)
+      .get(`/api/v1/users/${dbUser.id}/wishlists`)
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toEqual(
+      `${response.body.wishlist.length} found`,
+    );
+  });
+});
+
+describe('DELETE user wishlist', () => {
+  it('should fail if user is not authenticated', async () => {
+    const response = await request(app).delete(
+      `/api/v1/users/${dbUser.id}/wishlists/12`,
+    );
+    expect(response.statusCode).toBe(401);
+    expect(response.body.error).toEqual(
+      'Access denied. You are not authorized to access this route',
+    );
+  });
+  it('should fail if logged in user is not the wishlist owner', async () => {
+    const response = await request(app)
+      .delete(`/api/v1/users/100/wishlists/${Product.id}`)
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(401);
+    expect(response.body.error).toEqual(
+      "You cannot access a resource you didn't create",
+    );
+  });
+  it('should delete product in wishlist', async () => {
+    const response = await request(app)
+      .delete(`/api/v1/users/${dbUser.id}/wishlists/${wishlistItem.product_id}`)
+      .set({ 'x-auth-token': userToken, Accept: 'application/json' });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toBe(
+      'product has been removed from wishlist',
+    );
+    expect(response.body.isItemRemoved).toBe(1);
   });
 });

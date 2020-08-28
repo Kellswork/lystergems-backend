@@ -34,7 +34,6 @@ export const addProductToWishlist = async (req, res) => {
       data,
     );
   } catch (error) {
-    console.log(error.message);
     return formatResponse(
       res,
       {
@@ -74,12 +73,12 @@ export const RemoveOneProductInWishlist = async (req, res) => {
   const { id } = req.user;
   req.body.user_id = id;
   try {
-    const wishlistItem = await deleteOneProductInWishlist(
+    const isItemRemoved = await deleteOneProductInWishlist(
       req.params.userId,
       req.params.productId,
     );
     const data = {
-      wishlistItem,
+      isItemRemoved,
     };
     return formatResponse(
       res,

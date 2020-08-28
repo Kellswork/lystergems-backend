@@ -20,7 +20,7 @@ export const checkUserId = (req, res, next) => {
   if (req.user.id != req.params.userId)
     return res
       .status(401)
-      .json({ error: "You cannot access an address you didn't create" });
+      .json({ error: "You cannot access a resource you didn't create" });
   return next();
 };
 

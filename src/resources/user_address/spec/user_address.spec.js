@@ -236,7 +236,7 @@ describe('UPDATE Address', () => {
       .send({ ...updatedAddress });
     expect(response.statusCode).toBe(401);
     expect(response.body.error).toEqual(
-      "You cannot access an address you didn't create",
+      "You cannot access a resource you didn't create",
     );
   });
   it('should access an address for the logged in user', async () => {
@@ -417,13 +417,13 @@ describe('GET all user addresses', () => {
       'Access denied. You are not authorized to access this route',
     );
   });
-  it('should fetch all addresses created by the user with the id', async () => {
+  it('should fail if logged in user is not the address owner', async () => {
     const response = await request(app)
       .get(`/api/v1/users/1111/addresses`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' });
     expect(response.statusCode).toBe(401);
     expect(response.body.error).toEqual(
-      "You cannot access an address you didn't create",
+      "You cannot access a resource you didn't create",
     );
   });
   it('should fetch all addresses created by the user with the id', async () => {
@@ -448,18 +448,22 @@ describe('GET One user address', () => {
   });
   it('should fetch the address with id created by the user', async () => {
     const response = await request(app)
-      .get(`/api/v1/users/${dbUser.id}/addresses/1`)
+      .get(
+        `/api/v1/users/${dbUser.id}/addresses/${addressData.body.userAddress.id}`,
+      )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' });
     expect(response.statusCode).toBe(200);
     expect(response.body.message).toBe('address fetched successfully');
-    expect(response.body.userAddress.id).toBe(1);
+    expect(response.body.userAddress.id).toEqual(
+      addressData.body.userAddress.id,
+    );
   });
 });
 
 describe('DELETE user address', () => {
   it('should fail if user is not authenticated', async () => {
-    const response = await request(app).get(
-      `/api/v1/users/${dbUser.id}/addresses`,
+    const response = await request(app).delete(
+      `/api/v1/users/${dbUser.id}/addresses/12`,
     );
     expect(response.statusCode).toBe(401);
     expect(response.body.error).toEqual(
@@ -468,20 +472,21 @@ describe('DELETE user address', () => {
   });
   it('should fail if logged in user is not the address owner', async () => {
     const response = await request(app)
-      .patch(`/api/v1/users/10/addresses/${addressData.body.userAddress.id}`)
+      .delete(`/api/v1/users/10/addresses/${addressData.body.userAddress.id}`)
       .set({ 'x-auth-token': userToken, Accept: 'application/json' })
       .send({ ...updatedAddress });
     expect(response.statusCode).toBe(401);
     expect(response.body.error).toEqual(
-      "You cannot access an address you didn't create",
+      "You cannot access a resource you didn't create",
     );
   });
   it('should delete the address', async () => {
     const response = await request(app)
-      .delete(`/api/v1/users/${dbUser.id}/addresses/1`)
+      .delete(
+        `/api/v1/users/${dbUser.id}/addresses/${addressData.body.userAddress.id}`,
+      )
       .set({ 'x-auth-token': userToken, Accept: 'application/json' });
     expect(response.statusCode).toBe(200);
     expect(response.body.message).toBe('address deleted successfully');
-    expect(response.body.userAddress).toBe(1);
   });
 });
