@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 import { formatResponse } from '../../helpers/baseHelper';
-import { fetchUserDetails } from './models/index.model';
+import { fetchUserDetails, patchUserProfile } from './models/index.model';
 
-const getUserProfile = async (req, res) => {
+export const getUserProfile = async (req, res) => {
   const { id } = req.user;
   req.body.user_id = id;
   try {
@@ -43,4 +43,24 @@ const getUserProfile = async (req, res) => {
   }
 };
 
-export default getUserProfile;
+export const updateUserProfile = async (req, res) => {
+  try {
+    const profile = await patchUserProfile(req.params.userId, req.body);
+    const data = {
+      profile,
+    };
+    return formatResponse(
+      res,
+      { message: 'Profile has been updated successfully' },
+      200,
+      data,
+    );
+  } catch (error) {
+    console.log(error);
+    return formatResponse(
+      res,
+      { error: 'could not update address, please try again later' },
+      500,
+    );
+  }
+};

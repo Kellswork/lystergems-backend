@@ -6,14 +6,18 @@ import {
   resetPasswordLink,
   newPassword,
 } from './auth.controller';
-import { validateUser, validateLogin } from '../../middlewares/validateUser';
+import {
+  validateUser,
+  validateLogin,
+  validateprofile,
+} from '../../middlewares/validateUser';
 import { verifyAuth } from '../../middlewares/validateUserAuth';
 import {
   restrictAccessToOwnerAndAdmin,
   checkIfOrderExists,
 } from '../../middlewares/validateOrder';
 import { getOrderById } from '../order/orders.controller';
-import getUserProfile from './user.controllers';
+import { getUserProfile, updateUserProfile } from './user.controllers';
 
 const router = Router();
 
@@ -30,5 +34,11 @@ router.get(
   getOrderById,
 );
 router.get('/users/:userId/profile', verifyAuth, getUserProfile);
+router.patch(
+  '/users/:userId/profile',
+  verifyAuth,
+  validateprofile,
+  updateUserProfile,
+);
 
 export default router;
