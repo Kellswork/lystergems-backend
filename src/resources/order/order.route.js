@@ -4,7 +4,7 @@ import { verifyAuth, validateAdmin } from '../../middlewares/validateUserAuth';
 import {
   addOrder,
   updateOrder,
-  getOrderById,
+  // getOrderById,
   cancelOrder,
   getAllOrders,
 } from './orders.controller';
@@ -13,7 +13,7 @@ import {
   validateStatusUpdate,
   checkStatus,
   checkIfOrderExists,
-  restrictAccessToOwnerAndAdmin,
+  // restrictAccessToOwnerAndAdmin,
   checkIfUserIsOwner,
   allowOnlyPendingOrder,
 } from '../../middlewares/validateOrder';
@@ -34,13 +34,6 @@ router.patch(
 router.get('/orders', verifyAuth, validateAdmin, getAllOrders);
 
 // I will move this to users route when we start working on the users functionalities
-router.get(
-  '/orders/:id',
-  verifyAuth,
-  checkIfOrderExists,
-  restrictAccessToOwnerAndAdmin,
-  getOrderById,
-);
 
 router.patch(
   '/orders/:id/cancel',
