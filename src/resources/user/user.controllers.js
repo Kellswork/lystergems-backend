@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { formatResponse } from '../../helpers/baseHelper';
+import { hashPassword, formatResponse } from '../../helpers/baseHelper';
 import { fetchUserDetails, patchUserProfile } from './models/index.model';
 
 export const getUserProfile = async (req, res) => {
@@ -15,14 +15,16 @@ export const getUserProfile = async (req, res) => {
       updated_at,
     } = profile;
     const data = {
-      id: profile.id,
-      firstname,
-      lastname,
-      email,
-      role,
-      is_verified,
-      created_at,
-      updated_at,
+      profile: {
+        id: profile.id,
+        firstname,
+        lastname,
+        email,
+        role,
+        is_verified,
+        created_at,
+        updated_at,
+      },
     };
     return formatResponse(
       res,
@@ -43,9 +45,21 @@ export const getUserProfile = async (req, res) => {
 
 export const updateUserProfile = async (req, res) => {
   try {
-    const profile = await patchUserProfile(req.params.userId, req.body);
+    const { firstname, lastname, email, password } = req.body;
+    const hashedPassword = hashPassword(password);
+    const profile = await patchUserProfile(req.params.userId, {
+      firstname,
+      lastname,
+      email,
+      password: hashedPassword,
+    });
     const data = {
-      profile,
+      profile: {
+        id: profile.id,
+        firstname,
+        lastname,
+        email,
+      },
     };
     return formatResponse(
       res,
@@ -54,6 +68,7 @@ export const updateUserProfile = async (req, res) => {
       data,
     );
   } catch (error) {
+    console.log(error.message);
     return formatResponse(
       res,
       { error: 'could not update address, please try again later' },

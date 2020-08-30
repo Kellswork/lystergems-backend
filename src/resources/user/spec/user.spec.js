@@ -203,6 +203,7 @@ describe('Profile', () => {
         lastname: 'SlenderMan',
         email: 'kelsie@gmail.com',
         password: 'pass12345',
+        confirmPassword: 'pass12345',
       };
       const response = await request(app)
         .patch(`/api/v1/users/${dbUser.id}/profile`)
@@ -212,8 +213,9 @@ describe('Profile', () => {
       expect(response.body.message).toEqual(
         'Profile has been updated successfully',
       );
-      expect(response.body.profile[0].firstname).toEqual('Boogie');
-      expect(response.body.profile[0].lastname).toEqual('SlenderMan');
+      expect(response.body.profile.firstname).toEqual('Boogie');
+      expect(response.body.profile.lastname).toEqual('SlenderMan');
+      expect(response.body.profile.email).toEqual('kelsie@gmail.com');
     });
   });
 });

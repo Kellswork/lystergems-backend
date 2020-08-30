@@ -6,11 +6,7 @@ import {
   resetPasswordLink,
   newPassword,
 } from './auth.controller';
-import {
-  validateUser,
-  validateLogin,
-  validateprofile,
-} from '../../middlewares/validateUser';
+import { validateUser, validateLogin } from '../../middlewares/validateUser';
 import { verifyAuth } from '../../middlewares/validateUserAuth';
 import {
   restrictAccessToOwnerAndAdmin,
@@ -39,7 +35,7 @@ router.patch(
   '/users/:userId/profile',
   verifyAuth,
   checkUserId,
-  validateprofile,
+  validateUser,
   updateUserProfile,
 );
 
