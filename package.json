@@ -4,7 +4,7 @@
   "description": "backend for the shopping site project I am bulding",
   "main": "index.js",
   "scripts": {
-    "heroku": "npm run build && node dist/index.js",
+    "heroku": "npm run build && node --optimize_for_size --max_old_space_size=920 --gc_interval=100 dist/index.js",
     "start": "nodemon src/index.js --exec \"node -r @babel/register\" ",
     "build": "npm run clean && babel src --out-dir dist",
     "clean": "rimraf dist",
