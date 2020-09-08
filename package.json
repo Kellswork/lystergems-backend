@@ -1,0 +1,99 @@
+{
+  "name": "shopping-site-backend",
+  "version": "1.0.0",
+  "description": "backend for the shopping site project I am bulding",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/index.js --exec \"node -r @babel/register\"",
+    "build": "npm run clean && babel src --out-dir dist",
+    "clean": "rimraf dist",
+    "test": "npm run clear-db && NODE_ENV=testing jest --coverage  --verbose --detectOpenHandles --forceExit --testTimeout=20000",
+    "knex": "node -r esm node_modules/.bin/knex",
+    "db:latest": "npm run knex migrate:latest",
+    "db:rollback": "npm run knex migrate:rollback",
+    "latest-test": "NODE_ENV=testing npm run knex migrate:latest ",
+    "clear-db": "NODE_ENV=testing npm run rollback-test && npm run latest-test",
+    "rollback-test": "NODE_ENV=testing npm run knex migrate:rollback",
+    "seed:admin": "npm run knex seed:run",
+    "seed:test": "NODE_ENV=testing npm run knex seed:run"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/src/*.js",
+      "**/src//**/*.js",
+      "!**/node_modules/**",
+      "!**/vendor/**",
+      "**/src/resources/**",
+      "**/src/helpers/**",
+      "**/src/middlewares/**",
+      "!**/coverage/**"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 50,
+        "functions": 50,
+        "lines": 50,
+        "statements": 50
+      }
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kellswork/shopping-site-backend.git"
+  },
+  "keywords": [
+    "git",
+    "npm",
+    "nodejs",
+    "express",
+    "postgres",
+    "circleci"
+  ],
+  "author": "Kelechi Ogbonna",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kellswork/shopping-site-backend/issues"
+  },
+  "homepage": "https://github.com/Kellswork/shopping-site-backend#readme",
+  "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/runtime": "^7.9.2",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "core-js": "^3.6.4",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "email-templates": "^7.0.5",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "express-handlebars": "^4.0.4",
+    "express-jwt": "^6.0.0",
+    "express-validator": "^6.4.0",
+    "helmet": "^3.22.0",
+    "jest": "^25.2.4",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.21.1",
+    "knex-cleaner": "^1.3.0",
+    "nodemailer": "^6.4.6",
+    "objection": "^2.1.3",
+    "pg": "^8.0.3",
+    "rimraf": "^3.0.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/register": "^7.9.0",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^25.3.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-prettier": "^3.1.2",
+    "nodemon": "^2.0.2",
+    "prettier": "^2.0.2",
+    "supertest": "^4.0.2"
+  }
+}
