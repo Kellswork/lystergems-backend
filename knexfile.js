@@ -49,6 +49,9 @@ module.exports = {
       directory: './src/db/seeds/production',
     },
     useNullAsDefault: true,
+    ssl: {
+      rejectUnauthorized: false,
+    },
   },
 
   onUpdateTrigger: (table) => `

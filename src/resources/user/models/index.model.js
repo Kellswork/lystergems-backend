@@ -14,3 +14,14 @@ export async function verifyUser(id) {
 export async function updateUserPassword(id, password) {
   return User.query().where({ id }).patch({ password });
 }
+
+export async function fetchUserDetails(id) {
+  return User.query().where({ id }).first();
+}
+
+export async function patchUserProfile(id, profile) {
+  return User.query()
+    .where({ id })
+    .patch({ ...profile, updated_at: User.fn.now() })
+    .returning('*');
+}
