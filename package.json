@@ -4,8 +4,8 @@
   "description": "backend for the shopping site project I am bulding",
   "main": "index.js",
   "scripts": {
-    "heroku": "npm run build && node dist/index.js",
-    "start": "nodemon src/index.js --exec \"node -r @babel/register\"",
+    "heroku": "npm run build && node cservice dist/index.js --accessKey lksjdf982734",
+    "start": "nodemon src/index.js --exec \"node -r @babel/register\" ",
     "build": "npm run clean && babel src --out-dir dist",
     "clean": "rimraf dist",
     "test": "npm run clear-db && NODE_ENV=testing jest --coverage  --verbose --detectOpenHandles --forceExit --testTimeout=20000",
@@ -57,8 +57,8 @@
   },
   "homepage": "https://github.com/Kellswork/shopping-site-backend#readme",
   "dependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/cli": "^7.8.4",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/preset-env": "^7.9.0",
     "@babel/runtime": "^7.9.2",
     "bcryptjs": "^2.4.3",
@@ -80,7 +80,8 @@
     "knex-cleaner": "^1.3.0",
     "objection": "^2.1.3",
     "pg": "^8.0.3",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "throng": "^4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
