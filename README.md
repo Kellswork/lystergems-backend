@@ -50,6 +50,8 @@ To run tests for the server side
 - [Node](https://nodejs.org/en/) Node Js is a Javascript runtime built on Chrome's V8 JavaScript engine
 - [Express](https://expressjs.com/) Express is a minimal and flexible Node.js web application framework
 - [PostgreSQL](https://www.postgresql.org/) POSTGRESQL: The world's most advanced open source relational database
+- [Objection JS](https://vincit.github.io/objection.js/): An SQL-friendly ORM for Node.js
+- [Knex Js](knexjs.org): An SQL query builder for JavaScript.
 
 ## Versioning
 
