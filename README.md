@@ -1,6 +1,6 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/kellswork/lystergems-backend/badge)](https://www.codefactor.io/repository/github/kellswork/lystergems-backend)
 
-# shopping-site-backend
+# lystergems-backend
 
 Hosted on Hekoru - [lystergems](https://lystergems.herokuapp.com/)
 
