@@ -33,7 +33,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installing
 - Install Node js
-- Clone the repository `https://github.com/Kellswork/Politico.git`
+- Clone the repository `https://github.com/Kellswork/lystergems-backend.git`
 - Navigate to the location of the folder
 - Run `npm install` to install dependencies
 - Run `npm start` to get the app started on your local machine
